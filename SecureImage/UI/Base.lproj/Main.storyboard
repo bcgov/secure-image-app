@@ -18,22 +18,22 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="BMA-rh-Jrz" kind="relationship" relationship="rootViewController" id="LkX-vO-eoH"/>
+                        <segue destination="AU3-s0-2LN" kind="relationship" relationship="rootViewController" id="wlT-Cs-WJu"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RGc-UW-wHD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-615" y="106"/>
         </scene>
-        <!--Authentication-->
-        <scene sceneID="lFc-hW-I2e">
+        <!--Albums-->
+        <scene sceneID="Obd-j2-e4T">
             <objects>
-                <viewControllerPlaceholder storyboardName="Authentication" id="BMA-rh-Jrz" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="D3C-3b-OTH"/>
+                <viewControllerPlaceholder storyboardName="Albums" id="AU3-s0-2LN" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="pDM-Pu-Cmh"/>
                 </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eIu-JD-zPQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4UP-gl-4bY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.0" y="105"/>
+            <point key="canvasLocation" x="66" y="105"/>
         </scene>
     </scenes>
 </document>
