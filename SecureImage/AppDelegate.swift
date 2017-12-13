@@ -24,9 +24,16 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let lockScreenWindow = LockScreenWindow(frame: UIScreen.main.bounds)
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+ 
+        NotificationCenter.default.addObserver(forName: Notification.Name.userAuthenticated, object: nil, queue:nil) { [weak self] _ in
+                self?.hideLockScreen()
+        }
+
+        lockScreenWindow.show()
+        
         return true
     }
 
@@ -53,4 +60,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
      // MARK:
+    
+    func hideLockScreen(animated: Bool = true) {
+        lockScreenWindow.hide(animated: animated, completion: { [weak self] in
+            self?.window?.makeKeyAndVisible()
+        })
+    }
 }
