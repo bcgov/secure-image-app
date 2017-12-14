@@ -28,12 +28,13 @@ class DataServices: NSObject {
     static let realmFileName = "default.realm"
     static let temporaryRealmName = "temporary.realm"
     
-    // MARK: Maintenance
+    // MARK: Management
     
     override init() {
         
         DataServices.configureRealm()
         DataServices.compactRealm()
+//        DataServices.seed()
     }
     
     internal class func configureRealm() {
@@ -49,15 +50,15 @@ class DataServices: NSObject {
         Realm.Configuration.defaultConfiguration = config
     }
     
+    public class func documentsURL() -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    }
+
     // Allow customization of the Realm; this will let us keep it in a location that is not
     // backed up if needed.
     private class func realmPath() -> URL {
         
-        guard let workspace = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
-            fatalError("Unable to determine the applications working directory")
-        }
-        
-        var workspaceURL = URL(fileURLWithPath: workspace, isDirectory: true).appendingPathComponent("db")
+        var workspaceURL = URL(fileURLWithPath: DataServices.documentsURL().path, isDirectory: true).appendingPathComponent("db")
         var directory: ObjCBool = ObjCBool(false)
         
         if !FileManager.default.fileExists(atPath: workspaceURL.path, isDirectory: &directory) {
@@ -104,5 +105,34 @@ class DataServices: NSObject {
             }
         }
     }
+    
+//    private class func seed() {
+//        // This is for testing only !!!
+//        do {
+//            let realm = try Realm()
+//            let files = ["IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG"]
+//            let album = Album()
+//            album.createdAt = Date()
+//            album.modifiedAt = Date()
+//            album.id = UUID().uuidString
+//
+//            for file in files {
+//                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, 0.5) {
+//
+//                        let doc = Document()
+//                        doc.imageData = imageData
+//                        doc.createdAt = Date()
+//                        doc.modifiedAt = Date()
+//                        doc.id = UUID().uuidString
+//                        album.documents.append(doc)
+//                }
+//            }
+//
+//            try realm.write {
+//                realm.add(album)
+//            }
+//        }  catch {
+//            fatalError("Unable to seed Realm")
+//        }
+//    }
 }
-
