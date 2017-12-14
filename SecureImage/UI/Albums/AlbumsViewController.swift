@@ -24,6 +24,8 @@ class AlbumsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    private let albumDetailsSequeID: String = "ShowAlbumDetailsSegue"
+    private var localAlbumId: String?
     private let createFirstAlbumView: CreateFirstAlbumView = {
         let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! CreateFirstAlbumView
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -41,6 +43,11 @@ class AlbumsViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         let dvc = segue.destination as! AlbumDetailsViewController
+         dvc.localAlbumID  = "11111111111"
+    }
+    
     private func commonInit() {
         tableView.isHidden = true
         
@@ -50,5 +57,16 @@ class AlbumsViewController: UIViewController {
         createFirstAlbumView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         createFirstAlbumView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         createFirstAlbumView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        createFirstAlbumView.onCreateFirstAlbumTouched = { [weak self] in
+            // Create a new album in the db
+            // Pass album ID to Album Details VC
+
+            guard let sequeID = self?.albumDetailsSequeID else {
+                return
+            }
+
+            self?.performSegue(withIdentifier: sequeID, sender: nil)
+        }
     }
 }
