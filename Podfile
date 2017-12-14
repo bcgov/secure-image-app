@@ -7,4 +7,5 @@ use_frameworks!
 target 'SecureImage' do
 # pod 'FeedHenry', '5.0.5'
     pod 'RealmSwift'
+    pod 'SwiftKeychainWrapper'
 end
