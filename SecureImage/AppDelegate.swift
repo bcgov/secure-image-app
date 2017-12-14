@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
  
         NotificationCenter.default.addObserver(forName: Notification.Name.userAuthenticated, object: nil, queue:nil) { [weak self] _ in
-                self?.hideLockScreen()
+            self?.hideLockScreen()
         }
 
         lockScreenWindow.show()

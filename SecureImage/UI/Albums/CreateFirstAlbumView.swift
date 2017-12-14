@@ -20,14 +20,28 @@
 
 import UIKit
 
+typealias CreateFirstAlbumTouched = () -> Void
+
 class CreateFirstAlbumView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    private let tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
+    public var onCreateFirstAlbumTouched: CreateFirstAlbumTouched?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        commonInit()
     }
-    */
+    
+    private func commonInit() {
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.addTarget(self, action: #selector(self.tapDetected(gestureRecognizer:)))
 
+        addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc
+    private dynamic func tapDetected(gestureRecognizer: UITapGestureRecognizer) {
+        onCreateFirstAlbumTouched?()
+    }
 }
