@@ -34,6 +34,8 @@
 		56D17DD01FE1D381002DF790 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D17DCF1FE1D381002DF790 /* Functions.swift */; };
 		56D17DD21FE1D3BD002DF790 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DD11FE1D3BD002DF790 /* README.md */; };
 		56D17DD41FE1D521002DF790 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DD31FE1D520002DF790 /* Podfile */; };
+		56E543731FE32AE100327591 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543721FE32AE100327591 /* Document.swift */; };
+		56E543791FE33F6300327591 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543781FE33F6300327591 /* Album.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		56D17DCF1FE1D381002DF790 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		56D17DD11FE1D3BD002DF790 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		56D17DD31FE1D520002DF790 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		56E543721FE32AE100327591 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
+		56E543781FE33F6300327591 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.release.xcconfig"; sourceTree = "<group>"; };
 		8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		971FDDD9C2BEB2ABD001DA68 /* Pods-SecureImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.debug.xcconfig"; sourceTree = "<group>"; };
@@ -260,6 +264,8 @@
 		56D17DCC1FE1D362002DF790 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				56E543781FE33F6300327591 /* Album.swift */,
+				56E543721FE32AE100327591 /* Document.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -477,6 +483,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56E543791FE33F6300327591 /* Album.swift in Sources */,
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
 				569D85061FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.swift in Sources */,
 				569D84F61FE1EFF90054173D /* AlbumsViewController.swift in Sources */,
@@ -485,6 +492,7 @@
 				569D850A1FE2FEA00054173D /* DataServices.swift in Sources */,
 				56D17DCE1FE1D379002DF790 /* Constants.swift in Sources */,
 				569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */,
+				56E543731FE32AE100327591 /* Document.swift in Sources */,
 				569D84FA1FE1F2690054173D /* CreateFirstAlbumView.swift in Sources */,
 				569D84FC1FE2EFAF0054173D /* AlbumDetailsViewController.swift in Sources */,
 				56D17DD01FE1D381002DF790 /* Functions.swift in Sources */,
