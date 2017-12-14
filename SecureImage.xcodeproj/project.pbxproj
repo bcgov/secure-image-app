@@ -20,6 +20,7 @@
 		569D85031FE2FCD10054173D /* AddImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569D85011FE2FCD10054173D /* AddImageCollectionViewCell.xib */; };
 		569D85061FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D85041FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.swift */; };
 		569D85071FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 569D85051FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.xib */; };
+		569D850A1FE2FEA00054173D /* DataServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D85091FE2FEA00054173D /* DataServices.swift */; };
 		56D17D941FE1A3DC002DF790 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D17D931FE1A3DC002DF790 /* AppDelegate.swift */; };
 		56D17D991FE1A3DC002DF790 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D17D971FE1A3DC002DF790 /* Main.storyboard */; };
 		56D17D9B1FE1A3DC002DF790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D17D9A1FE1A3DC002DF790 /* Assets.xcassets */; };
@@ -65,6 +66,7 @@
 		569D85011FE2FCD10054173D /* AddImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		569D85041FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageThumbnailCollectionViewCell.swift; sourceTree = "<group>"; };
 		569D85051FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageThumbnailCollectionViewCell.xib; sourceTree = "<group>"; };
+		569D85091FE2FEA00054173D /* DataServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataServices.swift; sourceTree = "<group>"; };
 		56D17D901FE1A3DC002DF790 /* SecureImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecureImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D17D931FE1A3DC002DF790 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D17D951FE1A3DC002DF790 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 		56D17DCB1FE1D35C002DF790 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				569D85091FE2FEA00054173D /* DataServices.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -437,17 +440,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AeroGear-Push-Swift/AeroGearPush.framework",
-				"${BUILT_PRODUCTS_DIR}/AeroGearHttp/AeroGearHttp.framework",
-				"${BUILT_PRODUCTS_DIR}/FeedHenry/FeedHenry.framework",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/ReachabilitySwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AeroGearPush.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AeroGearHttp.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FeedHenry.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReachabilitySwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -481,6 +480,7 @@
 				569D84F61FE1EFF90054173D /* AlbumsViewController.swift in Sources */,
 				569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */,
 				56D17D941FE1A3DC002DF790 /* AppDelegate.swift in Sources */,
+				569D850A1FE2FEA00054173D /* DataServices.swift in Sources */,
 				56D17DCE1FE1D379002DF790 /* Constants.swift in Sources */,
 				569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */,
 				569D84FA1FE1F2690054173D /* CreateFirstAlbumView.swift in Sources */,
