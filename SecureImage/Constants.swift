@@ -25,6 +25,10 @@ struct Constants {
     struct Defaults {
         static let jPEGCompressionRatio = 0.5
     }
+    
+    struct Keychain {
+        static let RealmEncryptionKey = "RealmEncryptionKey"
+    }
 }
 
 extension Notification.Name {
