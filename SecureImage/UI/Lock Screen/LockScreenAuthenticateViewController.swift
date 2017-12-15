@@ -5,7 +5,7 @@
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// You may obtain a copy of the License at 
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -18,12 +18,18 @@
 // Created by Jason Leach on 2017-12-13.
 //
 
-import Foundation
+import UIKit
 
-struct Constants {
+class LockScreenAuthenticateViewController: UIViewController {
 
-}
-
-extension Notification.Name {
-    static let userAuthenticated = Notification.Name("userAuthenticated")
+    static func viewController() -> LockScreenAuthenticateViewController {
+        let storyboard = UIStoryboard(name: String(describing: self), bundle: nil)
+        let vc = storyboard.instantiateInitialViewController() as! LockScreenAuthenticateViewController
+        
+        return vc
+    }
+    
+    @IBAction func go() { // TODO(jl): Rename when during implementation
+        NotificationCenter.default.post(Notification(name: .userAuthenticated))
+    }
 }
