@@ -23,10 +23,10 @@ import RealmSwift
 
 class Document: Object {
     
-    @objc dynamic var id: String?
+    @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var createdAt: Date = Date()
+    @objc dynamic var modifiedAt: Date = Date()
     @objc dynamic var imageData: Data?
-    @objc dynamic var createdAt: Date?
-    @objc dynamic var modifiedAt: Date?
 
     override class func primaryKey() -> String {
         return "id"

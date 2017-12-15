@@ -15,20 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2017-12-14.
+// Created by Jason Leach on 2017-12-15.
 //
 
 import Foundation
-import RealmSwift
 
-class Album: Object {
+extension Data {
+ 
+    func hexString() -> String {
     
-    @objc dynamic var id: String = UUID().uuidString
-    @objc dynamic var createdAt: Date = Date()
-    @objc dynamic var modifiedAt: Date = Date()
-    internal let documents = List<Document>()
-
-    override class func primaryKey() -> String {
-        return "id"
+        return self.map { b in String(format: "%02X", b) }.joined()
     }
 }

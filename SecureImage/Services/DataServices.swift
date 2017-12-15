@@ -137,22 +137,19 @@ class DataServices: NSObject {
 //        // This is for testing only !!!
 //        do {
 //            let realm = try Realm()
-//            print(Realm.Configuration.defaultConfiguration.fileURL)
 //            let files = ["IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG"]
 //            let album = Album()
-//            album.createdAt = Date()
-//            album.modifiedAt = Date()
-//            album.id = UUID().uuidString
-//
+//            
 //            for file in files {
 //                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, 0.5) {
+//                    
+//                    let doc = Document()
+//                    doc.id = UUID().uuidString
+//                    doc.imageData = imageData
+//                    doc.createdAt = Date()
+//                    doc.modifiedAt = Date()
 //
-//                        let doc = Document()
-//                        doc.imageData = imageData
-//                        doc.createdAt = Date()
-//                        doc.modifiedAt = Date()
-//                        doc.id = UUID().uuidString
-//                        album.documents.append(doc)
+//                    album.documents.append(doc)
 //                }
 //            }
 //
