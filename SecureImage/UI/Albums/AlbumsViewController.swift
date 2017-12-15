@@ -24,7 +24,7 @@ class AlbumsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    private let albumDetailsSequeID: String = "ShowAlbumDetailsSegue"
+    private let albumDetailsSegueID: String = "ShowAlbumDetailsSegue"
     private var localAlbumId: String?
     private let createFirstAlbumView: CreateFirstAlbumView = {
         let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! CreateFirstAlbumView
@@ -62,11 +62,11 @@ class AlbumsViewController: UIViewController {
             // Create a new album in the db
             // Pass album ID to Album Details VC
 
-            guard let sequeID = self?.albumDetailsSequeID else {
+            guard let segueID = self?.albumDetailsSegueID else {
                 return
             }
 
-            self?.performSegue(withIdentifier: sequeID, sender: nil)
+            self?.performSegue(withIdentifier: segueID, sender: nil)
         }
     }
 }
