@@ -24,22 +24,49 @@ import SwiftKeychainWrapper
 
 class DataServices: NSObject {
     
-    static let shared = DataServices()
     static let realmFileName = "default.realm"
     static let temporaryRealmName = "temporary.realm"
     
     // MARK: Management
-    
-    override init() {
-        
+
+    internal class func setup() {
+
         DataServices.configureRealm()
         DataServices.compactRealm()
-//        DataServices.seed()
     }
     
-    internal class func configureRealm() {
+    private class func realmEncryptionKey() -> Data? {
+
+        if let key = KeychainWrapper.standard.string(forKey: Constants.Keychain.RealmEncryptionKey), let data = Data(base64Encoded: key) {
+            return data
+        }
+        
+        var key = Data(count: 64)
+        key.withUnsafeMutableBytes { (keyByteArray: UnsafeMutablePointer<UInt8>) -> Void in
+            let status = SecRandomCopyBytes(kSecRandomDefault, key.count, keyByteArray)
+            if status != errSecSuccess {
+                fatalError("Unable to extract randome bytes for the encryption key")
+            }
+
+            key = Data.init(bytes: keyByteArray, count: key.count)
+            
+            // Securley store they key
+            guard KeychainWrapper.standard.set(key.base64EncodedString(), forKey: Constants.Keychain.RealmEncryptionKey) else {
+                fatalError("Unalbe to store the Realm encryption key")
+            }
+        }
+        
+        if key.count == 0 {
+            print("WARNING: The Realm encryption key is empty !!!")
+        }
+
+        return key.count == 0 ? nil : key
+    }
+    
+    private class func configureRealm() {
         
         let config = Realm.Configuration(fileURL: DataServices.realmPath(),
+                                         encryptionKey: DataServices.realmEncryptionKey(),
                                          schemaVersion: 0,
                                          migrationBlock: { migration, oldSchemaVersion in
                                             // check oldSchemaVersion here, if we're newer call
@@ -50,10 +77,6 @@ class DataServices: NSObject {
         Realm.Configuration.defaultConfiguration = config
     }
     
-    public class func documentsURL() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    }
-
     // Allow customization of the Realm; this will let us keep it in a location that is not
     // backed up if needed.
     private class func realmPath() -> URL {
@@ -75,6 +98,10 @@ class DataServices: NSObject {
         }
         
         return URL(fileURLWithPath: realmFileName, isDirectory: false, relativeTo: workspaceURL)
+    }
+    
+    public class func documentsURL() -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
     private class func compactRealm() {
@@ -106,10 +133,11 @@ class DataServices: NSObject {
         }
     }
     
-//    private class func seed() {
+//    internal class func seed() {
 //        // This is for testing only !!!
 //        do {
 //            let realm = try Realm()
+//            print(Realm.Configuration.defaultConfiguration.fileURL)
 //            let files = ["IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG"]
 //            let album = Album()
 //            album.createdAt = Date()
