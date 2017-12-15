@@ -25,15 +25,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     let lockScreenWindow = LockScreenWindow(frame: UIScreen.main.bounds)
+
+    override init() {
+        // Any Realm management must be done before accessing `Realm()` for the first time
+        // otherwise realm will initalize with the default configuraiton.
+        // Realm must be initalized here, in `init` because `didFinishLaunchingWithOptions`
+        // often executes after `viewDidLoad` et al.
+        DataServices.setup()
+
+        super.init()
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
  
+        #if (arch(i386) || arch(x86_64)) && os(iOS) && DEBUG
+            // so we can find our Documents
+            print("documents = \(DataServices.documentsURL())")
+        #endif
+        
         NotificationCenter.default.addObserver(forName: Notification.Name.userAuthenticated, object: nil, queue:nil) { [weak self] _ in
             self?.hideLockScreen()
         }
 
         lockScreenWindow.show()
         
+//        DataServices.seed()
+
         return true
     }
 

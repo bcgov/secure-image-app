@@ -5,7 +5,7 @@
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// You may obtain a copy of the License at 
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -15,22 +15,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2017-12-13.
+// Created by Jason Leach on 2017-12-14.
 //
 
 import Foundation
+import RealmSwift
 
-struct Constants {
-
-    struct Defaults {
-        static let jPEGCompressionRatio = 0.5
-    }
+class Album: Object {
     
-    struct Keychain {
-        static let RealmEncryptionKey = "RealmEncryptionKey"
-    }
-}
+    @objc dynamic var id: String?
+    @objc dynamic var createdAt: Date?
+    @objc dynamic var modifiedAt: Date?
+    internal let documents = List<Document>()
 
-extension Notification.Name {
-    static let userAuthenticated = Notification.Name("userAuthenticated")
+    override class func primaryKey() -> String {
+        return "id"
+    }
 }
