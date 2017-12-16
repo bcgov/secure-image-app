@@ -29,7 +29,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YYz-f5-z10">
+                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="album-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="YYz-f5-z10">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ac2-cf-Iu8">
@@ -295,6 +295,9 @@
             <point key="canvasLocation" x="972" y="36.431784107946029"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="album-placeholder" width="708" height="278"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Wg1-Pc-Fbg"/>
     </inferredMetricsTieBreakers>

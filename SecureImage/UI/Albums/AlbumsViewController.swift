@@ -116,8 +116,8 @@ class AlbumsViewController: UIViewController {
             return
         }
         
-        print(albums[indexPath.row].id)
-        print(albums[indexPath.row].createdAt)
+//        print(albums[indexPath.row].id)
+//        print(albums[indexPath.row].createdAt)
         
         if let iv = cell.viewWithTag(AlbumsViewController.albumImageViewTag) as? UIImageView {
             iv.image = UIImage(data: imageData)
