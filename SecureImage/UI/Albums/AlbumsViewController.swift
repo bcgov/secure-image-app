@@ -20,10 +20,12 @@
 
 import UIKit
 import RealmSwift
+import QuartzCore
 
 class AlbumsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var createAlbumButton: UIButton!
     
     private static let cellAspectScaler: CGFloat = 0.533
     private static let albumCellReuseID = "AlbumCell"
@@ -72,26 +74,16 @@ class AlbumsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
 
+        createAlbumButton.layer.cornerRadius = createAlbumButton.frame.height / 2
+        createAlbumButton.clipsToBounds = true
+        
         createFirstAlbumView.widthAnchor.constraint(equalToConstant: 250).isActive = true
         createFirstAlbumView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         createFirstAlbumView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         createFirstAlbumView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         createFirstAlbumView.onCreateFirstAlbumTouched = { [weak self] in
-            
-            do {
-                let album = Album()
-                self?.selectedAlbumID = album.id
-                
-                let realm = try Realm()
-                try realm.write {
-                    realm.add(album)
-                }
-            } catch {
-                print("Unable to create new album in Realm")
-            }
-
-            self?.performSegue(withIdentifier: AlbumsViewController.albumDetailsSegueID, sender: nil)
+            self?.createAlbumTouched(sender: nil)
         }
     }
     
@@ -122,6 +114,23 @@ class AlbumsViewController: UIViewController {
         if let iv = cell.viewWithTag(AlbumsViewController.albumImageViewTag) as? UIImageView {
             iv.image = UIImage(data: imageData)
         }
+    }
+    
+    @IBAction dynamic private func createAlbumTouched(sender: Any?) {
+
+        do {
+            let album = Album()
+            selectedAlbumID = album.id
+            
+            let realm = try Realm()
+            try realm.write {
+                realm.add(album)
+            }
+        } catch {
+            print("Unable to create new album in Realm")
+        }
+        
+        performSegue(withIdentifier: AlbumsViewController.albumDetailsSegueID, sender: nil)
     }
 }
 
