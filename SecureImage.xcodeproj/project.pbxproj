@@ -34,7 +34,6 @@
 		56D17DD41FE1D521002DF790 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DD31FE1D520002DF790 /* Podfile */; };
 		56E543731FE32AE100327591 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543721FE32AE100327591 /* Document.swift */; };
 		56E543791FE33F6300327591 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543781FE33F6300327591 /* Album.swift */; };
-		56E543881FE48B7900327591 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E543871FE48B7900327591 /* Assets.xcassets */; };
 		56E5438B1FE4912A00327591 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E5438A1FE4912A00327591 /* DataExtensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,7 +88,6 @@
 		56D17DD31FE1D520002DF790 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
 		56E543721FE32AE100327591 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		56E543781FE33F6300327591 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
-		56E543871FE48B7900327591 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56E5438A1FE4912A00327591 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.release.xcconfig"; sourceTree = "<group>"; };
 		8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,7 +239,6 @@
 				56D17D951FE1A3DC002DF790 /* ViewController.swift */,
 				56D17D971FE1A3DC002DF790 /* Main.storyboard */,
 				56D17DC71FE1BC9C002DF790 /* Camera.storyboard */,
-				56E543871FE48B7900327591 /* Assets.xcassets */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -401,7 +398,6 @@
 				569D85031FE2FCD10054173D /* AddImageCollectionViewCell.xib in Resources */,
 				56D17DC81FE1BC9C002DF790 /* Camera.storyboard in Resources */,
 				56D17D9E1FE1A3DC002DF790 /* LaunchScreen.storyboard in Resources */,
-				56E543881FE48B7900327591 /* Assets.xcassets in Resources */,
 				56D17DC61FE1BC68002DF790 /* Albums.storyboard in Resources */,
 				56D17D991FE1A3DC002DF790 /* Main.storyboard in Resources */,
 				569D84F81FE1F22E0054173D /* CreateFirstAlbumView.xib in Resources */,

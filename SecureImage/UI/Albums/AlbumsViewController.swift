@@ -92,12 +92,14 @@ class AlbumsViewController: UIViewController {
         if albumsExist {
             tableView.isHidden = false
             createFirstAlbumView.isHidden = true
+            createAlbumButton.isHidden = false
             
             return
         }
         
         tableView.isHidden = true
         createFirstAlbumView.isHidden = false
+        createAlbumButton.isHidden = true
     }
     
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
