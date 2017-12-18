@@ -19,22 +19,27 @@
 //
 
 import UIKit
+import RealmSwift
 
 class AlbumDetailsViewController: UIViewController {
 
-    public var localAlbumID: String?
+    @IBOutlet weak var tableView: UITableView!
+    
+    private static let previewCellReuseID = "ImagePreviewCellID"
+    private static let functionsCellReuseID = "FunctionsCellID"
+    private static let annotationCellReuseID = "AnnotationCellID"
+    internal var album: Album!
     
     override func viewDidLoad() {
+
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        guard let _ = album else {
+            fatalError("The album was not passed to \(AlbumDetailsViewController.self())")
+        }
+        
+        commonInit()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     /*
     // MARK: - Navigation
@@ -45,5 +50,67 @@ class AlbumDetailsViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    private func commonInit() {
+        
+        tableView.dataSource = self
+    }
+    
+    private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
 
+        guard let identifier = cell.reuseIdentifier else {
+            fatalError("Unable to determine cell reuse ID")
+        }
+
+        switch identifier {
+        case AlbumDetailsViewController.previewCellReuseID:
+            (cell as! ImagePreviewTableViewCell).previewImages = album.documents
+        default:
+            ()
+        }
+    }
+}
+
+// MARK: UITableViewDataSource
+extension AlbumDetailsViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        var identifier = ""
+
+        switch indexPath.row {
+        case 0:
+            identifier = AlbumDetailsViewController.previewCellReuseID
+        case 1:
+            identifier = AlbumDetailsViewController.functionsCellReuseID
+        default:
+            identifier = AlbumDetailsViewController.annotationCellReuseID
+        }
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) else {
+            fatalError("Unable to dequeue cell with identifier \(identifier)")
+        }
+
+        configureCell(cell: cell, at: indexPath)
+
+        return cell
+    }
+}
+
+// MARK: UITableViewDelegate
+extension AlbumDetailsViewController: UITableViewDelegate {
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//
+//        return tableView.frame.size.width * AlbumsViewController.cellAspectScaler
+//    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    }
 }

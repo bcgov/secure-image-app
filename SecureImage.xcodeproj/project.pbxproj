@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		20DD6413B51B01038EC9CA87 /* Pods_SecureImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */; };
+		5621A8361FE85C0F000C10A2 /* PreviewImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5621A8351FE85C0F000C10A2 /* PreviewImageCollectionViewCell.xib */; };
+		563F228B1FE839F600E33986 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 563F228A1FE839F600E33986 /* Assets.xcassets */; };
+		563F228D1FE83F1500E33986 /* ImagePreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563F228C1FE83F1500E33986 /* ImagePreviewTableViewCell.swift */; };
+		563F228F1FE846DF00E33986 /* PreviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563F228E1FE846DF00E33986 /* PreviewImageCollectionViewCell.swift */; };
 		569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84EC1FE1DD770054173D /* LockScreenWindow.swift */; };
 		569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */; };
 		569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */; };
@@ -56,6 +60,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5621A8351FE85C0F000C10A2 /* PreviewImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageCollectionViewCell.xib; sourceTree = "<group>"; };
+		563F228A1FE839F600E33986 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		563F228C1FE83F1500E33986 /* ImagePreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewTableViewCell.swift; sourceTree = "<group>"; };
+		563F228E1FE846DF00E33986 /* PreviewImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		09CFE999102A3ADFD8C86955 /* Pods-SecureImageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests.release.xcconfig"; sourceTree = "<group>"; };
 		3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
@@ -155,6 +163,9 @@
 				569D84F71FE1F22E0054173D /* CreateFirstAlbumView.xib */,
 				569D84F91FE1F2690054173D /* CreateFirstAlbumView.swift */,
 				569D84FB1FE2EFAF0054173D /* AlbumDetailsViewController.swift */,
+				563F228C1FE83F1500E33986 /* ImagePreviewTableViewCell.swift */,
+				563F228E1FE846DF00E33986 /* PreviewImageCollectionViewCell.swift */,
+				5621A8351FE85C0F000C10A2 /* PreviewImageCollectionViewCell.xib */,
 			);
 			path = Albums;
 			sourceTree = "<group>";
@@ -246,6 +257,7 @@
 				56D17D951FE1A3DC002DF790 /* ViewController.swift */,
 				56D17D971FE1A3DC002DF790 /* Main.storyboard */,
 				56D17DC71FE1BC9C002DF790 /* Camera.storyboard */,
+				563F228A1FE839F600E33986 /* Assets.xcassets */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -411,9 +423,11 @@
 				56D17D9E1FE1A3DC002DF790 /* LaunchScreen.storyboard in Resources */,
 				56D17DC61FE1BC68002DF790 /* Albums.storyboard in Resources */,
 				56D17D991FE1A3DC002DF790 /* Main.storyboard in Resources */,
+				5621A8361FE85C0F000C10A2 /* PreviewImageCollectionViewCell.xib in Resources */,
 				569D84F81FE1F22E0054173D /* CreateFirstAlbumView.xib in Resources */,
 				56D17DD41FE1D521002DF790 /* Podfile in Resources */,
 				56D17DD21FE1D3BD002DF790 /* README.md in Resources */,
+				563F228B1FE839F600E33986 /* Assets.xcassets in Resources */,
 				569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,7 +577,9 @@
 				569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */,
 				56E5438B1FE4912A00327591 /* DataExtensions.swift in Sources */,
 				56E543731FE32AE100327591 /* Document.swift in Sources */,
+				563F228F1FE846DF00E33986 /* PreviewImageCollectionViewCell.swift in Sources */,
 				569D84FA1FE1F2690054173D /* CreateFirstAlbumView.swift in Sources */,
+				563F228D1FE83F1500E33986 /* ImagePreviewTableViewCell.swift in Sources */,
 				569D84FC1FE2EFAF0054173D /* AlbumDetailsViewController.swift in Sources */,
 				56D17DD01FE1D381002DF790 /* Functions.swift in Sources */,
 			);
