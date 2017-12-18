@@ -28,6 +28,8 @@ class AlbumDetailsViewController: UIViewController {
     private static let previewCellReuseID = "ImagePreviewCellID"
     private static let functionsCellReuseID = "FunctionsCellID"
     private static let annotationCellReuseID = "AnnotationCellID"
+    private static let functionsCellRowHeight: CGFloat = 60.0
+    private static let annotationCellRowHeight: CGFloat = 100.0
     internal var album: Album!
     
     override func viewDidLoad() {
@@ -53,7 +55,11 @@ class AlbumDetailsViewController: UIViewController {
     
     private func commonInit() {
         
+//        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.estimatedRowHeight = 300
+        
         tableView.dataSource = self
+        tableView.delegate = self
     }
     
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
@@ -69,17 +75,8 @@ class AlbumDetailsViewController: UIViewController {
             ()
         }
     }
-}
-
-// MARK: UITableViewDataSource
-extension AlbumDetailsViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return 3
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
         
         var identifier = ""
 
@@ -91,6 +88,22 @@ extension AlbumDetailsViewController: UITableViewDataSource {
         default:
             identifier = AlbumDetailsViewController.annotationCellReuseID
         }
+        
+        return identifier
+    }
+}
+
+// MARK: UITableViewDataSource
+extension AlbumDetailsViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let identifier = cellIdentifierForCell(at: indexPath)
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) else {
             fatalError("Unable to dequeue cell with identifier \(identifier)")
@@ -105,10 +118,20 @@ extension AlbumDetailsViewController: UITableViewDataSource {
 // MARK: UITableViewDelegate
 extension AlbumDetailsViewController: UITableViewDelegate {
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//
-//        return tableView.frame.size.width * AlbumsViewController.cellAspectScaler
-//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        let identifier = cellIdentifierForCell(at: indexPath)
+        switch identifier
+        {
+        case AlbumDetailsViewController.previewCellReuseID:
+            let x = ImagePreviewTableViewCell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.bottomInset
+            return x
+        case AlbumDetailsViewController.functionsCellReuseID:
+            return AlbumDetailsViewController.functionsCellRowHeight
+        default:
+            return AlbumDetailsViewController.annotationCellRowHeight
+        }
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 

@@ -28,7 +28,19 @@ class ImagePreviewTableViewCell: UITableViewCell {
     internal var previewImages: List<Document>?
     private static let imageThumbnailCellReuseID = "ImageThumbnailCellID"
     private static let addPhotoCellReuseID = "AddPhotoCellID"
+    internal static let cellRowSpacing: CGFloat = 5.0
+    internal static let cellColumnSpacing: CGFloat = 5.0
+    internal static let numberOfColumns: CGFloat = 3.0
+    internal static let leftInset: CGFloat = 20.0
+    internal static let rightInset: CGFloat = 15.0
+    internal static let bottomInset: CGFloat = 15.0
+    
+    internal class func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
 
+        let h = ((width - (ImagePreviewTableViewCell.leftInset + ImagePreviewTableViewCell.rightInset)) - ((ImagePreviewTableViewCell.numberOfColumns - 1) *
+            ImagePreviewTableViewCell.cellColumnSpacing)) / ImagePreviewTableViewCell.numberOfColumns
+        return h
+    }
     override func awakeFromNib() {
 
         super.awakeFromNib()
@@ -48,7 +60,12 @@ class ImagePreviewTableViewCell: UITableViewCell {
         let imgcell = UINib(nibName: "PreviewImageCollectionViewCell" , bundle: nil)
         collectionView.register(imgcell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID)
 
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: ImagePreviewTableViewCell.leftInset,
+                                           bottom: ImagePreviewTableViewCell.bottomInset, right: ImagePreviewTableViewCell.rightInset)
+
         collectionView.dataSource = self
+        collectionView.delegate = self
     }
 
     private func configureCell(cell: UICollectionViewCell, atIndexPath indexPath: IndexPath) {
@@ -72,6 +89,32 @@ class ImagePreviewTableViewCell: UITableViewCell {
     }
 }
 
+extension ImagePreviewTableViewCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let width = ImagePreviewTableViewCell.collectionViewRowHeightFor(collectionView.frame.size.width)
+
+        return CGSize(width: width, height: width)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return ImagePreviewTableViewCell.cellRowSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return ImagePreviewTableViewCell.cellColumnSpacing
+    }
+}
+
 extension ImagePreviewTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -88,3 +131,4 @@ extension ImagePreviewTableViewCell: UICollectionViewDataSource {
         return cell
     }
 }
+
