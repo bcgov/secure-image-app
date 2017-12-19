@@ -72,7 +72,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         
         let imgcell = UINib(nibName: "PreviewImageCollectionViewCell" , bundle: nil)
         collectionView.register(imgcell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID)
-
+        
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: ImagePreviewTableViewCell.leftInset,
                                            bottom: ImagePreviewTableViewCell.bottomInset, right: ImagePreviewTableViewCell.rightInset)

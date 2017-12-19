@@ -87,6 +87,17 @@ class AlbumDetailsViewController: UIViewController {
             cell.onAddImageTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
+        case AlbumDetailsViewController.functionsCellReuseID:
+            let cell = cell as! FuncitonTableViewCell
+            cell.onViewAllImagesTouched = {
+                print("I should view all")
+            }
+            cell.onUploadAlbumTouched = {
+                print("I should upload")
+            }
+            cell.onSaveAlbumTouched = {
+                print("I should save")
+            }
         default:
             ()
         }
