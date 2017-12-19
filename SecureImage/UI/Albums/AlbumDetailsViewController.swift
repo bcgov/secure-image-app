@@ -30,6 +30,7 @@ class AlbumDetailsViewController: UIViewController {
     private static let annotationCellReuseID = "AnnotationCellID"
     private static let functionsCellRowHeight: CGFloat = 60.0
     private static let annotationCellRowHeight: CGFloat = 100.0
+    private static let numberOfRows: Int = 3
     internal var album: Album!
     
     override func viewDidLoad() {
@@ -54,10 +55,7 @@ class AlbumDetailsViewController: UIViewController {
     */
     
     private func commonInit() {
-        
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//        tableView.estimatedRowHeight = 300
-        
+
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -98,7 +96,7 @@ extension AlbumDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 3
+        return AlbumDetailsViewController.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -124,8 +122,7 @@ extension AlbumDetailsViewController: UITableViewDelegate {
         switch identifier
         {
         case AlbumDetailsViewController.previewCellReuseID:
-            let x = ImagePreviewTableViewCell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.bottomInset
-            return x
+            return ImagePreviewTableViewCell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.bottomInset
         case AlbumDetailsViewController.functionsCellReuseID:
             return AlbumDetailsViewController.functionsCellRowHeight
         default:
@@ -133,7 +130,7 @@ extension AlbumDetailsViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//    }
 }
