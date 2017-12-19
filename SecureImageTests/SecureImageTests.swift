@@ -22,27 +22,25 @@ import XCTest
 @testable import SecureImage
 
 class SecureImageTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+
+    func textDataExtensionExists() {
+
+        guard let _ = "Hello World".data(using: .utf8)?.hexString() else {
+            XCTAssertTrue(false)
+            return
         }
+        
+        XCTAssertTrue(true)
     }
     
+    func testHexStringResult() {
+        
+        let expectedValue = "48656C6C6F20576F726C64"
+        guard let hexString = "Hello World".data(using: .utf8)?.hexString() else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertTrue(hexString == expectedValue)
+    }
 }

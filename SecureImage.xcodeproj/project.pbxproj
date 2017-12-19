@@ -35,6 +35,7 @@
 		56E543731FE32AE100327591 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543721FE32AE100327591 /* Document.swift */; };
 		56E543791FE33F6300327591 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543781FE33F6300327591 /* Album.swift */; };
 		56E5438B1FE4912A00327591 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E5438A1FE4912A00327591 /* DataExtensions.swift */; };
+		D7EDE921552817C852CD2F4F /* Pods_SecureImageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09CFE999102A3ADFD8C86955 /* Pods-SecureImageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests.release.xcconfig"; sourceTree = "<group>"; };
+		3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
 		569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockScreenAuthenticateViewController.storyboard; sourceTree = "<group>"; };
 		569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAuthenticateViewController.swift; sourceTree = "<group>"; };
@@ -85,13 +88,14 @@
 		56D17DCD1FE1D379002DF790 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		56D17DCF1FE1D381002DF790 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		56D17DD11FE1D3BD002DF790 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		56D17DD31FE1D520002DF790 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		56D17DD31FE1D520002DF790 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		56E543721FE32AE100327591 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		56E543781FE33F6300327591 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		56E5438A1FE4912A00327591 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.release.xcconfig"; sourceTree = "<group>"; };
 		8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		971FDDD9C2BEB2ABD001DA68 /* Pods-SecureImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.debug.xcconfig"; sourceTree = "<group>"; };
+		C15C074AF54BB376A91716A5 /* Pods-SecureImageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7EDE921552817C852CD2F4F /* Pods_SecureImageTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,8 @@
 			children = (
 				971FDDD9C2BEB2ABD001DA68 /* Pods-SecureImage.debug.xcconfig */,
 				5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */,
+				C15C074AF54BB376A91716A5 /* Pods-SecureImageTests.debug.xcconfig */,
+				09CFE999102A3ADFD8C86955 /* Pods-SecureImageTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -279,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */,
+				3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -310,9 +318,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 56D17DBB1FE1A3DC002DF790 /* Build configuration list for PBXNativeTarget "SecureImageTests" */;
 			buildPhases = (
+				4A6331B0E7C76EACD3D47143 /* [CP] Check Pods Manifest.lock */,
 				56D17DA01FE1A3DC002DF790 /* Sources */,
 				56D17DA11FE1A3DC002DF790 /* Frameworks */,
 				56D17DA21FE1A3DC002DF790 /* Resources */,
+				119AF1497D8C2CB08B1C4951 /* [CP] Embed Pods Frameworks */,
+				4A390937AAFAB17A5D6FF01D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -436,6 +447,61 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-SecureImage-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		119AF1497D8C2CB08B1C4951 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A390937AAFAB17A5D6FF01D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A6331B0E7C76EACD3D47143 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SecureImageTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -695,6 +761,7 @@
 		};
 		56D17DBC1FE1A3DC002DF790 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C15C074AF54BB376A91716A5 /* Pods-SecureImageTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -711,6 +778,7 @@
 		};
 		56D17DBD1FE1A3DC002DF790 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09CFE999102A3ADFD8C86955 /* Pods-SecureImageTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
