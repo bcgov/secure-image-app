@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="181" height="180"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="album-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="JHI-dH-8k3">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-photo-small" translatesAutoresizingMaskIntoConstraints="NO" id="JHI-dH-8k3">
                         <rect key="frame" x="0.0" y="0.0" width="181" height="180"/>
                     </imageView>
                 </subviews>
@@ -36,6 +36,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="album-placeholder" width="708" height="278"/>
+        <image name="add-photo-small" width="100" height="100"/>
     </resources>
 </document>
