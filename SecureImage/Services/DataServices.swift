@@ -32,7 +32,7 @@ class DataServices: NSObject {
     internal class func setup() {
 
         DataServices.configureRealm()
-        DataServices.compactRealm()
+//        DataServices.seed()
     }
     
     private class func realmEncryptionKey() -> Data? {
@@ -72,6 +72,14 @@ class DataServices: NSObject {
                                             // check oldSchemaVersion here, if we're newer call
                                             // a method(s) specifically designed to migrate to
                                             // the desired schema. ie `self.migrateSchemaV0toV1(migration)`
+        },
+                                         shouldCompactOnLaunch: { totalBytes, usedBytes in
+                                            // totalBytes refers to the size of the file on disk in bytes (data + free space)
+                                            // usedBytes refers to the number of bytes used by data in the file
+                                            
+                                            // Compact if the file is over 100MB in size and less than 50% 'used'
+                                            let oneHundredMB = 100 * 1024 * 1024
+                                            return (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.5
         })
         
         Realm.Configuration.defaultConfiguration = config
@@ -103,64 +111,32 @@ class DataServices: NSObject {
     public class func documentsURL() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
-    
-    private class func compactRealm() {
-        
-        // This will be important because we're storing large amounts of data in the db
-        
-        let defaultRealmPathURL = realmPath().deletingLastPathComponent() // remove file name
-        let temporaryRealmPathURL  = defaultRealmPathURL.appendingPathComponent(temporaryRealmName, isDirectory: false)
-        
-        if !FileManager.default.fileExists(atPath: temporaryRealmPathURL.path) {
-            return
-        }
-        
-        // Compact Realm in an autorelease pool to prevent singletons from becoming persistent
-        autoreleasepool {
-            do {
-                // Cleanup any old work
-                if FileManager.default.fileExists(atPath: temporaryRealmPathURL.path) {
-                    try FileManager.default.removeItem(at: temporaryRealmPathURL)
+
+    internal class func seed() {
+        // This is for testing only !!!
+        do {
+            let realm = try Realm()
+            let files = ["IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg"]
+            let album = Album()
+            
+            for file in files {
+                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, 0.5) {
+                    
+                    let doc = Document()
+                    doc.id = UUID().uuidString
+                    doc.imageData = imageData
+                    doc.createdAt = Date()
+                    doc.modifiedAt = Date()
+
+                    album.documents.append(doc)
                 }
-                
-                // Copying the realm will recover lost space
-                try Realm().writeCopy(toFile: temporaryRealmPathURL)
-                try FileManager.default.removeItem(at: defaultRealmPathURL)
-                try FileManager.default.moveItem(atPath: temporaryRealmPathURL.path, toPath: defaultRealmPathURL.path)
-            } catch {
-                fatalError("Unable to compact Realm")
             }
+
+            try realm.write {
+                realm.add(album)
+            }
+        }  catch {
+            fatalError("Unable to seed Realm")
         }
     }
-    
-//    internal class func seed() {
-//        // This is for testing only !!!
-//        do {
-//            let realm = try Realm()
-//            print(Realm.Configuration.defaultConfiguration.fileURL)
-//            let files = ["IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG", "IMG_2250.JPG"]
-//            let album = Album()
-//            album.createdAt = Date()
-//            album.modifiedAt = Date()
-//            album.id = UUID().uuidString
-//
-//            for file in files {
-//                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, 0.5) {
-//
-//                        let doc = Document()
-//                        doc.imageData = imageData
-//                        doc.createdAt = Date()
-//                        doc.modifiedAt = Date()
-//                        doc.id = UUID().uuidString
-//                        album.documents.append(doc)
-//                }
-//            }
-//
-//            try realm.write {
-//                realm.add(album)
-//            }
-//        }  catch {
-//            fatalError("Unable to seed Realm")
-//        }
-//    }
 }

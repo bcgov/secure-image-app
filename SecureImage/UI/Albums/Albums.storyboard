@@ -22,38 +22,75 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="220" id="f4T-ax-5uQ">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="220"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlbumCell" rowHeight="200" id="wla-x6-ReG">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="f4T-ax-5uQ" id="Snd-Ha-ne1">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="219.5"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wla-x6-ReG" id="79H-O2-kof">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello Cell" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lJv-RN-y0L">
-                                                    <rect key="frame" x="151" y="99" width="73" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="album-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="YYz-f5-z10">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
+                                                </imageView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ac2-cf-Iu8">
+                                                    <rect key="frame" x="0.0" y="129.5" width="375" height="70"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTj-3b-5UF">
+                                                            <rect key="frame" x="54" y="24" width="162" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="70" id="Icf-Ag-wtE"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="YYz-f5-z10" secondAttribute="trailing" id="027-qp-WB1"/>
+                                                <constraint firstAttribute="trailing" secondItem="ac2-cf-Iu8" secondAttribute="trailing" id="JFl-89-qnB"/>
+                                                <constraint firstItem="ac2-cf-Iu8" firstAttribute="leading" secondItem="79H-O2-kof" secondAttribute="leading" id="LMI-yS-zgx"/>
+                                                <constraint firstAttribute="bottom" secondItem="YYz-f5-z10" secondAttribute="bottom" id="TTW-Li-Mso"/>
+                                                <constraint firstAttribute="bottom" secondItem="ac2-cf-Iu8" secondAttribute="bottom" id="WiR-BF-qHp"/>
+                                                <constraint firstItem="YYz-f5-z10" firstAttribute="top" secondItem="79H-O2-kof" secondAttribute="top" id="c9R-kM-teY"/>
+                                                <constraint firstItem="YYz-f5-z10" firstAttribute="leading" secondItem="79H-O2-kof" secondAttribute="leading" id="pzr-fC-r9c"/>
+                                            </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.27678944770000002" green="1" blue="0.34527240469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLo-eY-PvA">
+                                <rect key="frame" x="92" y="559" width="190" height="42"/>
+                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="190" id="1Db-Vv-Pm8"/>
+                                    <constraint firstAttribute="height" constant="42" id="D8M-Kz-rmm"/>
+                                </constraints>
+                                <state key="normal" title="Create Album">
+                                    <color key="titleColor" red="0.24313725489999999" green="0.50980392159999999" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="createAlbumTouchedWithSender:" destination="6Dk-VU-4Ic" eventType="touchUpInside" id="ZEG-M7-me9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="2a5-kc-O1S" firstAttribute="bottom" secondItem="vLo-eY-PvA" secondAttribute="bottom" constant="66" id="6bK-oT-Lyk"/>
                             <constraint firstItem="rcj-lW-f2p" firstAttribute="top" secondItem="2a5-kc-O1S" secondAttribute="top" id="E9G-Sa-eSf"/>
                             <constraint firstItem="2a5-kc-O1S" firstAttribute="bottom" secondItem="rcj-lW-f2p" secondAttribute="bottom" id="EJd-LR-8gk"/>
                             <constraint firstItem="rcj-lW-f2p" firstAttribute="leading" secondItem="2a5-kc-O1S" secondAttribute="leading" id="Rkr-HO-yVQ"/>
                             <constraint firstItem="2a5-kc-O1S" firstAttribute="trailing" secondItem="rcj-lW-f2p" secondAttribute="trailing" id="Rw3-5N-cSq"/>
+                            <constraint firstItem="vLo-eY-PvA" firstAttribute="centerX" secondItem="x6v-zW-8Io" secondAttribute="centerX" id="ran-gs-kgO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2a5-kc-O1S"/>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="createAlbumButton" destination="vLo-eY-PvA" id="dpU-D6-cfL"/>
                         <outlet property="tableView" destination="rcj-lW-f2p" id="W1q-f4-nq0"/>
                         <segue destination="DgY-RZ-y86" kind="show" identifier="ShowAlbumDetailsSegue" id="U5C-1w-pbt"/>
                     </connections>
@@ -275,6 +312,9 @@
             <point key="canvasLocation" x="972" y="36.431784107946029"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="album-placeholder" width="708" height="278"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Wg1-Pc-Fbg"/>
     </inferredMetricsTieBreakers>
