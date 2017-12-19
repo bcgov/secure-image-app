@@ -25,6 +25,8 @@ class AlbumDetailsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    private static let captureImageSegueID = "CaptureImageSegue"
+    private static let showImageSegueID = "ShowImageSegue"
     private static let previewCellReuseID = "ImagePreviewCellID"
     private static let functionsCellReuseID = "FunctionsCellID"
     private static let annotationCellReuseID = "AnnotationCellID"
@@ -44,16 +46,20 @@ class AlbumDetailsViewController: UIViewController {
         commonInit()
     }
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+//        let dvc = segue.destination
+//        let segueID = segue.identifier
+        
+        // if AlbumDetailsViewController.showImageSegueID then pass document along
+        
+        // if AlbumDetailsViewController.captureImageSegueID then we shoudl register as a deliage for this
+        // VC so we can get the captured image back. Implement protocol.
     }
-    */
-    
+
+    // MARK: -
+
     private func commonInit() {
 
         tableView.dataSource = self
@@ -68,7 +74,14 @@ class AlbumDetailsViewController: UIViewController {
 
         switch identifier {
         case AlbumDetailsViewController.previewCellReuseID:
-            (cell as! ImagePreviewTableViewCell).previewImages = album.documents
+            let cell = cell as! ImagePreviewTableViewCell
+            cell.previewImages = album.documents
+            cell.onViewImageTouched = { (document: Document) in
+                self.performSegue(withIdentifier: AlbumDetailsViewController.showImageSegueID, sender: nil)
+            }
+            cell.onAddImageTouched = {
+                self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
+            }
         default:
             ()
         }

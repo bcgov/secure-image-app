@@ -45,12 +45,6 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
 
         commonInit()
     }
-    
-//    override func layoutSubviews() {
-//
-//        super.layoutSubviews()
-//    
-//    }
 
     private func commonInit() {
 

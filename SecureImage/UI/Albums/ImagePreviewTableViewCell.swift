@@ -21,19 +21,25 @@
 import UIKit
 import RealmSwift
 
+typealias AddNewImageCallback = () -> Void
+typealias ViewImageCallback = (_ document: Document) -> Void
+
 class ImagePreviewTableViewCell: UITableViewCell {
+
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     internal var previewImages: List<Document>?
     private static let imageThumbnailCellReuseID = "ImageThumbnailCellID"
-    private static let addPhotoCellReuseID = "AddPhotoCellID"
+    private static let addImageCellReuseID = "AddImageCellReuseID"
     internal static let cellRowSpacing: CGFloat = 5.0
     internal static let cellColumnSpacing: CGFloat = 5.0
     internal static let numberOfColumns: CGFloat = 3.0
     internal static let leftInset: CGFloat = 20.0
     internal static let rightInset: CGFloat = 15.0
     internal static let bottomInset: CGFloat = 15.0
+    internal var onAddImageTouched: AddNewImageCallback?
+    internal var onViewImageTouched: ViewImageCallback?
     
     internal class func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
 
@@ -56,6 +62,9 @@ class ImagePreviewTableViewCell: UITableViewCell {
     }
     
     private func commonInit() {
+
+        let funccell = UINib(nibName: "AddImageCollectionViewCell" , bundle: nil)
+        collectionView.register(funccell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.addImageCellReuseID)
         
         let imgcell = UINib(nibName: "PreviewImageCollectionViewCell" , bundle: nil)
         collectionView.register(imgcell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID)
@@ -70,20 +79,20 @@ class ImagePreviewTableViewCell: UITableViewCell {
 
     private func configureCell(cell: UICollectionViewCell, atIndexPath indexPath: IndexPath) {
         
-        guard let identifier = cell.reuseIdentifier, let previewImages = previewImages else {
+        guard let previewImages = previewImages else {
             fatalError("Unable configure collection view cell")
         }
         
-        let image = previewImages[indexPath.row]
-        
-        switch identifier {
-        case ImagePreviewTableViewCell.imageThumbnailCellReuseID:
-            (cell as! PreviewImageCollectionViewCell).document = image
+        switch indexPath.row {
+        case 0:
+            ()
+        default:
+            let document = previewImages[indexPath.row - 1]
+            (cell as! PreviewImageCollectionViewCell).document = document
             (cell as! PreviewImageCollectionViewCell).onDeleteImageTouched = { (document: Document) in
                 print("I should delete \(document.id)")
             }
-        default:
-            ()
+
         }
 
     }
@@ -119,12 +128,20 @@ extension ImagePreviewTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
-        return previewImages?.count ?? 0
+        let count = previewImages?.count ?? 0
+        return count > 5 ? 6 : count + 1 // first 5images and one additional functional cell
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID, for: indexPath)
+        var cell: UICollectionViewCell
+        
+        switch indexPath.row {
+        case 0:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagePreviewTableViewCell.addImageCellReuseID, for: indexPath)
+        default:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID, for: indexPath)
+        }
         
         configureCell(cell: cell, atIndexPath: indexPath)
         
@@ -132,3 +149,19 @@ extension ImagePreviewTableViewCell: UICollectionViewDataSource {
     }
 }
 
+extension ImagePreviewTableViewCell: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            onAddImageTouched?()
+        default:
+            guard let previewImages = previewImages else {
+                fatalError("Unable configure collection view cell")
+            }
+            
+            let document = previewImages[indexPath.row - 1]
+            onViewImageTouched?(document)
+        }
+    }
+}

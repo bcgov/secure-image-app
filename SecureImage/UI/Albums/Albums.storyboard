@@ -151,13 +151,13 @@
             </objects>
             <point key="canvasLocation" x="1764" y="-338"/>
         </scene>
-        <!--Storyboard Reference-->
+        <!--SecureCamera-->
         <scene sceneID="zy6-0N-mkt">
             <objects>
-                <viewControllerPlaceholder id="U3Y-4F-ktD" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="SecureCamera" id="U3Y-4F-ktD" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ai8-De-eua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="181"/>
+            <point key="canvasLocation" x="1561" y="177"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="yX1-Eg-lb4">
