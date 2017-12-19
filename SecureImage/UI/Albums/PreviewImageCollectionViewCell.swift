@@ -19,7 +19,6 @@
 //
 
 import UIKit
-import QuartzCore
 import RealmSwift
 
 typealias DeleteImageCallback = (_ document: Document) -> Void
