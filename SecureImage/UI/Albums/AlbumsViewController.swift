@@ -20,7 +20,6 @@
 
 import UIKit
 import RealmSwift
-import QuartzCore
 
 class AlbumsViewController: UIViewController {
 
@@ -143,7 +142,8 @@ extension AlbumsViewController: UITableViewDataSource {
         
         let count = albums?.count ?? 0
 
-        configureFor(albumsExist: count == 0 ? false : true)
+        configureFor(albumsExist: count != 0)
+        
         return count
     }
     
