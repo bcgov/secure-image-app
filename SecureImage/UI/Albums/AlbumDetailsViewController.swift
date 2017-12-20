@@ -33,6 +33,7 @@ class AlbumDetailsViewController: UIViewController {
     private static let functionsCellRowHeight: CGFloat = 60.0
     private static let annotationCellRowHeight: CGFloat = 100.0
     private static let numberOfRows: Int = 3
+    private var document: Document?
     internal var album: Album!
     
     override func viewDidLoad() {
@@ -49,10 +50,13 @@ class AlbumDetailsViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let dvc = segue.destination
-//        let segueID = segue.identifier
-        
-        // if AlbumDetailsViewController.showImageSegueID then pass document along
+
+        if let document = document, let dvc = segue.destination as? PhotoViewController,
+             segue.identifier == AlbumDetailsViewController.showImageSegueID {
+            
+            dvc.document = document
+            return
+        }
         
         // if AlbumDetailsViewController.captureImageSegueID then we shoudl register as a deliage for this
         // VC so we can get the captured image back. Implement protocol.
@@ -77,6 +81,7 @@ class AlbumDetailsViewController: UIViewController {
             let cell = cell as! ImagePreviewTableViewCell
             cell.previewImages = album.documents
             cell.onViewImageTouched = { (document: Document) in
+                self.document = document
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showImageSegueID, sender: nil)
             }
             cell.onAddImageTouched = {

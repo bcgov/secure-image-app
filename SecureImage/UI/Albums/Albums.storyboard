@@ -163,25 +163,30 @@
             </objects>
             <point key="canvasLocation" x="1561" y="177"/>
         </scene>
-        <!--View Controller-->
+        <!--Photo View Controller-->
         <scene sceneID="yX1-Eg-lb4">
             <objects>
-                <viewController id="0yp-iC-f7d" sceneMemberID="viewController">
+                <viewController id="0yp-iC-f7d" customClass="PhotoViewController" customModule="SecureImage" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dRI-Xe-aL9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="View Image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UxG-0D-qFm">
-                                <rect key="frame" x="143" y="323" width="89" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gGF-iN-kJN">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="gGF-iN-kJN" firstAttribute="leading" secondItem="kzq-Dg-2UX" secondAttribute="leading" id="JVE-Ho-RMW"/>
+                            <constraint firstItem="kzq-Dg-2UX" firstAttribute="trailing" secondItem="gGF-iN-kJN" secondAttribute="trailing" id="PqW-Qc-yZC"/>
+                            <constraint firstItem="gGF-iN-kJN" firstAttribute="top" secondItem="kzq-Dg-2UX" secondAttribute="top" id="UE3-w8-YkB"/>
+                            <constraint firstItem="kzq-Dg-2UX" firstAttribute="bottom" secondItem="gGF-iN-kJN" secondAttribute="bottom" id="bNL-qX-uwB"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="kzq-Dg-2UX"/>
                     </view>
+                    <connections>
+                        <outlet property="currentPhotoImageView" destination="gGF-iN-kJN" id="sy5-M9-XNh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWw-eX-8gc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
