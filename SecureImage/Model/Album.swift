@@ -24,13 +24,16 @@ import RealmSwift
 class Album: Object {
     
     @objc dynamic var id: String = UUID().uuidString
-    @objc dynamic var titie: String = {
+    @objc dynamic var albumName: String = {
         let date = Date()
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = Constants.Defaults.dateFormat
         
         return "Created \(dateFormat.string(from: date))"
     }()
+    @objc dynamic var caseNumber: String?
+    @objc dynamic var address: String?
+    @objc dynamic var comments: String?
     @objc dynamic var createdAt: Date = Date()
     @objc dynamic var modifiedAt: Date = Date()
     internal let documents = List<Document>()

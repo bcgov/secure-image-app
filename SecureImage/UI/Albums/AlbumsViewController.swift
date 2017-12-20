@@ -112,7 +112,7 @@ class AlbumsViewController: UIViewController {
             cell.coverImageView.image = UIImage(data: imageData)
         }
 
-        cell.albumTitleLabel.text = album.titie
+        cell.albumTitleLabel.text = album.albumName
     }
     
     @IBAction dynamic private func createAlbumTouched(sender: Any?) {
