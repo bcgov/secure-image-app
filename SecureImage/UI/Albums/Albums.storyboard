@@ -35,9 +35,11 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ac2-cf-Iu8">
                                                     <rect key="frame" x="0.0" y="129.5" width="375" height="70"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTj-3b-5UF">
-                                                            <rect key="frame" x="54" y="24" width="162" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello World" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTj-3b-5UF">
+                                                            <rect key="frame" x="25" y="24" width="88.5" height="21"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="21" id="rYF-qy-8pW"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -45,7 +47,9 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstItem="NTj-3b-5UF" firstAttribute="centerY" secondItem="ac2-cf-Iu8" secondAttribute="centerY" id="C8a-sa-SAs"/>
                                                         <constraint firstAttribute="height" constant="70" id="Icf-Ag-wtE"/>
+                                                        <constraint firstItem="NTj-3b-5UF" firstAttribute="leading" secondItem="ac2-cf-Iu8" secondAttribute="leading" constant="25" id="xku-xJ-hDj"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>

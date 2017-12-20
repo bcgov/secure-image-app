@@ -24,6 +24,7 @@ struct Constants {
 
     struct Defaults {
         static let jPEGCompressionRatio = 0.5
+        static let dateFormat = "YYYY-MM-dd\'T\'HH:mm"
     }
     
     struct Keychain {

@@ -101,13 +101,18 @@ class AlbumsViewController: UIViewController {
     
     private func configureCell(cell: AlbumTableViewCell, at indexPath: IndexPath) {
         
-        guard let albums = albums, let document = albums[indexPath.row].documents.first, let imageData = document.imageData else {
+        guard let albums = albums else {
             print("Unable to unpack album information")
             return
         }
 
-        cell.coverImageView.image = UIImage(data: imageData)
-        cell.albumTitleLabel.text = "Hello World"
+        let album = albums[indexPath.row]
+
+        if let document = album.documents.first, let imageData = document.imageData {
+            cell.coverImageView.image = UIImage(data: imageData)
+        }
+
+        cell.albumTitleLabel.text = album.titie
     }
     
     @IBAction dynamic private func createAlbumTouched(sender: Any?) {
