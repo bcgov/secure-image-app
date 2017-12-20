@@ -15,13 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2017-12-13.
+// Created by Jason Leach on 2017-12-19.
 //
 
 import XCTest
+
 @testable import SecureImage
 
-class SecureImageTests: XCTestCase {
+class DataExtensionTests: XCTestCase {
 
     func textDataExtensionExists() {
 
