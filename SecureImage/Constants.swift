@@ -30,6 +30,15 @@ struct Constants {
     struct Keychain {
         static let RealmEncryptionKey = "RealmEncryptionKey"
     }
+    
+    struct Album {
+        // When converted to cammelcase these must match the related `Album`
+        // model properties.
+        static let Fields = [(name: "Album Name", placeHolderText: "Jane Doe"),
+                             (name: "Case Number", placeHolderText: "JCL12345"),
+                             (name: "Address", placeHolderText: "1965 Blue St"),
+                             (name: "Comments", placeHolderText: "Your text here")]
+    }
 }
 
 extension Notification.Name {

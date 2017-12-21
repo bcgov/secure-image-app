@@ -25,24 +25,28 @@ typealias SaveAlbumCallback = () -> Void
 typealias ViewAllCallback = () -> Void
 
 class FuncitonTableViewCell: UITableViewCell {
-
+    
     internal var onUploadAlbumTouched: UploadAlbumCallback?
     internal var onSaveAlbumTouched: SaveAlbumCallback?
     internal var onViewAllImagesTouched: ViewAllCallback?
     
     override func awakeFromNib() {
+
         super.awakeFromNib()
     }
     
     @IBAction dynamic private func uploadAlbumTouched(sender: UIButton) {
+
         onUploadAlbumTouched?()
     }
     
     @IBAction dynamic private func saveAlbumTouched(sender: UIButton) {
+
         onSaveAlbumTouched?()
     }
     
     @IBAction dynamic private func viewAllImagesTouched(sender: UIButton) {
+
         onViewAllImagesTouched?()
     }
 }
