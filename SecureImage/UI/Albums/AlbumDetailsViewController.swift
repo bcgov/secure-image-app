@@ -144,9 +144,10 @@ class AlbumDetailsViewController: UIViewController {
         
         do {
             let realm = try Realm()
-            let myAlbum = realm.objects(Album.self).filter("id == %@", album.id)
-            try realm.write {
-                myAlbum.setValue(value, forKey: property)
+            if let myAlbum = realm.objects(Album.self).filter("id == %@", album.id).first {
+                try realm.write {
+                    myAlbum.setValue(value, forKey: property)
+                }
             }
         } catch {
             fatalError("Unable to update album properties")
