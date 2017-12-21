@@ -32,7 +32,8 @@ class AlbumDetailsViewController: UIViewController {
     private static let annotationCellReuseID = "AnnotationCellID"
     private static let functionsCellRowHeight: CGFloat = 60.0
     private static let annotationCellRowHeight: CGFloat = 100.0
-    private static let numberOfRows: Int = 3
+    private static let annotationCellsOffset: Int = 2
+    private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
     internal var album: Album!
     
@@ -57,7 +58,7 @@ class AlbumDetailsViewController: UIViewController {
             dvc.document = document
             return
         }
-        
+
         // if AlbumDetailsViewController.captureImageSegueID then we shoudl register as a deliage for this
         // VC so we can get the captured image back. Implement protocol.
     }
@@ -66,15 +67,22 @@ class AlbumDetailsViewController: UIViewController {
 
     private func commonInit() {
 
+        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillShow),
+                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillHide),
+                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+
         tableView.dataSource = self
         tableView.delegate = self
     }
-    
+
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
 
         guard let identifier = cell.reuseIdentifier else {
             fatalError("Unable to determine cell reuse ID")
         }
+        
+        self.tableView.isEditing = false
 
         switch identifier {
         case AlbumDetailsViewController.previewCellReuseID:
@@ -89,6 +97,7 @@ class AlbumDetailsViewController: UIViewController {
             }
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
+            
             cell.onViewAllImagesTouched = {
                 print("I should view all")
             }
@@ -99,7 +108,19 @@ class AlbumDetailsViewController: UIViewController {
                 print("I should save")
             }
         default:
-            ()
+            let cell = cell as! AlbumPropertyTableViewCell
+            let property = Constants.Album.Fields[indexPath.row - AlbumDetailsViewController.annotationCellsOffset]
+            
+            cell.attributeTitleLabel.text = property.name
+            if let key = property.name.toCammelCase(), let value = album.value(forKey: key) as? String, !value.isEmpty {
+                cell.attributeTextField.text = value
+            } else {
+                cell.attributeTextField.placeholder = property.placeHolderText
+            }
+
+            cell.onPropertyChanged = { (property: String, value: String) in
+                self.updateAlbum(property: property, value: value)
+            }
         }
     }
     
@@ -117,6 +138,54 @@ class AlbumDetailsViewController: UIViewController {
         }
         
         return identifier
+    }
+    
+    internal func updateAlbum(property: String, value: String) {
+        
+        do {
+            let realm = try Realm()
+            if let myAlbum = realm.objects(Album.self).filter("id == %@", album.id).first {
+                try realm.write {
+                    myAlbum.setValue(value, forKey: property)
+                }
+            }
+        } catch {
+            fatalError("Unable to update album properties")
+        }
+    }
+    
+    @objc dynamic private func keyboardWillShow(notification: NSNotification) {
+
+        guard let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
+            print("Could not extract the keyboard frame from the notification")
+            return
+        }
+    
+        // Get the cell the user is interacting with
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        let cell = tableView.visibleCells.map { (cell: UITableViewCell) -> UITableViewCell? in
+            if let cell = cell as? AlbumPropertyTableViewCell, cell.attributeTextField.isFirstResponder {
+                return cell
+            }
+            
+            return nil
+        }.filter { $0 != nil }.first
+
+        // adjust the table so that the users current cell is just above
+        // the top of the keyboard
+        if let aCell = cell {
+            // We want to move the table up the difference between the cells
+            // current postion and the top of the keyboard.
+            let delta = aCell!.center.y - keyboardHeight
+            tableView.setContentOffset(CGPoint(x: 0, y: delta), animated: true)
+        }
+    }
+    
+    @objc dynamic private func keyboardWillHide(notification: NSNotification) {
+
+        // reset the table to its initial state when the keyboard is gone
+        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
 }
 
@@ -158,8 +227,4 @@ extension AlbumDetailsViewController: UITableViewDelegate {
             return AlbumDetailsViewController.annotationCellRowHeight
         }
     }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//    }
 }

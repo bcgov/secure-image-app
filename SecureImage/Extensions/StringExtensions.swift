@@ -22,9 +22,9 @@ import Foundation
 
 extension String {
     
-    func toCammelCase(separator aSeperator: Character = " ") -> String? {
+    func toCammelCase(_ seperator: Character = " ") -> String? {
 
-        return self.split(separator: aSeperator).enumerated().map({ (offset: Int, element: String.SubSequence) -> String in
+        return self.split(separator: seperator).enumerated().map({ (offset: Int, element: String.SubSequence) -> String in
             
             if offset == 0 {
                 return element.lowercased()
