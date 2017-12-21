@@ -27,6 +27,7 @@ class AlbumDetailsViewController: UIViewController {
     
     private static let captureImageSegueID = "CaptureImageSegue"
     private static let showImageSegueID = "ShowImageSegue"
+    private static let showPhotosSegueID = "ShowPhotosSegue"
     private static let previewCellReuseID = "ImagePreviewCellID"
     private static let functionsCellReuseID = "FunctionsCellID"
     private static let annotationCellReuseID = "AnnotationCellID"
@@ -58,9 +59,13 @@ class AlbumDetailsViewController: UIViewController {
             dvc.document = document
             return
         }
+        
+        if let album = album, let dvc = segue.destination as? PhotosViewController,
+            segue.identifier == AlbumDetailsViewController.showPhotosSegueID {
 
-        // if AlbumDetailsViewController.captureImageSegueID then we shoudl register as a deliage for this
-        // VC so we can get the captured image back. Implement protocol.
+            dvc.album = album
+            return
+        }
     }
 
     // MARK: -
@@ -99,7 +104,7 @@ class AlbumDetailsViewController: UIViewController {
             let cell = cell as! FuncitonTableViewCell
             
             cell.onViewAllImagesTouched = {
-                print("I should view all")
+                self.performSegue(withIdentifier: AlbumDetailsViewController.showPhotosSegueID, sender: nil)
             }
             cell.onUploadAlbumTouched = {
                 print("I should upload")

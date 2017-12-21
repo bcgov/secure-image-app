@@ -117,7 +117,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7jS-U6-Vfs">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" red="1" green="0.4165608952" blue="0.26187923810000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9RS-0D-i4f">
                                     <size key="itemSize" width="101" height="110"/>
@@ -342,6 +342,7 @@
                         <outlet property="tableView" destination="SyJ-ra-Ww5" id="lAo-pn-5lC"/>
                         <segue destination="0yp-iC-f7d" kind="show" identifier="ShowImageSegue" id="Wg1-Pc-Fbg"/>
                         <segue destination="U3Y-4F-ktD" kind="show" identifier="CaptureImageSegue" id="IxR-nL-kP8"/>
+                        <segue destination="a00-06-C4f" kind="show" identifier="ShowPhotosSegue" id="bip-ua-7Vc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nr4-DB-B3z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -353,6 +354,6 @@
         <image name="album-placeholder" width="352" height="201"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Wg1-Pc-Fbg"/>
+        <segue reference="K57-Qv-A33"/>
     </inferredMetricsTieBreakers>
 </document>
