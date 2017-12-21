@@ -31,7 +31,7 @@ class AlbumsViewController: UIViewController {
     private static let albumDetailsSegueID = "ShowAlbumDetailsSegue"
     private static let albumImageViewTag = 100
     private static let albumTitleLabelTag = 101
-    private var selectedAlbumID: String?
+    private var selectedAlbum: Album?
     private var albums: Results<Album>?
     private var localAlbumId: String?
     private let createFirstAlbumView: CreateFirstAlbumView = {
@@ -63,7 +63,7 @@ class AlbumsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
          let dvc = segue.destination as! AlbumDetailsViewController
-         dvc.localAlbumID  = selectedAlbumID
+         dvc.album  = selectedAlbum
     }
     
     private func commonInit() {
@@ -121,11 +121,11 @@ class AlbumsViewController: UIViewController {
 
         do {
             let album = Album()
-            selectedAlbumID = album.id
-            
             let realm = try Realm()
+
             try realm.write {
                 realm.add(album)
+                selectedAlbum = album
             }
         } catch {
             print("Unable to create new album in Realm")
@@ -173,7 +173,7 @@ extension AlbumsViewController: UITableViewDelegate {
             fatalError("Unable to extract album for selected row")
         }
         
-        selectedAlbumID = albums[indexPath.row].id
+        selectedAlbum = albums[indexPath.row]
         performSegue(withIdentifier: AlbumsViewController.albumDetailsSegueID, sender: nil)
     }
 }
