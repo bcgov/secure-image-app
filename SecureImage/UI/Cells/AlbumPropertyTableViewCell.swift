@@ -38,23 +38,23 @@ class AlbumPropertyTableViewCell: UITableViewCell {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
+        // if the user touches outside of the active text field then we want
+        // to dismiss the keyboard
         if let touch = event?.allTouches?.first, let aView = touch.view {
             if attributeTextField.isFirstResponder && attributeTextField != aView {
                 attributeTextField.resignFirstResponder()
             }
         }
         
+        // pass this event on down the chain; this is imporant :)
         super.touchesBegan(touches, with: event)
     }
 }
 
 // MARK: UITextFieldDelegate
 extension AlbumPropertyTableViewCell: UITextFieldDelegate {
-    
-    //    func textFieldDidBeginEditing(_ textField: UITextField) {
-    //        print("BEGIN EDIT")
-    //    }
-    
+
+    // triggerd when the user presses the return key, etc
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         textField.resignFirstResponder()

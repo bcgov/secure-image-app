@@ -47,11 +47,6 @@ class AlbumDetailsViewController: UIViewController {
         
         commonInit()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        super.viewWillDisappear(animated)
-    }
 
     // MARK: - Navigation
 
@@ -165,6 +160,7 @@ class AlbumDetailsViewController: UIViewController {
             return
         }
     
+        // Get the cell the user is interacting with
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
         let cell = tableView.visibleCells.map { (cell: UITableViewCell) -> UITableViewCell? in
@@ -175,6 +171,8 @@ class AlbumDetailsViewController: UIViewController {
             return nil
         }.filter { $0 != nil }.first
 
+        // adjust the table so that the users current cell is just above
+        // the top of the keyboard
         if let aCell = cell {
             // We want to move the table up the difference between the cells
             // current postion and the top of the keyboard.
@@ -185,6 +183,7 @@ class AlbumDetailsViewController: UIViewController {
     
     @objc dynamic private func keyboardWillHide(notification: NSNotification) {
 
+        // reset the table to its initial state when the keyboard is gone
         tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
 }
@@ -226,12 +225,5 @@ extension AlbumDetailsViewController: UITableViewDelegate {
         default:
             return AlbumDetailsViewController.annotationCellRowHeight
         }
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//            tableView.setContentOffset(CGPoint(x: 0, y: cell.center.y - 60), animated: true)
-//        }
     }
 }
