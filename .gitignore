@@ -21,6 +21,9 @@ DerivedData/
 Build/*
 Build/
 
+# Exclude merge artifacts
+*.orig
+
 # Obj-C/Swift binaries
 *.hmap
 *.ipa

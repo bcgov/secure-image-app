@@ -38,8 +38,12 @@ class ImagePreviewTableViewCell: UITableViewCell {
     internal static let leftInset: CGFloat = 20.0
     internal static let rightInset: CGFloat = 15.0
     internal static let bottomInset: CGFloat = 15.0
+    // index represents the location in the data source. The collection view will have
+    // and additional cell at index 0 so we must account for this with an offset.
+    internal static let imageCellOffset = 1
     internal var onAddImageTouched: AddNewImageCallback?
     internal var onViewImageTouched: ViewImageCallback?
+
     
     internal class func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
 
@@ -68,7 +72,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         
         let imgcell = UINib(nibName: "PreviewImageCollectionViewCell" , bundle: nil)
         collectionView.register(imgcell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID)
-
+        
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: ImagePreviewTableViewCell.leftInset,
                                            bottom: ImagePreviewTableViewCell.bottomInset, right: ImagePreviewTableViewCell.rightInset)
@@ -90,11 +94,48 @@ class ImagePreviewTableViewCell: UITableViewCell {
             let document = previewImages[indexPath.row - 1]
             (cell as! PreviewImageCollectionViewCell).document = document
             (cell as! PreviewImageCollectionViewCell).onDeleteImageTouched = { (document: Document) in
-                print("I should delete \(document.id)")
+                self.delete(document: document)
             }
-
         }
+    }
+    
+    private func delete(document: Document) {
 
+        guard let previewImages = previewImages, let index = previewImages.index(of: document) else {
+            fatalError("Unable unwrap data source")
+        }
+        
+        deleteFromDataSource(document: document)
+        deleteFromCollectionView(index: index)
+    }
+
+    private func deleteFromDataSource(document: Document) {
+
+        do {
+            let realm = try Realm()
+            
+            if let item = realm.objects(Document.self).filter("id ==  %@", document.id).first {
+                try realm.write {
+                    realm.delete(item)
+                }
+            }
+        } catch {
+            print("Unable to delete object from realm")
+        }
+    }
+    
+    private func deleteFromCollectionView(index: Int) {
+        
+        collectionView.performBatchUpdates({
+            let indexPath = IndexPath(row: index + ImagePreviewTableViewCell.imageCellOffset, section: 0)
+            collectionView.deleteItems(at: [indexPath])
+            // If we have more items that are not displayed then we need to
+            // push one onto the collection view from the back.
+            if let count = previewImages?.count, count >= 5 {
+                let indexPath = IndexPath(row: 5, section: 0)
+                collectionView.insertItems(at: [indexPath])
+            }
+        }, completion: nil)
     }
 }
 
@@ -129,7 +170,7 @@ extension ImagePreviewTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
         let count = previewImages?.count ?? 0
-        return count > 5 ? 6 : count + 1 // first 5images and one additional functional cell
+        return count > 5 ? 6 : count + ImagePreviewTableViewCell.imageCellOffset
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -160,7 +201,7 @@ extension ImagePreviewTableViewCell: UICollectionViewDelegate {
                 fatalError("Unable configure collection view cell")
             }
             
-            let document = previewImages[indexPath.row - 1]
+            let document = previewImages[indexPath.row - ImagePreviewTableViewCell.imageCellOffset]
             onViewImageTouched?(document)
         }
     }

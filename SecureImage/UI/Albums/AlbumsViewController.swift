@@ -29,8 +29,6 @@ class AlbumsViewController: UIViewController {
     private static let cellAspectScaler: CGFloat = 0.533
     private static let albumCellReuseID = "AlbumCell"
     private static let albumDetailsSegueID = "ShowAlbumDetailsSegue"
-    private static let albumImageViewTag = 100
-    private static let albumTitleLabelTag = 101
     private var selectedAlbum: Album?
     private var albums: Results<Album>?
     private var localAlbumId: String?
@@ -101,20 +99,20 @@ class AlbumsViewController: UIViewController {
         createAlbumButton.isHidden = true
     }
     
-    private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
+    private func configureCell(cell: AlbumTableViewCell, at indexPath: IndexPath) {
         
-        guard let albums = albums, let document = albums[indexPath.row].documents.first, let imageData = document.imageData else {
-            print("Unable to unpack the album")
-            
+        guard let albums = albums else {
+            print("Unable to unpack album information")
             return
         }
-        
-//        print(albums[indexPath.row].id)
-//        print(albums[indexPath.row].createdAt)
-        
-        if let iv = cell.viewWithTag(AlbumsViewController.albumImageViewTag) as? UIImageView {
-            iv.image = UIImage(data: imageData)
+
+        let album = albums[indexPath.row]
+
+        if let document = album.documents.first, let imageData = document.imageData {
+            cell.coverImageView.image = UIImage(data: imageData)
         }
+
+        cell.albumTitleLabel.text = album.albumName
     }
     
     @IBAction dynamic private func createAlbumTouched(sender: Any?) {
@@ -149,7 +147,7 @@ extension AlbumsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: AlbumsViewController.albumCellReuseID) else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AlbumsViewController.albumCellReuseID) as? AlbumTableViewCell else {
             fatalError("Unable to dequeue cell with identifier \(AlbumsViewController.albumCellReuseID)")
         }
         

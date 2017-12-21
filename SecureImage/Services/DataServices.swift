@@ -25,7 +25,6 @@ import SwiftKeychainWrapper
 class DataServices: NSObject {
     
     static let realmFileName = "default.realm"
-    static let temporaryRealmName = "temporary.realm"
     
     // MARK: Management
 
@@ -116,7 +115,8 @@ class DataServices: NSObject {
         // This is for testing only !!!
         do {
             let realm = try Realm()
-            let files = ["IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg"]
+            let files = ["IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg",
+                         "IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg"]
             let album = Album()
             
             for file in files {
