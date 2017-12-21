@@ -21,13 +21,11 @@
 import UIKit
 
 typealias UploadAlbumCallback = () -> Void
-typealias SaveAlbumCallback = () -> Void
 typealias ViewAllCallback = () -> Void
 
 class FuncitonTableViewCell: UITableViewCell {
     
     internal var onUploadAlbumTouched: UploadAlbumCallback?
-    internal var onSaveAlbumTouched: SaveAlbumCallback?
     internal var onViewAllImagesTouched: ViewAllCallback?
     
     override func awakeFromNib() {
@@ -39,12 +37,7 @@ class FuncitonTableViewCell: UITableViewCell {
 
         onUploadAlbumTouched?()
     }
-    
-    @IBAction dynamic private func saveAlbumTouched(sender: UIButton) {
 
-        onSaveAlbumTouched?()
-    }
-    
     @IBAction dynamic private func viewAllImagesTouched(sender: UIButton) {
 
         onViewAllImagesTouched?()

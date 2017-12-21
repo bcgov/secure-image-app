@@ -247,58 +247,29 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="fxJ-Mt-6WR">
-                                                    <rect key="frame" x="32" y="10" width="311" height="56"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="u5C-JJ-CD9">
+                                                    <rect key="frame" x="50.5" y="21" width="274" height="34"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="LBE-xE-3Iz">
-                                                            <rect key="frame" x="0.0" y="0.0" width="139.5" height="56"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVJ-Bd-CHX">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="139.5" height="23"/>
-                                                                    <state key="normal" title="View All Images"/>
-                                                                    <connections>
-                                                                        <action selector="viewAllImagesTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="hmy-Gw-lxb"/>
-                                                                    </connections>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLD-8D-Qqi">
-                                                                    <rect key="frame" x="0.0" y="33" width="139.5" height="23"/>
-                                                                    <state key="normal" title="Upload"/>
-                                                                    <connections>
-                                                                        <action selector="uploadAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="BAS-ww-aof"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="QVJ-Bd-CHX" firstAttribute="height" secondItem="HLD-8D-Qqi" secondAttribute="height" id="8HD-fu-LIS"/>
-                                                            </constraints>
-                                                        </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xxV-WZ-zEe">
-                                                            <rect key="frame" x="171.5" y="0.0" width="139.5" height="56"/>
-                                                            <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOO-dJ-Frh">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="139.5" height="23"/>
-                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </view>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SUW-Tw-yjk">
-                                                                    <rect key="frame" x="0.0" y="33" width="139.5" height="23"/>
-                                                                    <state key="normal" title="Save"/>
-                                                                    <connections>
-                                                                        <action selector="saveAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="Bin-7G-S6s"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="lOO-dJ-Frh" firstAttribute="height" secondItem="SUW-Tw-yjk" secondAttribute="height" id="xQ6-F0-A3I"/>
-                                                            </constraints>
-                                                        </stackView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVJ-Bd-CHX">
+                                                            <rect key="frame" x="0.0" y="0.0" width="127" height="34"/>
+                                                            <state key="normal" title="View All Images"/>
+                                                            <connections>
+                                                                <action selector="viewAllImagesTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="hmy-Gw-lxb"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bmo-j7-fW0">
+                                                            <rect key="frame" x="147" y="0.0" width="127" height="34"/>
+                                                            <state key="normal" title="Upload"/>
+                                                            <connections>
+                                                                <action selector="uploadAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="Knd-I3-rU7"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="fxJ-Mt-6WR" secondAttribute="trailing" constant="32" id="8SI-gf-8F7"/>
-                                                <constraint firstItem="fxJ-Mt-6WR" firstAttribute="leading" secondItem="V6D-HQ-Y25" secondAttribute="leading" constant="32" id="CyM-7V-hWB"/>
-                                                <constraint firstItem="fxJ-Mt-6WR" firstAttribute="top" secondItem="V6D-HQ-Y25" secondAttribute="top" constant="10" id="WwZ-s2-YnW"/>
-                                                <constraint firstAttribute="bottom" secondItem="fxJ-Mt-6WR" secondAttribute="bottom" constant="10" id="smo-kR-D28"/>
+                                                <constraint firstItem="u5C-JJ-CD9" firstAttribute="centerX" secondItem="V6D-HQ-Y25" secondAttribute="centerX" id="cnQ-Aw-88e"/>
+                                                <constraint firstItem="u5C-JJ-CD9" firstAttribute="centerY" secondItem="V6D-HQ-Y25" secondAttribute="centerY" id="njb-Vf-ad6"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.27678944770000002" green="1" blue="0.34527240469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -104,9 +104,6 @@ class AlbumDetailsViewController: UIViewController {
             cell.onUploadAlbumTouched = {
                 print("I should upload")
             }
-            cell.onSaveAlbumTouched = {
-                print("I should save")
-            }
         default:
             let cell = cell as! AlbumPropertyTableViewCell
             let property = Constants.Album.Fields[indexPath.row - AlbumDetailsViewController.annotationCellsOffset]
