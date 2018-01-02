@@ -51,7 +51,7 @@ class AlbumsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         do {
-            albums = try Realm().objects(Album.self)
+            albums = try Realm().objects(Album.self).sorted(byKeyPath: "createdAt", ascending: false)
             tableView.reloadData()
         } catch {
             print("Unable to load Albums")

@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		20DD6413B51B01038EC9CA87 /* Pods_SecureImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */; };
+		5625FEC71FFD532C00E1F6BD /* AlbumCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */; };
 		563F228B1FE839F600E33986 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 563F228A1FE839F600E33986 /* Assets.xcassets */; };
+		565417A91FEDD7B900D0B2AC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */; };
 		569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84EC1FE1DD770054173D /* LockScreenWindow.swift */; };
 		569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */; };
 		569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */; };
@@ -68,7 +70,9 @@
 /* Begin PBXFileReference section */
 		09CFE999102A3ADFD8C86955 /* Pods-SecureImageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImageTests/Pods-SecureImageTests.release.xcconfig"; sourceTree = "<group>"; };
 		3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewManager.swift; sourceTree = "<group>"; };
 		563F228A1FE839F600E33986 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
 		569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockScreenAuthenticateViewController.storyboard; sourceTree = "<group>"; };
 		569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAuthenticateViewController.swift; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 		56D17DCB1FE1D35C002DF790 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */,
 				569D85091FE2FEA00054173D /* DataServices.swift */,
 			);
 			path = Services;
@@ -307,7 +312,6 @@
 				56C1D0A91FEADE78004B0266 /* PreviewImageCollectionViewCell.xib */,
 				56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */,
 				56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */,
-				56B176DE1FE8962000721C7A /* FuncitonTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -317,6 +321,7 @@
 			children = (
 				56E5438A1FE4912A00327591 /* DataExtensions.swift */,
 				56C1D0C41FEAE7E2004B0266 /* StringExtensions.swift */,
+				565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -596,11 +601,13 @@
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
 				56C1D0A81FEADE6A004B0266 /* ImagePreviewTableViewCell.swift in Sources */,
 				56F524F51FEB39AA0093D8E0 /* FuncitonTableViewCell.swift in Sources */,
+				5625FEC71FFD532C00E1F6BD /* AlbumCollectionViewManager.swift in Sources */,
 				569D85061FE2FCFF0054173D /* ImageThumbnailCollectionViewCell.swift in Sources */,
 				569D84F61FE1EFF90054173D /* AlbumsViewController.swift in Sources */,
 				56C1D0941FE9DE15004B0266 /* AlbumTableViewCell.swift in Sources */,
 				56F524F61FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift in Sources */,
 				569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */,
+				565417A91FEDD7B900D0B2AC /* UIViewExtensions.swift in Sources */,
 				56D17D941FE1A3DC002DF790 /* AppDelegate.swift in Sources */,
 				569D850A1FE2FEA00054173D /* DataServices.swift in Sources */,
 				56D17DCE1FE1D379002DF790 /* Constants.swift in Sources */,

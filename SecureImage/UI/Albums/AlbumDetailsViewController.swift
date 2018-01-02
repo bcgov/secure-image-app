@@ -5,7 +5,7 @@
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at 
+// You may obtain a copy of the License at
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,12 @@ import UIKit
 import RealmSwift
 
 class AlbumDetailsViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     private static let captureImageSegueID = "CaptureImageSegue"
     private static let showImageSegueID = "ShowImageSegue"
-    private static let showPhotosSegueID = "ShowPhotosSegue"
+    private static let showAllImagesSegueID = "ShowAllImagesSegue"
     private static let previewCellReuseID = "ImagePreviewCellID"
     private static let functionsCellReuseID = "FunctionsCellID"
     private static let annotationCellReuseID = "AnnotationCellID"
@@ -36,59 +36,60 @@ class AlbumDetailsViewController: UIViewController {
     private static let annotationCellsOffset: Int = 2
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
-    internal var album: Album!
+    private var previewCellHeight: CGFloat = 250.0
+    internal var album: Album! // TODO:(jl) Should this be force unwraped?
     
     override func viewDidLoad() {
-
+        
         super.viewDidLoad()
-
+        
         guard let _ = album else {
             fatalError("The album was not passed to \(AlbumDetailsViewController.self())")
         }
         
         commonInit()
     }
-
+    
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
         if let document = document, let dvc = segue.destination as? PhotoViewController,
-             segue.identifier == AlbumDetailsViewController.showImageSegueID {
+            segue.identifier == AlbumDetailsViewController.showImageSegueID {
             
             dvc.document = document
             return
         }
         
-        if let album = album, let dvc = segue.destination as? PhotosViewController,
-            segue.identifier == AlbumDetailsViewController.showPhotosSegueID {
-
+        if let dvc = segue.destination as? PhotosViewController,
+            segue.identifier == AlbumDetailsViewController.showAllImagesSegueID {
+            
             dvc.album = album
             return
         }
     }
-
+    
     // MARK: -
-
+    
     private func commonInit() {
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillShow),
                                                name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillHide),
                                                name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-
+        
         tableView.dataSource = self
         tableView.delegate = self
     }
-
+    
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
-
+        
         guard let identifier = cell.reuseIdentifier else {
             fatalError("Unable to determine cell reuse ID")
         }
         
         self.tableView.isEditing = false
-
+        
         switch identifier {
         case AlbumDetailsViewController.previewCellReuseID:
             let cell = cell as! ImagePreviewTableViewCell
@@ -100,11 +101,12 @@ class AlbumDetailsViewController: UIViewController {
             cell.onAddImageTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
+            previewCellHeight = cell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.insets.bottom
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
             
             cell.onViewAllImagesTouched = {
-                self.performSegue(withIdentifier: AlbumDetailsViewController.showPhotosSegueID, sender: nil)
+                self.performSegue(withIdentifier: AlbumDetailsViewController.showAllImagesSegueID, sender: nil)
             }
             cell.onUploadAlbumTouched = {
                 print("I should upload")
@@ -119,7 +121,7 @@ class AlbumDetailsViewController: UIViewController {
             } else {
                 cell.attributeTextField.placeholder = property.placeHolderText
             }
-
+            
             cell.onPropertyChanged = { (property: String, value: String) in
                 self.updateAlbum(property: property, value: value)
             }
@@ -129,7 +131,7 @@ class AlbumDetailsViewController: UIViewController {
     private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
         
         var identifier = ""
-
+        
         switch indexPath.row {
         case 0:
             identifier = AlbumDetailsViewController.previewCellReuseID
@@ -157,12 +159,12 @@ class AlbumDetailsViewController: UIViewController {
     }
     
     @objc dynamic private func keyboardWillShow(notification: NSNotification) {
-
+        
         guard let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
             print("Could not extract the keyboard frame from the notification")
             return
         }
-    
+        
         // Get the cell the user is interacting with
         let keyboardRectangle = keyboardFrame.cgRectValue
         let keyboardHeight = keyboardRectangle.height
@@ -172,8 +174,8 @@ class AlbumDetailsViewController: UIViewController {
             }
             
             return nil
-        }.filter { $0 != nil }.first
-
+            }.filter { $0 != nil }.first
+        
         // adjust the table so that the users current cell is just above
         // the top of the keyboard
         if let aCell = cell {
@@ -185,7 +187,7 @@ class AlbumDetailsViewController: UIViewController {
     }
     
     @objc dynamic private func keyboardWillHide(notification: NSNotification) {
-
+        
         // reset the table to its initial state when the keyboard is gone
         tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
@@ -200,15 +202,15 @@ extension AlbumDetailsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let identifier = cellIdentifierForCell(at: indexPath)
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) else {
             fatalError("Unable to dequeue cell with identifier \(identifier)")
         }
-
+        
         configureCell(cell: cell, at: indexPath)
-
+        
         return cell
     }
 }
@@ -217,12 +219,12 @@ extension AlbumDetailsViewController: UITableViewDataSource {
 extension AlbumDetailsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
+        
         let identifier = cellIdentifierForCell(at: indexPath)
         switch identifier
         {
         case AlbumDetailsViewController.previewCellReuseID:
-            return ImagePreviewTableViewCell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.bottomInset
+            return previewCellHeight
         case AlbumDetailsViewController.functionsCellReuseID:
             return AlbumDetailsViewController.functionsCellRowHeight
         default:

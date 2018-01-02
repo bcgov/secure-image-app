@@ -7,6 +7,8 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,23 +23,39 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lM3-92-Mo7">
-                        <rect key="frame" x="0.0" y="12.5" width="242.5" height="242.5"/>
+                        <rect key="frame" x="0.0" y="25.5" width="230" height="229.5"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DrZ-IB-9Ut">
-                        <rect key="frame" x="230" y="0.0" width="25" height="25"/>
+                        <rect key="frame" x="204" y="0.0" width="51" height="51"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="25" id="Hxp-eQ-TZv"/>
-                            <constraint firstAttribute="height" constant="25" id="qeH-F4-cP8"/>
+                            <constraint firstAttribute="width" id="7d7-9C-Znm"/>
+                            <constraint firstAttribute="width" secondItem="DrZ-IB-9Ut" secondAttribute="height" multiplier="1:1" id="ab6-Y7-FGS"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7d7-9C-Znm"/>
+                            </mask>
+                        </variation>
                         <connections>
                             <action selector="deleteImageTouched:" destination="nlu-4h-dPD" eventType="touchUpInside" id="i6B-aO-PGh"/>
                         </connections>
                     </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uua-yu-7OD">
+                        <rect key="frame" x="196" y="221" width="24" height="24"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="8SW-Vn-uFl"/>
+                            <constraint firstAttribute="width" secondItem="uua-yu-7OD" secondAttribute="height" multiplier="1:1" id="TCz-Ds-Ciu"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <color key="backgroundColor" red="1" green="0.24437601647755769" blue="0.68431829132002719" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="lM3-92-Mo7" firstAttribute="top" secondItem="DrZ-IB-9Ut" secondAttribute="centerY" id="6Tz-Ei-Cgg"/>
+                <constraint firstItem="DrZ-IB-9Ut" firstAttribute="width" secondItem="nlu-4h-dPD" secondAttribute="width" multiplier="0.2" id="Ayc-vg-76Y"/>
+                <constraint firstItem="uua-yu-7OD" firstAttribute="trailing" secondItem="lM3-92-Mo7" secondAttribute="trailing" constant="-10" id="I1s-Fe-suZ"/>
+                <constraint firstItem="uua-yu-7OD" firstAttribute="bottom" secondItem="lM3-92-Mo7" secondAttribute="bottom" constant="-10" id="Kw9-Ol-5yD"/>
                 <constraint firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="trailing" id="PtU-M7-2oT"/>
                 <constraint firstItem="lM3-92-Mo7" firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="centerX" id="ZE3-Jb-jZm"/>
                 <constraint firstItem="lM3-92-Mo7" firstAttribute="leading" secondItem="nlu-4h-dPD" secondAttribute="leading" id="cZw-bg-zi5"/>
@@ -48,6 +66,9 @@
             <size key="customSize" width="128" height="117"/>
             <connections>
                 <outlet property="deleteButton" destination="DrZ-IB-9Ut" id="Tnv-qF-2OT"/>
+                <outlet property="deleteButtonWidthConstraint" destination="Ayc-vg-76Y" id="h4z-g8-x5g"/>
+                <outlet property="deleteButtonWidthToZeroConstraint" destination="7d7-9C-Znm" id="SHU-XI-DP1"/>
+                <outlet property="multiSelectIndicatorView" destination="uua-yu-7OD" id="8s5-9T-vZe"/>
                 <outlet property="thumbnailImageView" destination="lM3-92-Mo7" id="3tS-1h-Tyg"/>
             </connections>
             <point key="canvasLocation" x="108.5" y="-270.5"/>

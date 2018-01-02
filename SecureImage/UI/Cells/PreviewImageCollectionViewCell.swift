@@ -27,31 +27,76 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var multiSelectIndicatorView: UIView!
+    @IBOutlet var deleteButtonWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var deleteButtonWidthToZeroConstraint: NSLayoutConstraint!
     
-    private var layoutComplete: Bool = false
+    internal var onDeleteImageTouched: DeleteImageCallback? {
+        didSet {
+            deleteButtonWidthConstraint.isActive = true
+            deleteButtonWidthToZeroConstraint.isActive = false
+            
+            setNeedsLayout()
+        }
+    }
+    internal var multiSelectEnabled = false {
+        didSet {
+            multiSelectIndicatorView.isHidden = !multiSelectEnabled
+            multiSelectIndicatorView.backgroundColor = UIColor.clear
+        }
+    }
     internal var document: Document? {
         didSet {
             if let data = document?.imageData {
-                self.thumbnailImageView.image = UIImage(data: data)
+                thumbnailImageView.image = UIImage(data: data)
             }
         }
     }
-    internal var onDeleteImageTouched: DeleteImageCallback?
+    
+//    override var bounds: CGRect {
+//        didSet {
+//            contentView.frame = bounds
+//        }
+//    }
     
     override func awakeFromNib() {
         
         super.awakeFromNib()
-
+        
         commonInit()
+    }
+    
+    override func prepareForReuse() {
+        
+        super.prepareForReuse()
+        
+        multiSelectEnabled = false
+        multiSelectIndicatorView.isHidden = true
+        multiSelectIndicatorView.backgroundColor = UIColor.clear
+    }
+    
+    override func layoutSubviews() {
+        
+        if onDeleteImageTouched == nil {
+            deleteButtonWidthConstraint.isActive = false
+            deleteButtonWidthToZeroConstraint.isActive = true
+        }
+        
+        super.layoutSubviews()
     }
 
     private func commonInit() {
 
-        deleteButton.layer.cornerRadius = deleteButton.bounds.size.height / 2.0
         deleteButton.clipsToBounds = true
         deleteButton.backgroundColor = UIColor.blue
+        
+        multiSelectIndicatorView.isHidden = true
+        multiSelectIndicatorView.backgroundColor = UIColor.clear
+        
+        multiSelectIndicatorView.createMaskLayer()
+        multiSelectIndicatorView.createCircleLayer(UIColor.white)
     }
-    
+
     @IBAction dynamic private func deleteImageTouched(_ sender: UIButton) {
 
         guard let document = document else {
@@ -59,5 +104,15 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
         }
 
         onDeleteImageTouched?(document)
+    }
+
+    internal func performSelectionAnimations() {
+
+        multiSelectIndicatorView.backgroundColor = UIColor.white
+    }
+    
+    internal func performDeselectionAnimations() {
+
+        multiSelectIndicatorView.backgroundColor = UIColor.clear
     }
 }

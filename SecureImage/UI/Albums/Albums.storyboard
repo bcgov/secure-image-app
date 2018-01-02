@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlbumCell" rowHeight="200" id="wla-x6-ReG" customClass="AlbumTableViewCell" customModule="SecureImage" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlbumCell" rowHeight="200" id="wla-x6-ReG" customClass="AlbumTableViewCell" customModule="SecureImage" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wla-x6-ReG" id="79H-O2-kof">
@@ -108,57 +108,85 @@
             </objects>
             <point key="canvasLocation" x="173.59999999999999" y="37.331334332833585"/>
         </scene>
-        <!--View Controller-->
+        <!--Photos View Controller-->
         <scene sceneID="tdQ-fG-jIE">
             <objects>
-                <viewController id="a00-06-C4f" sceneMemberID="viewController">
+                <viewController id="a00-06-C4f" customClass="PhotosViewController" customModule="SecureImage" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Yu-Wx-93L">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7jS-U6-Vfs">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7jS-U6-Vfs">
+                                <rect key="frame" x="0.0" y="99" width="375" height="568"/>
                                 <color key="backgroundColor" red="1" green="0.4165608952" blue="0.26187923810000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9RS-0D-i4f">
                                     <size key="itemSize" width="101" height="110"/>
-                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7Gw-BU-5Kt">
-                                        <rect key="frame" x="0.0" y="50" width="101" height="110"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="101" height="110"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </view>
-                                        <color key="backgroundColor" red="0.27678944770000002" green="1" blue="0.34527240469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </collectionViewCell>
-                                </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eBk-y5-2sq">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                </collectionReusableView>
+                                <cells/>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6T-r1-ITh">
+                                <rect key="frame" x="219" y="596" width="120" height="35"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="pCm-WN-bw7"/>
+                                    <constraint firstAttribute="height" constant="35" id="x1C-R6-fZa"/>
+                                </constraints>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteButtonTouchedWithSender:" destination="a00-06-C4f" eventType="touchUpInside" id="TAS-Xg-3kE"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z6t-ME-yca">
+                                <rect key="frame" x="0.0" y="64" width="375" height="35"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Count" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCm-w3-MZb">
+                                        <rect key="frame" x="270.5" y="7" width="84.5" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="YFX-8y-jxK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="NCm-w3-MZb" firstAttribute="centerY" secondItem="Z6t-ME-yca" secondAttribute="centerY" id="ShM-N2-iAN"/>
+                                    <constraint firstAttribute="height" constant="35" id="V6v-hq-2yi"/>
+                                    <constraint firstAttribute="trailing" secondItem="NCm-w3-MZb" secondAttribute="trailing" constant="20" id="buU-hD-9kO"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="Z6t-ME-yca" secondAttribute="trailing" id="56L-5Q-XBx"/>
+                            <constraint firstItem="y9u-R7-imk" firstAttribute="bottom" secondItem="P6T-r1-ITh" secondAttribute="bottom" constant="36" id="6Pm-bs-QPd"/>
+                            <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="P6T-r1-ITh" secondAttribute="trailing" constant="36" id="OgM-Ec-SfS"/>
+                            <constraint firstItem="Z6t-ME-yca" firstAttribute="top" secondItem="y9u-R7-imk" secondAttribute="top" id="TrD-is-84n"/>
+                            <constraint firstItem="Z6t-ME-yca" firstAttribute="leading" secondItem="y9u-R7-imk" secondAttribute="leading" id="bNI-07-tQ8"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="7jS-U6-Vfs" secondAttribute="trailing" id="c6v-U1-Qsb"/>
-                            <constraint firstItem="7jS-U6-Vfs" firstAttribute="top" secondItem="y9u-R7-imk" secondAttribute="top" id="dtT-EY-ith"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="bottom" secondItem="7jS-U6-Vfs" secondAttribute="bottom" id="sC9-10-QTI"/>
                             <constraint firstItem="7jS-U6-Vfs" firstAttribute="leading" secondItem="y9u-R7-imk" secondAttribute="leading" id="u1L-cu-Voc"/>
+                            <constraint firstItem="7jS-U6-Vfs" firstAttribute="top" secondItem="Z6t-ME-yca" secondAttribute="bottom" id="wpa-I5-4LW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="y9u-R7-imk"/>
                     </view>
                     <connections>
+                        <outlet property="collectionView" destination="7jS-U6-Vfs" id="XJ6-hP-Mvd"/>
+                        <outlet property="deleteButton" destination="P6T-r1-ITh" id="zEx-Yh-SuE"/>
+                        <outlet property="itemCountLabel" destination="NCm-w3-MZb" id="Lef-fc-T6T"/>
                         <segue destination="0yp-iC-f7d" kind="show" identifier="ShowImageSegue" id="K57-Qv-A33"/>
+                        <segue destination="U3Y-4F-ktD" kind="show" identifier="CaptureImageSegue" id="MSl-AZ-UjZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fkf-a1-Utu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1764" y="-338"/>
+            <point key="canvasLocation" x="1764" y="-338.68065967016497"/>
         </scene>
         <!--SecureCamera-->
         <scene sceneID="zy6-0N-mkt">
@@ -166,7 +194,7 @@
                 <viewControllerPlaceholder storyboardName="SecureCamera" id="U3Y-4F-ktD" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ai8-De-eua" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1561" y="177"/>
+            <point key="canvasLocation" x="1561" y="170"/>
         </scene>
         <!--Photo View Controller-->
         <scene sceneID="yX1-Eg-lb4">
@@ -247,29 +275,58 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="u5C-JJ-CD9">
-                                                    <rect key="frame" x="50.5" y="21" width="274" height="34"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="fxJ-Mt-6WR">
+                                                    <rect key="frame" x="32" y="10" width="311" height="56"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVJ-Bd-CHX">
-                                                            <rect key="frame" x="0.0" y="0.0" width="127" height="34"/>
-                                                            <state key="normal" title="View All Images"/>
-                                                            <connections>
-                                                                <action selector="viewAllImagesTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="hmy-Gw-lxb"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bmo-j7-fW0">
-                                                            <rect key="frame" x="147" y="0.0" width="127" height="34"/>
-                                                            <state key="normal" title="Upload"/>
-                                                            <connections>
-                                                                <action selector="uploadAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="Knd-I3-rU7"/>
-                                                            </connections>
-                                                        </button>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="LBE-xE-3Iz">
+                                                            <rect key="frame" x="0.0" y="0.0" width="139.5" height="56"/>
+                                                            <subviews>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVJ-Bd-CHX">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="139.5" height="23"/>
+                                                                    <state key="normal" title="View All Images"/>
+                                                                    <connections>
+                                                                        <action selector="viewAllImagesTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="hmy-Gw-lxb"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLD-8D-Qqi">
+                                                                    <rect key="frame" x="0.0" y="33" width="139.5" height="23"/>
+                                                                    <state key="normal" title="Upload"/>
+                                                                    <connections>
+                                                                        <action selector="uploadAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="BAS-ww-aof"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="QVJ-Bd-CHX" firstAttribute="height" secondItem="HLD-8D-Qqi" secondAttribute="height" id="8HD-fu-LIS"/>
+                                                            </constraints>
+                                                        </stackView>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xxV-WZ-zEe">
+                                                            <rect key="frame" x="171.5" y="0.0" width="139.5" height="56"/>
+                                                            <subviews>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lOO-dJ-Frh">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="139.5" height="23"/>
+                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </view>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SUW-Tw-yjk">
+                                                                    <rect key="frame" x="0.0" y="33" width="139.5" height="23"/>
+                                                                    <state key="normal" title="Save"/>
+                                                                    <connections>
+                                                                        <action selector="saveAlbumTouchedWithSender:" destination="JQm-Xs-vHK" eventType="touchUpInside" id="Bin-7G-S6s"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="lOO-dJ-Frh" firstAttribute="height" secondItem="SUW-Tw-yjk" secondAttribute="height" id="xQ6-F0-A3I"/>
+                                                            </constraints>
+                                                        </stackView>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="u5C-JJ-CD9" firstAttribute="centerX" secondItem="V6D-HQ-Y25" secondAttribute="centerX" id="cnQ-Aw-88e"/>
-                                                <constraint firstItem="u5C-JJ-CD9" firstAttribute="centerY" secondItem="V6D-HQ-Y25" secondAttribute="centerY" id="njb-Vf-ad6"/>
+                                                <constraint firstAttribute="trailing" secondItem="fxJ-Mt-6WR" secondAttribute="trailing" constant="32" id="8SI-gf-8F7"/>
+                                                <constraint firstItem="fxJ-Mt-6WR" firstAttribute="leading" secondItem="V6D-HQ-Y25" secondAttribute="leading" constant="32" id="CyM-7V-hWB"/>
+                                                <constraint firstItem="fxJ-Mt-6WR" firstAttribute="top" secondItem="V6D-HQ-Y25" secondAttribute="top" constant="10" id="WwZ-s2-YnW"/>
+                                                <constraint firstAttribute="bottom" secondItem="fxJ-Mt-6WR" secondAttribute="bottom" constant="10" id="smo-kR-D28"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.27678944770000002" green="1" blue="0.34527240469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -342,7 +399,7 @@
                         <outlet property="tableView" destination="SyJ-ra-Ww5" id="lAo-pn-5lC"/>
                         <segue destination="0yp-iC-f7d" kind="show" identifier="ShowImageSegue" id="Wg1-Pc-Fbg"/>
                         <segue destination="U3Y-4F-ktD" kind="show" identifier="CaptureImageSegue" id="IxR-nL-kP8"/>
-                        <segue destination="a00-06-C4f" kind="show" identifier="ShowPhotosSegue" id="bip-ua-7Vc"/>
+                        <segue destination="a00-06-C4f" kind="show" identifier="ShowAllImagesSegue" id="Sup-CQ-R9q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nr4-DB-B3z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -355,5 +412,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="K57-Qv-A33"/>
+        <segue reference="MSl-AZ-UjZ"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -115,8 +115,10 @@ class DataServices: NSObject {
         // This is for testing only !!!
         do {
             let realm = try Realm()
-            let files = ["IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg",
-                         "IMG_2255.jpg", "IMG_2256.jpg", "IMG_2257.jpg", "IMG_2258.jpg"]
+            let files = ["IMG_0093.jpg", "IMG_0094.jpg", "IMG_0095.jpg", "IMG_0096.jpg", "IMG_0097.jpg", "IMG_0098.jpg",
+                         "IMG_0093.jpg", "IMG_0094.jpg", "IMG_0095.jpg", "IMG_0096.jpg", "IMG_0097.jpg", "IMG_0098.jpg",
+                         "IMG_0093.jpg", "IMG_0094.jpg", "IMG_0095.jpg", "IMG_0096.jpg", "IMG_0097.jpg", "IMG_0098.jpg",
+                         "IMG_0093.jpg", "IMG_0094.jpg", "IMG_0095.jpg", "IMG_0096.jpg", "IMG_0097.jpg", "IMG_0098.jpg"]
             let album = Album()
             
             for file in files {

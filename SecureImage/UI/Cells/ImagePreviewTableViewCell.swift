@@ -26,31 +26,19 @@ typealias ViewImageCallback = (_ document: Document) -> Void
 
 class ImagePreviewTableViewCell: UITableViewCell {
 
-
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    internal var previewImages: List<Document>?
-    private static let imageThumbnailCellReuseID = "ImageThumbnailCellID"
-    private static let addImageCellReuseID = "AddImageCellReuseID"
-    internal static let cellRowSpacing: CGFloat = 5.0
-    internal static let cellColumnSpacing: CGFloat = 5.0
-    internal static let numberOfColumns: CGFloat = 3.0
-    internal static let leftInset: CGFloat = 20.0
-    internal static let rightInset: CGFloat = 15.0
-    internal static let bottomInset: CGFloat = 15.0
-    // index represents the location in the data source. The collection view will have
-    // and additional cell at index 0 so we must account for this with an offset.
-    internal static let imageCellOffset = 1
+
+    internal var previewImages: List<Document>? {
+        didSet {
+            self.albumCollectionViewManager.data = previewImages
+            self.collectionView.reloadData()
+        }
+    }
+    internal static let insets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 15.0, right: 15.0)
+    internal var albumCollectionViewManager: AlbumCollectionViewManager!
     internal var onAddImageTouched: AddNewImageCallback?
     internal var onViewImageTouched: ViewImageCallback?
 
-    
-    internal class func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
-
-        let h = ((width - (ImagePreviewTableViewCell.leftInset + ImagePreviewTableViewCell.rightInset)) - ((ImagePreviewTableViewCell.numberOfColumns - 1) *
-            ImagePreviewTableViewCell.cellColumnSpacing)) / ImagePreviewTableViewCell.numberOfColumns
-        return h
-    }
     override func awakeFromNib() {
 
         super.awakeFromNib()
@@ -68,35 +56,30 @@ class ImagePreviewTableViewCell: UITableViewCell {
     private func commonInit() {
 
         let funccell = UINib(nibName: "AddImageCollectionViewCell" , bundle: nil)
-        collectionView.register(funccell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.addImageCellReuseID)
+        collectionView.register(funccell, forCellWithReuseIdentifier: AlbumCollectionViewManager.addImageCellReuseID)
         
         let imgcell = UINib(nibName: "PreviewImageCollectionViewCell" , bundle: nil)
-        collectionView.register(imgcell, forCellWithReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID)
+        collectionView.register(imgcell, forCellWithReuseIdentifier: AlbumCollectionViewManager.imageThumbnailCellReuseID)
         
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: ImagePreviewTableViewCell.leftInset,
-                                           bottom: ImagePreviewTableViewCell.bottomInset, right: ImagePreviewTableViewCell.rightInset)
+        layout.sectionInset = ImagePreviewTableViewCell.insets
+        
+        albumCollectionViewManager = AlbumCollectionViewManager(insets: ImagePreviewTableViewCell.insets,
+                                                                rowSpacing: 5.0,
+                                                                columnSpacing: 5.0,
+                                                                numberOfColumns: 3,
+                                                                numberOfRows: 2,
+                                                                data: previewImages,
+                                                                delegate: self)
 
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        collectionView.dataSource = albumCollectionViewManager
+        collectionView.delegate = albumCollectionViewManager
+        collectionView.allowsMultipleSelection = false
     }
 
-    private func configureCell(cell: UICollectionViewCell, atIndexPath indexPath: IndexPath) {
+    internal func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
         
-        guard let previewImages = previewImages else {
-            fatalError("Unable configure collection view cell")
-        }
-        
-        switch indexPath.row {
-        case 0:
-            ()
-        default:
-            let document = previewImages[indexPath.row - 1]
-            (cell as! PreviewImageCollectionViewCell).document = document
-            (cell as! PreviewImageCollectionViewCell).onDeleteImageTouched = { (document: Document) in
-                self.delete(document: document)
-            }
-        }
+        return albumCollectionViewManager.collectionViewRowHeightFor(width)
     }
     
     private func delete(document: Document) {
@@ -127,7 +110,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
     private func deleteFromCollectionView(index: Int) {
         
         collectionView.performBatchUpdates({
-            let indexPath = IndexPath(row: index + ImagePreviewTableViewCell.imageCellOffset, section: 0)
+            let indexPath = IndexPath(row: index + AlbumCollectionViewManager.imageCellOffset, section: 0)
             collectionView.deleteItems(at: [indexPath])
             // If we have more items that are not displayed then we need to
             // push one onto the collection view from the back.
@@ -139,70 +122,32 @@ class ImagePreviewTableViewCell: UITableViewCell {
     }
 }
 
-extension ImagePreviewTableViewCell: UICollectionViewDelegateFlowLayout {
+// MARK: AlbumCollectionManagerProtocol
+extension ImagePreviewTableViewCell: AlbumCollectionManagerProtocol {
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let width = ImagePreviewTableViewCell.collectionViewRowHeightFor(collectionView.frame.size.width)
-
-        return CGSize(width: width, height: width)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func configureCell(cell: UICollectionViewCell, atIndexPath indexPath: IndexPath) {
         
-        return ImagePreviewTableViewCell.cellRowSpacing
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        
-        return ImagePreviewTableViewCell.cellColumnSpacing
-    }
-}
-
-extension ImagePreviewTableViewCell: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
-        let count = previewImages?.count ?? 0
-        return count > 5 ? 6 : count + ImagePreviewTableViewCell.imageCellOffset
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        var cell: UICollectionViewCell
-        
-        switch indexPath.row {
-        case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagePreviewTableViewCell.addImageCellReuseID, for: indexPath)
-        default:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImagePreviewTableViewCell.imageThumbnailCellReuseID, for: indexPath)
+        guard let previewImages = previewImages else {
+            fatalError("Unable configure collection view cell")
         }
         
-        configureCell(cell: cell, atIndexPath: indexPath)
-        
-        return cell
-    }
-}
-
-extension ImagePreviewTableViewCell: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            onAddImageTouched?()
+            ()
         default:
-            guard let previewImages = previewImages else {
-                fatalError("Unable configure collection view cell")
+            let document = previewImages[indexPath.row - 1]
+            (cell as! PreviewImageCollectionViewCell).document = document
+            (cell as! PreviewImageCollectionViewCell).onDeleteImageTouched = { (document: Document) in
+                self.delete(document: document)
             }
-            
-            let document = previewImages[indexPath.row - ImagePreviewTableViewCell.imageCellOffset]
-            onViewImageTouched?(document)
         }
+    }
+    
+    func viewPhoto(document: Document) {
+        onViewImageTouched?(document)
+    }
+    
+    func addPhoto() {
+        onAddImageTouched?()
     }
 }
