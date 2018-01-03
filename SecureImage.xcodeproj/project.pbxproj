@@ -284,8 +284,8 @@
 		56D17DCB1FE1D35C002DF790 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */,
 				569D85091FE2FEA00054173D /* DataServices.swift */,
+				5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
