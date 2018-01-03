@@ -44,6 +44,7 @@
 		56E5438B1FE4912A00327591 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E5438A1FE4912A00327591 /* DataExtensions.swift */; };
 		56F524F51FEB39AA0093D8E0 /* FuncitonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */; };
 		56F524F61FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */; };
+		56F524FA1FEC5D450093D8E0 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F91FEC5D450093D8E0 /* PhotosViewController.swift */; };
 		D7EDE921552817C852CD2F4F /* Pods_SecureImageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -110,6 +111,7 @@
 		56E5438A1FE4912A00327591 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuncitonTableViewCell.swift; sourceTree = "<group>"; };
 		56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumPropertyTableViewCell.swift; sourceTree = "<group>"; };
+		56F524F91FEC5D450093D8E0 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.release.xcconfig"; sourceTree = "<group>"; };
 		8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		971FDDD9C2BEB2ABD001DA68 /* Pods-SecureImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.debug.xcconfig"; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				56D17DC51FE1BC68002DF790 /* Albums.storyboard */,
 				569D84F51FE1EFF90054173D /* AlbumsViewController.swift */,
 				569D84FB1FE2EFAF0054173D /* AlbumDetailsViewController.swift */,
+				56F524F91FEC5D450093D8E0 /* PhotosViewController.swift */,
 				56C1D09D1FE9EBD8004B0266 /* PhotoViewController.swift */,
 			);
 			path = Albums;
@@ -304,6 +307,7 @@
 				56C1D0A91FEADE78004B0266 /* PreviewImageCollectionViewCell.xib */,
 				56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */,
 				56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */,
+				56B176DE1FE8962000721C7A /* FuncitonTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -607,6 +611,7 @@
 				56E543731FE32AE100327591 /* Document.swift in Sources */,
 				569D84FA1FE1F2690054173D /* CreateFirstAlbumView.swift in Sources */,
 				569D84FC1FE2EFAF0054173D /* AlbumDetailsViewController.swift in Sources */,
+				56F524FA1FEC5D450093D8E0 /* PhotosViewController.swift in Sources */,
 				56C1D0AC1FEADE78004B0266 /* PreviewImageCollectionViewCell.swift in Sources */,
 				56D17DD01FE1D381002DF790 /* Functions.swift in Sources */,
 			);
