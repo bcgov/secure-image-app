@@ -31,7 +31,6 @@ protocol AlbumCollectionManagerProtocol: class {
     // Optional
     func selectedCell(atIndexPath indexPath: IndexPath)
     func deselectedCell(atIndexPath indexPath: IndexPath)
-//    func configureHeader(view: UIView)
 }
 
 // Allow for default implementation of optional protocol
@@ -45,10 +44,6 @@ extension AlbumCollectionManagerProtocol {
     func deselectedCell(atIndexPath indexPath: IndexPath) {
         ()
     }
-    
-//    func configureHeader(view: UIView) {
-//        ()
-//    }
 }
 
 class AlbumCollectionViewManager: NSObject {
