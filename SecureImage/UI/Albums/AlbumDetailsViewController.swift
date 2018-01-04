@@ -50,6 +50,13 @@ class AlbumDetailsViewController: UIViewController {
         commonInit()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -65,6 +72,12 @@ class AlbumDetailsViewController: UIViewController {
             segue.identifier == AlbumDetailsViewController.showAllImagesSegueID {
             
             dvc.album = album
+            return
+        }
+        
+        if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == AlbumDetailsViewController.captureImageSegueID {
+            dvc.delegate = self
+            
             return
         }
     }
@@ -230,5 +243,18 @@ extension AlbumDetailsViewController: UITableViewDelegate {
         default:
             return AlbumDetailsViewController.annotationCellRowHeight
         }
+    }
+}
+
+// MARK: SecureCameraImageCaptureDelegate
+extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
+    
+    func captured(image: Data) {
+        
+        guard let album = album else {
+            fatalError("Unable unwrap album")
+        }
+        
+        DataServices.add(image: image, to: album)
     }
 }

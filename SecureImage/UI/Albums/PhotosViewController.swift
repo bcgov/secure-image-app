@@ -29,13 +29,16 @@ class PhotosViewController: UIViewController {
     
     private static let animationDuration = 0.2
     private static let showImageSegueID = "ShowImageSegue"
-    private static let captureImageSegueID = ""
+    private static let captureImageSegueID = "CaptureImageSegue"
     private static let insets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 0.0, right: 5.0)
     private var selectedDocument: Document?
     private var albumCollectionViewManager: AlbumCollectionViewManager!
     private var selectEnabled = false
     private var selectedItems = [IndexPath]()
     internal var album: Album?
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
 
@@ -44,12 +47,28 @@ class PhotosViewController: UIViewController {
         commonInit()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        
+        updateCount()
+        
+        collectionView.reloadData()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         
         if let document = selectedDocument, let dvc = segue.destination as? PhotoViewController,
             segue.identifier == PhotosViewController.showImageSegueID {
             
             dvc.document = document
+            return
+        }
+        
+        if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == PhotosViewController.captureImageSegueID {
+            dvc.delegate = self
+
             return
         }
     }
@@ -81,8 +100,6 @@ class PhotosViewController: UIViewController {
         
         let select = UIBarButtonItem(title: "Select", style: .done, target: self, action: #selector(PhotosViewController.selectTouched(sender:)))
         navigationItem.rightBarButtonItem = select
-        
-        updateCount()
     }
     
     @IBAction func deleteButtonTouched(sender: UIButton) {
@@ -247,5 +264,18 @@ extension PhotosViewController: AlbumCollectionManagerProtocol {
         
         let cell = (collectionView.cellForItem(at: indexPath) as! PreviewImageCollectionViewCell)
         cell.performDeselectionAnimations()
+    }
+}
+
+// MARK: SecureCameraImageCaptureDelegate
+extension PhotosViewController: SecureCameraImageCaptureDelegate {
+    
+    func captured(image: Data) {
+
+        guard let album = album else {
+            fatalError("Unable unwrap album")
+        }
+
+        DataServices.add(image: image, to: album)
     }
 }
