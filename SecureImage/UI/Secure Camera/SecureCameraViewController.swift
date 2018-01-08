@@ -21,8 +21,6 @@
 
 import UIKit
 import AVFoundation
-import ImageIO
-import Accelerate
 
 typealias cameraAuthorizationCallback = ((_ authorized: Bool) -> Void)
 typealias cameraSessionConfigurationCallback = ((_ success: Bool) -> Void)
@@ -191,13 +189,14 @@ class SecureCameraViewController: UIViewController {
     
     private func adjustPreviewViewHeight(inputDevice: AVCaptureDeviceInput) {
 
+        let resizeAnimationDuraiton = 0.2
         let scale = UIScreen.main.scale
         let dims = CMVideoFormatDescriptionGetDimensions(inputDevice.device.activeFormat.formatDescription)
         previewViewHeightConstraint.constant = (CGFloat(dims.height)/scale/2) - (navigationController?.navigationBar.frame.height ?? 0.0)
 
         view.setNeedsUpdateConstraints()
         
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: resizeAnimationDuraiton) {
             self.view.layoutIfNeeded()
         }
     }
@@ -235,12 +234,8 @@ class SecureCameraViewController: UIViewController {
         let compression = [AVVideoQualityKey : NSNumber(value: Constants.Defaults.jPEGCompressionRatio)]
         let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG,
                                                        AVVideoCompressionPropertiesKey: compression])
-//        settings.isAutoStillImageStabilizationEnabled = false
-//        settings.isHighResolutionPhotoEnabled = true
-        settings.flashMode = flashMode
 
-//        let formatDesc = inputDevice?.device.activeFormat.formatDescription
-//        let dimensions = CMVideoFormatDescriptionGetDimensions(formatDesc!)
+        settings.flashMode = flashMode
         
         return settings
     }
@@ -275,10 +270,13 @@ class SecureCameraViewController: UIViewController {
     
     private func performImageCapturedAnimations() {
 
-        UIView.animate(withDuration: 0.1, animations: {
-            self.cameraPortalOverlayView.alpha = 0.9
+        let fadeInAnimationDuration = 0.1
+        let fadeOutAnimationDuration = 0.2
+        
+        UIView.animate(withDuration: fadeInAnimationDuration, animations: {
+            self.cameraPortalOverlayView.alpha = 0.7
         }, completion: { success in
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: fadeOutAnimationDuration, animations: {
                 self.cameraPortalOverlayView.alpha = 0
             })
         })
@@ -320,62 +318,6 @@ class SecureCameraViewController: UIViewController {
         
         present(ac, animated: true, completion: nil)
     }
-    
-//    private func resize(data: Data) -> Data? {
-//
-//    if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-//        CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
-//
-//        //                unsigned char *outImg= (unsigned char*)malloc(4*outWidth*outHeight);
-//        //                vImage_Buffer outBuff = {outImg, outHeight, outWidth, 4*outWidth};
-//    }
-
-    
-    //            int cropX0, cropY0, cropHeight, cropWidth, outWidth, outHeight;
-    //
-    
-    
-    
-    //            void *baseAddress = CVPixelBufferGetBaseAddress(imageBuffer);
-    //            size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
-    //
-    //            vImage_Buffer inBuff;
-    //            inBuff.height = cropHeight;
-    //            inBuff.width = cropWidth;
-    //            inBuff.rowBytes = bytesPerRow;
-    //
-    //            int startpos = cropY0*bytesPerRow+4*cropX0;
-    //            inBuff.data = baseAddress+startpos;
-    //
-    //            unsigned char *outImg= (unsigned char*)malloc(4*outWidth*outHeight);
-    //            vImage_Buffer outBuff = {outImg, outHeight, outWidth, 4*outWidth};
-    //
-    //            vImage_Error err = vImageScale_ARGB8888(&inBuff, &outBuff, NULL, 0);
-    //            if (err != kvImageNoError) NSLog(@" error %ld", err);
-//        let source: CGImageSource = CGImageSourceCreateWithData((data as CFData), nil)!
-//        let maxEdgeSize = 1920.0
-//
-//        let options = [
-//            kCGImageSourceThumbnailMaxPixelSize: maxEdgeSize,
-//            kCGImageSourceCreateThumbnailFromImageAlways: true,
-//            kCGImageDestinationLossyCompressionQuality: 0.3
-//            ] as CFDictionary
-//
-//
-//        let scaledImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options)//.flatMap { UIImage(CGImage: $0) }
-//
-//        let provider = scaledImage?.dataProvider!
-//        if let xx1 = provider?.data {
-//            let m = CFDataCreateMutableCopy(nil, CFDataGetLength(xx1), xx1)
-//            let x = CGImageDestinationCreateWithData(m!, kUTTypeJPEG, 1, nil)
-//            CGImageDestinationAddImage(x!, scaledImage!, nil)
-//            CGImageDestinationFinalize(x!)
-//
-//            return CFDataCreateCopy(nil, m)! as Data
-//        }
-//
-//        return nil
-//    }
 }
 
 // MARK: AVCapturePhotoCaptureDelegate
@@ -404,11 +346,4 @@ extension SecureCameraViewController: AVCapturePhotoCaptureDelegate {
             delegate?.captured(image: data)
         }
     }
-    
-//    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
-//
-//        if let error = error {
-//            print(error.localizedDescription)
-//        }
-//    }
 }
