@@ -43,7 +43,7 @@ extension UIView {
         return min(bounds.size.width, bounds.size.height) * percentageOfViewForCircleStrokeWidht
     }
     
-    func createMaskLayer(_ fillColor: UIColor = UIColor.black) {
+    func createCircularMaskLayer(_ fillColor: UIColor = UIColor.black) {
         
         let mask = circularMaskLayer()
     

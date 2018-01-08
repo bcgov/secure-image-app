@@ -27,17 +27,25 @@ typealias ViewImageCallback = (_ document: Document) -> Void
 class ImagePreviewTableViewCell: UITableViewCell {
 
     @IBOutlet weak var collectionView: UICollectionView!
-
+    @IBOutlet weak var addPhotosView: UIView!
+    
     internal var previewImages: List<Document>? {
         didSet {
             self.albumCollectionViewManager.data = previewImages
             self.collectionView.reloadData()
+            hideAddPhotosImageViewIfNeeded()
         }
     }
-    internal static let insets: UIEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 15.0, right: 15.0)
+    internal static let insets: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 20.0, bottom: 15.0, right: 15.0)
     internal var albumCollectionViewManager: AlbumCollectionViewManager!
     internal var onAddImageTouched: AddNewImageCallback?
     internal var onViewImageTouched: ViewImageCallback?
+    private let addPhotoGestureRecognizer: UITapGestureRecognizer = {
+        let gr = UITapGestureRecognizer()
+        gr.numberOfTouchesRequired = 1
+
+        return gr
+    }()
 
     override func awakeFromNib() {
 
@@ -66,7 +74,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         
         albumCollectionViewManager = AlbumCollectionViewManager(insets: ImagePreviewTableViewCell.insets,
                                                                 rowSpacing: 5.0,
-                                                                columnSpacing: 5.0,
+                                                                columnSpacing: 2.0,
                                                                 numberOfColumns: 3,
                                                                 numberOfRows: 2,
                                                                 data: previewImages,
@@ -75,11 +83,16 @@ class ImagePreviewTableViewCell: UITableViewCell {
         collectionView.dataSource = albumCollectionViewManager
         collectionView.delegate = albumCollectionViewManager
         collectionView.allowsMultipleSelection = false
-    }
-
-    internal func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
+        collectionView.backgroundColor = UIColor.white
+        collectionView.isHidden = true
         
-        return albumCollectionViewManager.collectionViewRowHeightFor(width)
+        addPhotoGestureRecognizer.addTarget(self, action: #selector(ImagePreviewTableViewCell.addPhotoImageViewTouched(sender:)))
+        
+        addPhotosView.isUserInteractionEnabled = true
+        addPhotosView.addGestureRecognizer(addPhotoGestureRecognizer)
+        addPhotosView.layer.borderColor = UIColor.lightGreyBorder().cgColor
+        addPhotosView.layer.borderWidth = 1.0
+        addPhotosView.clipsToBounds = true
     }
     
     private func delete(document: Document) {
@@ -120,6 +133,21 @@ class ImagePreviewTableViewCell: UITableViewCell {
             }
         }, completion: nil)
     }
+    
+    private func hideAddPhotosImageViewIfNeeded() {
+        
+        guard let data = albumCollectionViewManager.data, data.count != 0 else {
+            return
+        }
+      
+        addPhotosView.isHidden = true
+        collectionView.isHidden = false
+    }
+    
+    @objc dynamic private func addPhotoImageViewTouched(sender: UITapGestureRecognizer) {
+        
+        onAddImageTouched?()
+    }
 }
 
 // MARK: AlbumCollectionManagerProtocol
@@ -133,7 +161,8 @@ extension ImagePreviewTableViewCell: AlbumCollectionManagerProtocol {
         
         switch indexPath.row {
         case 0:
-            ()
+            let myCell = (cell as! AddImageCollectionViewCell)
+            myCell.shouldOffsetImage = true
         default:
             let document = previewImages[indexPath.row - 1]
             (cell as! PreviewImageCollectionViewCell).document = document
@@ -144,10 +173,12 @@ extension ImagePreviewTableViewCell: AlbumCollectionManagerProtocol {
     }
     
     func viewPhoto(document: Document) {
+
         onViewImageTouched?(document)
     }
     
     func addPhoto() {
+
         onAddImageTouched?()
     }
 }
