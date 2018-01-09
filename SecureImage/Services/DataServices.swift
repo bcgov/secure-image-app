@@ -171,4 +171,20 @@ class DataServices: NSObject {
         
         return nil
     }
+    
+    internal class func canAddToAlbum(album: Album) -> Bool {
+        
+        guard let realm = try? Realm() else {
+            print("Unable open realm")
+            return false
+        }
+        
+        if let myAlbum = realm.objects(Album.self).filter("id == %@", album.id).first {
+            if myAlbum.documents.count >= Constants.Defaults.maxAlbumImageCount {
+                return false
+            }
+        }
+        
+        return true
+    }
 }
