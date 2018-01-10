@@ -12,6 +12,7 @@
 		5625FEC71FFD532C00E1F6BD /* AlbumCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */; };
 		5625FEC91FFD5FCA00E1F6BD /* SecureCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625FEC81FFD5FCA00E1F6BD /* SecureCameraViewController.swift */; };
 		5625FECB1FFD65E100E1F6BD /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5625FECA1FFD65E100E1F6BD /* VideoPreviewView.swift */; };
+		562A75DE20067A8A00D55426 /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562A75DD20067A8A00D55426 /* LocationServices.swift */; };
 		563F228B1FE839F600E33986 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 563F228A1FE839F600E33986 /* Assets.xcassets */; };
 		565417A91FEDD7B900D0B2AC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */; };
 		569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84EC1FE1DD770054173D /* LockScreenWindow.swift */; };
@@ -77,6 +78,7 @@
 		5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewManager.swift; sourceTree = "<group>"; };
 		5625FEC81FFD5FCA00E1F6BD /* SecureCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureCameraViewController.swift; sourceTree = "<group>"; };
 		5625FECA1FFD65E100E1F6BD /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
+		562A75DD20067A8A00D55426 /* LocationServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
 		563F228A1FE839F600E33986 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				569D85091FE2FEA00054173D /* DataServices.swift */,
+				562A75DD20067A8A00D55426 /* LocationServices.swift */,
 				5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */,
 			);
 			path = Services;
@@ -608,6 +611,7 @@
 			files = (
 				56E543791FE33F6300327591 /* Album.swift in Sources */,
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
+				562A75DE20067A8A00D55426 /* LocationServices.swift in Sources */,
 				56C1D0A81FEADE6A004B0266 /* ImagePreviewTableViewCell.swift in Sources */,
 				5625FEC91FFD5FCA00E1F6BD /* SecureCameraViewController.swift in Sources */,
 				56F524F51FEB39AA0093D8E0 /* FuncitonTableViewCell.swift in Sources */,

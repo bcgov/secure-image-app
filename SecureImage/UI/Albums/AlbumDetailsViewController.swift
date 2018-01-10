@@ -37,6 +37,12 @@ class AlbumDetailsViewController: UIViewController {
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
     private var previewCellHeight: CGFloat = 250.0
+    private let locationServices: LocationServices = {
+        let ls = LocationServices()
+        ls.start()
+        
+        return ls
+    }()
     internal var album: Album! // TODO:(jl) Should this be force unwraped?
     
     override func viewDidLoad() {
@@ -53,6 +59,11 @@ class AlbumDetailsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         
         tableView.reloadData()
     }
@@ -255,6 +266,8 @@ extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
             fatalError("Unable unwrap album")
         }
         
-        DataServices.add(image: image, to: album)
+        if let doc = DataServices.add(image: image, to: album) {
+            locationServices.addLocation(to: doc)
+        }
     }
 }

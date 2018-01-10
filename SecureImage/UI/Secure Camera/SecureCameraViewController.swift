@@ -41,10 +41,10 @@ class SecureCameraViewController: UIViewController {
     private let queue = {
         return DispatchQueue(label: "mySerialQueue")
     }()
+    private let session = AVCaptureSession()
     private var device: AVCaptureDevice?
     private var inputDevice: AVCaptureDeviceInput?
     private var cameraOutput = AVCapturePhotoOutput()
-    private let session = AVCaptureSession()
     private var flashMode: AVCaptureDevice.FlashMode = .auto
     override var shouldAutorotate: Bool {
         return false
