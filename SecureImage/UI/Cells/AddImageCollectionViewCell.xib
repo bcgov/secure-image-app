@@ -6,6 +6,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,19 +22,39 @@
                 <rect key="frame" x="0.0" y="0.0" width="181" height="180"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yno-WR-zEI">
+                        <rect key="frame" x="145" y="0.0" width="36" height="36"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="yno-WR-zEI" secondAttribute="height" multiplier="1:1" id="Gcb-P0-Z2h"/>
+                            <constraint firstAttribute="width" id="giJ-Vd-eTE"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="giJ-Vd-eTE"/>
+                            </mask>
+                        </variation>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-photo-small" translatesAutoresizingMaskIntoConstraints="NO" id="JHI-dH-8k3">
-                        <rect key="frame" x="0.0" y="0.0" width="181" height="180"/>
+                        <rect key="frame" x="0.0" y="18" width="163" height="162"/>
                     </imageView>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="JHI-dH-8k3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="7pB-DV-Kyv"/>
-                <constraint firstAttribute="trailing" secondItem="JHI-dH-8k3" secondAttribute="trailing" id="Did-Up-hhu"/>
+                <constraint firstItem="JHI-dH-8k3" firstAttribute="trailing" secondItem="yno-WR-zEI" secondAttribute="centerX" id="06p-f5-Rkn"/>
                 <constraint firstAttribute="bottom" secondItem="JHI-dH-8k3" secondAttribute="bottom" id="IA2-CK-uRd"/>
                 <constraint firstItem="JHI-dH-8k3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="LYE-Q2-thf"/>
+                <constraint firstItem="JHI-dH-8k3" firstAttribute="top" secondItem="yno-WR-zEI" secondAttribute="centerY" id="Rzj-6k-5kf"/>
+                <constraint firstItem="yno-WR-zEI" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" multiplier="0.2" id="Sws-do-6lo"/>
+                <constraint firstItem="yno-WR-zEI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="VGc-sD-QrM"/>
+                <constraint firstAttribute="trailing" secondItem="yno-WR-zEI" secondAttribute="trailing" id="spq-wc-6Pi"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="181" height="180"/>
+            <connections>
+                <outlet property="offsetViewWidthConstraint" destination="Sws-do-6lo" id="qGn-LZ-LB2"/>
+                <outlet property="offsetViewWidthToZeroConstraint" destination="giJ-Vd-eTE" id="z4w-vl-WPO"/>
+            </connections>
             <point key="canvasLocation" x="-52.5" y="22"/>
         </collectionViewCell>
     </objects>

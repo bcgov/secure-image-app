@@ -36,7 +36,25 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DNp-gT-erK" userLabel="Footer View">
                                 <rect key="frame" x="-0.5" y="563" width="375.5" height="104"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkF-UA-INe">
+                                        <rect key="frame" x="275" y="46" width="66" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="QIg-rL-hXg"/>
+                                            <constraint firstAttribute="width" constant="66" id="i0B-E7-cbi"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Albums"/>
+                                        <connections>
+                                            <action selector="backTouchedWithSender:" destination="ADf-KZ-4mM" eventType="touchUpInside" id="Ckk-0X-GNm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.4900910429" green="1" blue="0.84251094790000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="dkF-UA-INe" secondAttribute="trailing" constant="34.5" id="6KD-dG-qqE"/>
+                                    <constraint firstAttribute="bottom" secondItem="dkF-UA-INe" secondAttribute="bottom" constant="28" id="B4Y-2I-arZ"/>
+                                </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAO-Zp-k9d">
                                 <rect key="frame" x="146.5" y="522" width="82" height="82"/>
@@ -67,7 +85,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="huL-Xj-og7">
+                                                    <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flash-auto" translatesAutoresizingMaskIntoConstraints="NO" id="huL-Xj-og7">
                                                         <rect key="frame" x="17.5" y="3" width="34.5" height="34"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
@@ -101,7 +119,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SfI-BK-I82">
+                                                    <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-flash" translatesAutoresizingMaskIntoConstraints="NO" id="SfI-BK-I82">
                                                         <rect key="frame" x="18" y="3" width="34" height="34"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
@@ -134,7 +152,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="c96-0E-Q4a">
+                                                    <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flash" translatesAutoresizingMaskIntoConstraints="NO" id="c96-0E-Q4a">
                                                         <rect key="frame" x="17.5" y="3" width="34" height="34"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
@@ -195,7 +213,13 @@
                         <outlet property="cameraPortalOverlayView" destination="QQ1-Tp-bce" id="MtU-MA-oeQ"/>
                         <outlet property="cameraPortalView" destination="Atj-SJ-2KH" id="Vpg-B2-nRc"/>
                         <outlet property="captureImageButton" destination="CAO-Zp-k9d" id="SCw-Wn-O7Q"/>
+                        <outlet property="flashAutoContainerView" destination="aYr-LD-aNS" id="FMD-lo-Mfa"/>
                         <outlet property="previewViewHeightConstraint" destination="k82-ZA-R5N" id="Fmu-hc-AUF"/>
+                        <outlet property="screenFooter" destination="DNp-gT-erK" id="hVc-O6-Fwv"/>
+                        <outlet property="screenHeader" destination="bjM-Er-CXI" id="BU6-gv-VDg"/>
+                        <outletCollection property="flashControlImageViews" destination="huL-Xj-og7" collectionClass="NSMutableArray" id="tOR-w9-DPh"/>
+                        <outletCollection property="flashControlImageViews" destination="SfI-BK-I82" collectionClass="NSMutableArray" id="b94-fc-VEi"/>
+                        <outletCollection property="flashControlImageViews" destination="c96-0E-Q4a" collectionClass="NSMutableArray" id="A82-RI-W71"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="09S-pY-5MN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -223,4 +247,9 @@
             <point key="canvasLocation" x="176.80000000000001" y="22.938530734632685"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="flash" width="10" height="20"/>
+        <image name="flash-auto" width="20" height="21"/>
+        <image name="no-flash" width="17" height="20"/>
+    </resources>
 </document>

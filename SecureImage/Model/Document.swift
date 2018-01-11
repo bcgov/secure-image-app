@@ -27,6 +27,8 @@ class Document: Object {
     @objc dynamic var createdAt: Date = Date()
     @objc dynamic var modifiedAt: Date = Date()
     @objc dynamic var imageData: Data?
+    @objc dynamic var latitude: Double = 0.0
+    @objc dynamic var longitude: Double = 0.0
 
     override class func primaryKey() -> String {
         return "id"

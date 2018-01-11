@@ -26,16 +26,17 @@ class AlbumsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var createAlbumButton: UIButton!
     
-    private static let cellAspectScaler: CGFloat = 0.533
+    private static let cellAspectScaler: CGFloat = 0.57
     private static let albumCellReuseID = "AlbumCell"
     private static let albumDetailsSegueID = "ShowAlbumDetailsSegue"
     private var selectedAlbum: Album?
     private var albums: Results<Album>?
     private var localAlbumId: String?
-    private let createFirstAlbumView: CreateFirstAlbumView = {
-        let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! CreateFirstAlbumView
+    private let createFirstAlbumView: UIView = {
+        let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! UIView
         v.translatesAutoresizingMaskIntoConstraints = false
-        
+        v.backgroundColor = UIColor.governmentDarkBlue()
+
         return v
     }()
     
@@ -50,6 +51,8 @@ class AlbumsViewController: UIViewController {
     
         super.viewWillAppear(animated)
         
+        setNeedsStatusBarAppearanceUpdate()
+
         do {
             albums = try Realm().objects(Album.self).sorted(byKeyPath: "createdAt", ascending: false)
             tableView.reloadData()
@@ -73,15 +76,13 @@ class AlbumsViewController: UIViewController {
 
         createAlbumButton.layer.cornerRadius = createAlbumButton.frame.height / 2
         createAlbumButton.clipsToBounds = true
+        createAlbumButton.backgroundColor = UIColor.governmentDeepYellow()
+        createAlbumButton.setTitleColor(UIColor.blueText(), for: .normal)
         
-        createFirstAlbumView.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        createFirstAlbumView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        createFirstAlbumView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         createFirstAlbumView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        createFirstAlbumView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        createFirstAlbumView.onCreateFirstAlbumTouched = { [weak self] in
-            self?.createAlbumTouched(sender: nil)
-        }
+        createFirstAlbumView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30.0).isActive = true
+        createFirstAlbumView.bottomAnchor.constraint(equalTo: createAlbumButton.topAnchor).isActive = true
     }
     
     private func configureFor(albumsExist: Bool) {
@@ -90,13 +91,15 @@ class AlbumsViewController: UIViewController {
             tableView.isHidden = false
             createFirstAlbumView.isHidden = true
             createAlbumButton.isHidden = false
+            view.backgroundColor = UIColor.white
             
             return
         }
         
         tableView.isHidden = true
         createFirstAlbumView.isHidden = false
-        createAlbumButton.isHidden = true
+        createAlbumButton.isHidden = false
+        view.backgroundColor = UIColor.governmentDarkBlue()
     }
     
     private func configureCell(cell: AlbumTableViewCell, at indexPath: IndexPath) {
@@ -162,7 +165,7 @@ extension AlbumsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
-        return tableView.frame.size.width * AlbumsViewController.cellAspectScaler
+        return tableView.frame.size.width * AlbumsViewController.cellAspectScaler + AlbumTableViewCell.fauxCellSpaceOffset
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

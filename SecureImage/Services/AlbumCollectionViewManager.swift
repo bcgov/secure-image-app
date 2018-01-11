@@ -81,10 +81,9 @@ class AlbumCollectionViewManager: NSObject {
     
     internal func collectionViewRowHeightFor(_ width: CGFloat) -> CGFloat {
 
-        let h = ((width - (insets.left + insets.right)) - ((CGFloat(numberOfColumns) - 1) *
-            columnSpacing)) / CGFloat(numberOfColumns)
+        let leftAndRightSpace = insets.left + insets.right + CGFloat(columnSpacing) * CGFloat(numberOfColumns - 1)
 
-        return h
+        return (width - leftAndRightSpace) / CGFloat(numberOfColumns)
     }
 }
 
@@ -94,9 +93,9 @@ extension AlbumCollectionViewManager: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let width = collectionViewRowHeightFor(collectionView.frame.size.width)
+        let height = collectionViewRowHeightFor(collectionView.bounds.size.width)
 
-        return CGSize(width: width, height: width)
+        return CGSize(width: height, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView,

@@ -30,11 +30,17 @@ class PhotosViewController: UIViewController {
     private static let animationDuration = 0.2
     private static let showImageSegueID = "ShowImageSegue"
     private static let captureImageSegueID = "CaptureImageSegue"
-    private static let insets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 0.0, right: 5.0)
+    private static let insets = UIEdgeInsets(top: 5.0, left: 15.0, bottom: 0.0, right: 15.0)
     private var selectedDocument: Document?
     private var albumCollectionViewManager: AlbumCollectionViewManager!
     private var selectEnabled = false
     private var selectedItems = [IndexPath]()
+    private let locationServices: LocationServices = {
+        let ls = LocationServices()
+        ls.start()
+        
+        return ls
+    }()
     internal var album: Album?
     override var prefersStatusBarHidden: Bool {
         return true
@@ -55,9 +61,8 @@ class PhotosViewController: UIViewController {
         
         collectionView.reloadData()
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         
         if let document = selectedDocument, let dvc = segue.destination as? PhotoViewController,
             segue.identifier == PhotosViewController.showImageSegueID {
@@ -71,6 +76,11 @@ class PhotosViewController: UIViewController {
 
             return
         }
+    }
+    
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func commonInit() {
@@ -94,10 +104,13 @@ class PhotosViewController: UIViewController {
         collectionView.dataSource = albumCollectionViewManager
         collectionView.delegate = albumCollectionViewManager
         collectionView.allowsMultipleSelection = false
-        
+        collectionView.backgroundColor = UIColor.white
+
         deleteButton.alpha = 0.0
         deleteButton.layer.cornerRadius = deleteButton.bounds.height / 2
-        
+        deleteButton.backgroundColor = UIColor.governmentDeepYellow()
+        deleteButton.setTitleColor(UIColor.blueText(), for: .normal)
+
         let select = UIBarButtonItem(title: "Select", style: .done, target: self, action: #selector(PhotosViewController.selectTouched(sender:)))
         navigationItem.rightBarButtonItem = select
     }
@@ -133,10 +146,8 @@ class PhotosViewController: UIViewController {
         
         collectionView.allowsMultipleSelection = true
    
-        for cell in collectionView.visibleCells {
-            if let myCell = cell as? PreviewImageCollectionViewCell {
-                myCell.multiSelectEnabled = true
-            }
+        for case let cell as PreviewImageCollectionViewCell in collectionView.visibleCells {
+            cell.multiSelectEnabled = true
         }
         
         updateCount()
@@ -221,7 +232,8 @@ extension PhotosViewController: AlbumCollectionManagerProtocol {
         
         switch indexPath.row {
         case 0:     // This will be the add image / function cell
-            ()
+            let myCell = (cell as! AddImageCollectionViewCell)
+            myCell.shouldOffsetImage = false
         default:    // This will be everything else
             let myCell = (cell as! PreviewImageCollectionViewCell)
             myCell.document = documents[indexPath.row - AlbumCollectionViewManager.imageCellOffset]
@@ -276,6 +288,8 @@ extension PhotosViewController: SecureCameraImageCaptureDelegate {
             fatalError("Unable unwrap album")
         }
 
-        DataServices.add(image: image, to: album)
+        if let doc = DataServices.add(image: image, to: album) {
+            locationServices.addLocation(to: doc)
+        }
     }
 }

@@ -24,22 +24,30 @@ import UIKit
 class LockScreenWindow: UIWindow {
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
 
+        super.init(coder: aDecoder)
+        
         commonInit()
     }
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
 
+        super.init(frame: frame)
+        
         commonInit()
     }
     
     private func commonInit() {
-       windowLevel = 1  // We always go on top !
+        
     }
     
     public func show() {
+        
+//        windowLevel = UIApplication.shared.windows.reduce(0.0) { (old: CGFloat, new: UIWindow) in
+//            max(old, new.windowLevel)
+//        }
+
+        windowLevel = 1  // Move to the top when we show.
         rootViewController = LockScreenAuthenticateViewController.viewController()
         alpha = 1.0
         makeKeyAndVisible()
@@ -47,11 +55,11 @@ class LockScreenWindow: UIWindow {
     
     public func hide(animated: Bool = true, completion: (() -> Void)?) {
         let animationDuration: Double = 0.25
-
+        
         UIView.animate(withDuration: animated ? animationDuration : 0.0, delay: 0.0, options: .curveEaseInOut, animations: { [weak self] in
             self?.alpha = 0.0
-        }, completion: { _ in
-            completion?()
+            }, completion: { _ in
+                completion?()
         })
     }
 }

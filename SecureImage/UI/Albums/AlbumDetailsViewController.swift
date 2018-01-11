@@ -37,6 +37,12 @@ class AlbumDetailsViewController: UIViewController {
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
     private var previewCellHeight: CGFloat = 250.0
+    private let locationServices: LocationServices = {
+        let ls = LocationServices()
+        ls.start()
+        
+        return ls
+    }()
     internal var album: Album! // TODO:(jl) Should this be force unwraped?
     
     override func viewDidLoad() {
@@ -53,6 +59,11 @@ class AlbumDetailsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         
         tableView.reloadData()
     }
@@ -93,6 +104,7 @@ class AlbumDetailsViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.allowsSelection = false
     }
     
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
@@ -102,7 +114,9 @@ class AlbumDetailsViewController: UIViewController {
         }
         
         self.tableView.isEditing = false
-        
+
+        cell.contentView.backgroundColor = UIColor.white
+
         switch identifier {
         case AlbumDetailsViewController.previewCellReuseID:
             let cell = cell as! ImagePreviewTableViewCell
@@ -114,7 +128,6 @@ class AlbumDetailsViewController: UIViewController {
             cell.onAddImageTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
-            previewCellHeight = cell.collectionViewRowHeightFor(tableView.frame.width) * 2.0 + ImagePreviewTableViewCell.insets.bottom
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
             
@@ -255,6 +268,8 @@ extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
             fatalError("Unable unwrap album")
         }
         
-        DataServices.add(image: image, to: album)
+        if let doc = DataServices.add(image: image, to: album) {
+            locationServices.addLocation(to: doc)
+        }
     }
 }
