@@ -35,6 +35,12 @@ class PhotosViewController: UIViewController {
     private var albumCollectionViewManager: AlbumCollectionViewManager!
     private var selectEnabled = false
     private var selectedItems = [IndexPath]()
+    private let locationServices: LocationServices = {
+        let ls = LocationServices()
+        ls.start()
+        
+        return ls
+    }()
     internal var album: Album?
     override var prefersStatusBarHidden: Bool {
         return true
@@ -55,7 +61,7 @@ class PhotosViewController: UIViewController {
         
         collectionView.reloadData()
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let document = selectedDocument, let dvc = segue.destination as? PhotoViewController,
@@ -282,6 +288,8 @@ extension PhotosViewController: SecureCameraImageCaptureDelegate {
             fatalError("Unable unwrap album")
         }
 
-        DataServices.add(image: image, to: album)
+        if let doc = DataServices.add(image: image, to: album) {
+            locationServices.addLocation(to: doc)
+        }
     }
 }
