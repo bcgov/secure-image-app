@@ -55,4 +55,12 @@ extension UINavigationController {
             return super.prefersStatusBarHidden
         }
     }
+    
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        
+        get {
+
+            return Theme.preferredStatusBarStyle
+        }
+    }
 }

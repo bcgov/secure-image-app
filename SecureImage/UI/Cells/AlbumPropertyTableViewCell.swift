@@ -24,6 +24,7 @@ typealias AlbumPropertyChangedCallback = (_ property: String, _ value: String) -
 
 class AlbumPropertyTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var cellDividerView: UIView!
     @IBOutlet weak var attributeTitleLabel: UILabel!
     @IBOutlet weak var attributeTextField: UITextField!
     
@@ -33,7 +34,7 @@ class AlbumPropertyTableViewCell: UITableViewCell {
         
         super.awakeFromNib()
         
-        attributeTextField.delegate = self
+        commonInit()
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -48,6 +49,15 @@ class AlbumPropertyTableViewCell: UITableViewCell {
         
         // pass this event on down the chain; this is imporant :)
         super.touchesBegan(touches, with: event)
+    }
+    
+    private func commonInit() {
+        
+        attributeTextField.delegate = self
+        attributeTextField.textColor = UIColor.blueText()
+        cellDividerView.backgroundColor = UIColor.governmentDarkBlue()
+        attributeTitleLabel.textColor = UIColor.blueText()
+        attributeTextField.backgroundColor = UIColor.clear
     }
 }
 

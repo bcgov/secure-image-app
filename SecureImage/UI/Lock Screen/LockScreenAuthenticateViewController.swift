@@ -28,6 +28,24 @@ class LockScreenAuthenticateViewController: UIViewController {
         
         return vc
     }
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        
+        get {
+            return Theme.preferredStatusBarStyle
+        }
+    }
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        commonInit()
+    }
+    
+    private func commonInit() {
+        
+        view.backgroundColor = UIColor.governmentDarkBlue()
+    }
 
     @IBAction func go() { // TODO(jl): Rename when during implementation
         NotificationCenter.default.post(Notification(name: .userAuthenticated))

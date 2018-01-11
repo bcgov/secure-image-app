@@ -12,25 +12,27 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CreateFirstAlbumView" customModule="SecureImage" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="324" height="246"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="324" height="389"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create New Album" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Dk-tn-Kvu">
-                    <rect key="frame" x="90.5" y="112.5" width="143" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OcI-78-Hq0">
+                    <rect key="frame" x="0.0" y="0.0" width="324" height="223.5"/>
+                    <string key="text">Hello,  Welcome to the Secure Image App. All your albums will be located on this screen.  In order to create a nw Album, simply tap on the "Create Album" button below.  Once you are within the create album screen, you have th eoption to take an image or annotate your album.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.73080851859999996" green="0.4494619829" blue="0.78922441710000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
-                <constraint firstItem="5Dk-tn-Kvu" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Koq-90-tPp"/>
-                <constraint firstItem="5Dk-tn-Kvu" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ouq-1V-FGx"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OcI-78-Hq0" secondAttribute="trailing" id="4Ut-Wa-UOu"/>
+                <constraint firstItem="OcI-78-Hq0" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="GWm-Wb-JcW"/>
+                <constraint firstItem="OcI-78-Hq0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="fFI-MO-5H2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <point key="canvasLocation" x="38" y="51"/>
+            <point key="canvasLocation" x="38" y="122.5"/>
         </view>
     </objects>
 </document>

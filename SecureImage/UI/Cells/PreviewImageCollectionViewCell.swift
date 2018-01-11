@@ -31,6 +31,7 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet var deleteButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet var deleteButtonWidthToZeroConstraint: NSLayoutConstraint!
     
+    private var maskLayerNeedsSet = true
     internal var onDeleteImageTouched: DeleteImageCallback? {
         didSet {
             deleteButtonWidthConstraint.isActive = true
@@ -52,12 +53,6 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
             }
         }
     }
-    
-//    override var bounds: CGRect {
-//        didSet {
-//            contentView.frame = bounds
-//        }
-//    }
     
     override func awakeFromNib() {
         
@@ -82,18 +77,22 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
             deleteButtonWidthToZeroConstraint.isActive = true
         }
         
+        deleteButton.createCircularMaskLayer()
+
         super.layoutSubviews()
     }
 
     private func commonInit() {
 
-        deleteButton.clipsToBounds = true
-        deleteButton.backgroundColor = UIColor.blue
+        backgroundColor = UIColor.white
         
+        deleteButton.clipsToBounds = true
+        deleteButton.backgroundColor = UIColor.governmentDarkBlue()
+
         multiSelectIndicatorView.isHidden = true
         multiSelectIndicatorView.backgroundColor = UIColor.clear
         
-        multiSelectIndicatorView.createMaskLayer()
+        multiSelectIndicatorView.createCircularMaskLayer()
         multiSelectIndicatorView.createCircleLayer(UIColor.white)
     }
 

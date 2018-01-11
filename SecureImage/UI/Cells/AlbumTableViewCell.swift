@@ -24,15 +24,43 @@ class AlbumTableViewCell: UITableViewCell {
 
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var albumTitleLabel: UILabel!
+    @IBOutlet weak var titleOverlayView: UIView!
+    
+    internal static let fauxCellSpaceOffset: CGFloat = 24.0
+    private static let cornerRadius: CGFloat = 10.0
+    private var titleOverlayViewCornersRounded = false
     
     override func awakeFromNib() {
         
         super.awakeFromNib()
+        
+        commonInit()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Some white space on the cell is used for spacing so we can't round
+        // the corners of the cell directly.
+        if !titleOverlayViewCornersRounded {
+            let mask = CAShapeLayer()
+            let path = UIBezierPath(roundedRect: titleOverlayView.bounds, byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight], cornerRadii: CGSize(width: AlbumTableViewCell.cornerRadius, height: AlbumTableViewCell.cornerRadius))
+            mask.path = path.cgPath
+            titleOverlayView.layer.mask = mask
+        }
+    }
     override func prepareForReuse() {
         
         coverImageView.image = UIImage(named: "album-placeholder")
     }
-
+    
+    private func commonInit() {
+        
+        contentView.backgroundColor = UIColor.white
+        
+        titleOverlayView.backgroundColor = UIColor.albumOverlayBlue()
+        
+        coverImageView.layer.cornerRadius = AlbumTableViewCell.cornerRadius
+        coverImageView.layer.masksToBounds = true
+    }
 }
