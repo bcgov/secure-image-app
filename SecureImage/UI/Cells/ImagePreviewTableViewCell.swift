@@ -84,7 +84,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         collectionView.delegate = albumCollectionViewManager
         collectionView.allowsMultipleSelection = false
         collectionView.backgroundColor = UIColor.white
-        collectionView.isHidden = true
+        collectionView.alpha = 0.0
         
         addPhotoGestureRecognizer.addTarget(self, action: #selector(ImagePreviewTableViewCell.addPhotoImageViewTouched(sender:)))
         
@@ -131,7 +131,23 @@ class ImagePreviewTableViewCell: UITableViewCell {
                 let indexPath = IndexPath(row: 5, section: 0)
                 collectionView.insertItems(at: [indexPath])
             }
-        }, completion: nil)
+        }, completion: { (success) in
+            self.showAddPhotosImageViewIfNeeded()
+        })
+    }
+    
+    private func showAddPhotosImageViewIfNeeded() {
+        
+        guard let data = albumCollectionViewManager.data, data.count == 0 else {
+            return
+        }
+        
+        let animationDuration: TimeInterval = 0.2
+        
+        UIView.animate(withDuration: animationDuration) {
+            self.addPhotosView.alpha = 1.0
+            self.collectionView.alpha = 0.0
+        }
     }
     
     private func hideAddPhotosImageViewIfNeeded() {
@@ -140,8 +156,8 @@ class ImagePreviewTableViewCell: UITableViewCell {
             return
         }
       
-        addPhotosView.isHidden = true
-        collectionView.isHidden = false
+        addPhotosView.alpha = 0.0
+        collectionView.alpha = 1.0
     }
     
     @objc dynamic private func addPhotoImageViewTouched(sender: UITapGestureRecognizer) {
