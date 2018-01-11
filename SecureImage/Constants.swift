@@ -39,6 +39,13 @@ struct Constants {
                              (name: "Address", placeHolderText: "1965 Blue St"),
                              (name: "Comments", placeHolderText: "Your text here")]
     }
+    
+    struct API {
+        static let serverURL = URL(string: "http://10.10.10.74:8000/v1/")
+        static let createAlbumPath = "album/"
+        static let addPhotoToAlbumPath = "album/:id"
+        static let getAlbumDownloadUrlPath = "album/:id"
+    }
 }
 
 extension Notification.Name {
