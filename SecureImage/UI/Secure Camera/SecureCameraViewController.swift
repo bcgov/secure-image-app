@@ -36,7 +36,12 @@ class SecureCameraViewController: UIViewController {
     @IBOutlet weak var cameraPortalOverlayView: UIView!
     @IBOutlet weak var previewViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var captureImageButton: UIButton!
+    @IBOutlet weak var screenHeader: UIView!
+    @IBOutlet weak var screenFooter: UIView!
+    @IBOutlet weak var flashAutoContainerView: UIView!
+    @IBOutlet var flashControlImageViews: [UIImageView]!
     
+    static private let imageViewTag: Int = 100
     weak internal var delegate: SecureCameraImageCaptureDelegate?
     private let queue = {
         return DispatchQueue(label: "mySerialQueue")
@@ -95,11 +100,21 @@ class SecureCameraViewController: UIViewController {
 
     private func commonInit() {
         
-        captureImageButton.layer.cornerRadius = captureImageButton.bounds.width / 2
-        previewViewHeightConstraint.constant = view.bounds.height / 2
         navigationController?.navigationBar.isHidden = true
         view.backgroundColor = UIColor.black
+
+        captureImageButton.layer.cornerRadius = captureImageButton.bounds.width / 2
+        captureImageButton.backgroundColor = UIColor.white
+        previewViewHeightConstraint.constant = view.bounds.height / 2
         cameraPortalOverlayView.alpha = 0.0
+        screenHeader.backgroundColor = UIColor.governmentDarkBlue()
+        screenFooter.backgroundColor = UIColor.governmentDarkBlue()
+        
+        resetFlashFunctions()
+        
+        if let gr = flashAutoContainerView.gestureRecognizers?.first {
+            flashAutoTouched(sender: gr)
+        }
     }
     
     private func startCamera() {
@@ -214,17 +229,50 @@ class SecureCameraViewController: UIViewController {
     
     @IBAction private func flashOnTouched(sender: UIGestureRecognizer) {
 
+        resetFlashFunctions()
+
+        if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
+            view.tintColor = UIColor.governmentDeepYellow()
+        }
+
         flashMode = .on
     }
     
     @IBAction private func flashOffTouched(sender: UIGestureRecognizer) {
+
+        resetFlashFunctions()
+        
+        if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
+            view.tintColor = UIColor.governmentDeepYellow()
+        }
 
         flashMode = .off
     }
     
     @IBAction private func flashAutoTouched(sender: UIGestureRecognizer) {
 
+        resetFlashFunctions()
+    
+        if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
+            view.tintColor = UIColor.governmentDeepYellow()
+        }
+
         flashMode = .auto
+    }
+    
+    @IBAction private func backTouched(sender: UIButton) {
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    private func resetFlashFunctions() {
+
+        for view in flashControlImageViews {
+            view.backgroundColor = UIColor.clear
+            view.image = view.image!.withRenderingMode(.alwaysTemplate)
+            view.tintColor = UIColor.white
+            view.tag = SecureCameraViewController.imageViewTag
+        }
     }
     
     // MARK: Photo Settings

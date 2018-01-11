@@ -22,19 +22,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="255" height="255"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lM3-92-Mo7">
-                        <rect key="frame" x="0.0" y="25" width="229.5" height="230"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lM3-92-Mo7">
+                        <rect key="frame" x="0.0" y="26" width="229.5" height="229"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="lM3-92-Mo7" secondAttribute="height" multiplier="1:1" id="Ush-hz-07w"/>
+                        </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DrZ-IB-9Ut">
                         <rect key="frame" x="204" y="0.0" width="51" height="51"/>
+                        <color key="backgroundColor" red="0.4900910429" green="1" blue="0.84251094790000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstAttribute="width" id="7d7-9C-Znm"/>
-                            <constraint firstAttribute="width" secondItem="DrZ-IB-9Ut" secondAttribute="height" multiplier="1:1" id="ab6-Y7-FGS"/>
+                            <constraint firstAttribute="width" secondItem="DrZ-IB-9Ut" secondAttribute="height" multiplier="1:1" id="397-gx-yCj"/>
+                            <constraint firstAttribute="width" id="G5P-Uo-fo8"/>
                         </constraints>
                         <state key="normal" image="icon-x"/>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="7d7-9C-Znm"/>
+                                <exclude reference="G5P-Uo-fo8"/>
                             </mask>
                         </variation>
                         <connections>
@@ -42,7 +46,7 @@
                         </connections>
                     </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uua-yu-7OD">
-                        <rect key="frame" x="195.5" y="221" width="24" height="24"/>
+                        <rect key="frame" x="185.5" y="211" width="24" height="24"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="8SW-Vn-uFl"/>
@@ -53,22 +57,21 @@
             </view>
             <color key="backgroundColor" red="1" green="0.24437601647755769" blue="0.68431829132002719" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
-                <constraint firstItem="lM3-92-Mo7" firstAttribute="top" secondItem="DrZ-IB-9Ut" secondAttribute="centerY" id="6Tz-Ei-Cgg"/>
-                <constraint firstItem="DrZ-IB-9Ut" firstAttribute="width" secondItem="nlu-4h-dPD" secondAttribute="width" multiplier="0.2" id="Ayc-vg-76Y"/>
-                <constraint firstItem="uua-yu-7OD" firstAttribute="trailing" secondItem="lM3-92-Mo7" secondAttribute="trailing" constant="-10" id="I1s-Fe-suZ"/>
-                <constraint firstItem="uua-yu-7OD" firstAttribute="bottom" secondItem="lM3-92-Mo7" secondAttribute="bottom" constant="-10" id="Kw9-Ol-5yD"/>
-                <constraint firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="trailing" id="PtU-M7-2oT"/>
-                <constraint firstItem="lM3-92-Mo7" firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="centerX" id="ZE3-Jb-jZm"/>
-                <constraint firstItem="lM3-92-Mo7" firstAttribute="leading" secondItem="nlu-4h-dPD" secondAttribute="leading" id="cZw-bg-zi5"/>
-                <constraint firstAttribute="bottom" secondItem="lM3-92-Mo7" secondAttribute="bottom" id="fXH-zY-9HL"/>
-                <constraint firstItem="DrZ-IB-9Ut" firstAttribute="top" secondItem="nlu-4h-dPD" secondAttribute="top" id="jzs-jG-l7J"/>
+                <constraint firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="trailing" id="Afk-O4-fOR"/>
+                <constraint firstItem="DrZ-IB-9Ut" firstAttribute="top" secondItem="nlu-4h-dPD" secondAttribute="top" id="B39-A8-J05"/>
+                <constraint firstItem="DrZ-IB-9Ut" firstAttribute="width" secondItem="nlu-4h-dPD" secondAttribute="width" multiplier="0.2" id="JiD-rt-efl"/>
+                <constraint firstItem="uua-yu-7OD" firstAttribute="bottom" secondItem="lM3-92-Mo7" secondAttribute="bottom" constant="-20" id="OjO-yE-MSl"/>
+                <constraint firstItem="uua-yu-7OD" firstAttribute="trailing" secondItem="lM3-92-Mo7" secondAttribute="trailing" constant="-20" id="QRG-ec-CDj"/>
+                <constraint firstItem="lM3-92-Mo7" firstAttribute="leading" secondItem="nlu-4h-dPD" secondAttribute="leading" id="Xao-3Q-1Oa"/>
+                <constraint firstAttribute="bottom" secondItem="lM3-92-Mo7" secondAttribute="bottom" id="wn4-Di-acv"/>
+                <constraint firstItem="lM3-92-Mo7" firstAttribute="trailing" secondItem="DrZ-IB-9Ut" secondAttribute="centerX" id="ydz-aG-WL8"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="9lb-1t-DHf"/>
             <size key="customSize" width="128" height="117"/>
             <connections>
                 <outlet property="deleteButton" destination="DrZ-IB-9Ut" id="Tnv-qF-2OT"/>
-                <outlet property="deleteButtonWidthConstraint" destination="Ayc-vg-76Y" id="h4z-g8-x5g"/>
-                <outlet property="deleteButtonWidthToZeroConstraint" destination="7d7-9C-Znm" id="SHU-XI-DP1"/>
+                <outlet property="deleteButtonWidthConstraint" destination="JiD-rt-efl" id="d6j-60-tGC"/>
+                <outlet property="deleteButtonWidthToZeroConstraint" destination="G5P-Uo-fo8" id="Joo-xC-9NH"/>
                 <outlet property="multiSelectIndicatorView" destination="uua-yu-7OD" id="8s5-9T-vZe"/>
                 <outlet property="thumbnailImageView" destination="lM3-92-Mo7" id="3tS-1h-Tyg"/>
             </connections>

@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // often executes after `viewDidLoad` et al.
         DataServices.setup()
 
+        Theme.apply()
+
         super.init()
     }
     
@@ -83,8 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         lockScreenWindow.hide(animated: animated, completion: { [weak self] in
             // If these are not reorderd then the lock screen will get some
             // events like the query for `prefersStatusBarHidden`
-            self?.window?.windowLevel = 1.0
-            self?.lockScreenWindow.windowLevel = 0.0
+            self?.window?.windowLevel = 0.0
+//            self?.lockScreenWindow.windowLevel = 0.0
             self?.window?.makeKeyAndVisible()
         })
     }

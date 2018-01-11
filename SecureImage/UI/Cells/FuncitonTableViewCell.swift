@@ -25,12 +25,29 @@ typealias ViewAllCallback = () -> Void
 
 class FuncitonTableViewCell: UITableViewCell {
     
+    
+    @IBOutlet weak var viewAllImagesButton: UIButton!
+    @IBOutlet weak var uploadButton: UIButton!
+    
     internal var onUploadAlbumTouched: UploadAlbumCallback?
     internal var onViewAllImagesTouched: ViewAllCallback?
-    
+
     override func awakeFromNib() {
 
         super.awakeFromNib()
+        
+        commonInit()
+    }
+    
+    private func commonInit() {
+        
+        viewAllImagesButton.backgroundColor = UIColor.governmentDeepYellow()
+        viewAllImagesButton.setTitleColor(UIColor.blueText(), for: .normal)
+        viewAllImagesButton.layer.cornerRadius = viewAllImagesButton.bounds.size.height / 2
+        
+        uploadButton.backgroundColor = UIColor.governmentDeepYellow()
+        uploadButton.setTitleColor(UIColor.blueText(), for: .normal)
+        uploadButton.layer.cornerRadius = uploadButton.bounds.size.height / 2
     }
     
     @IBAction dynamic private func uploadAlbumTouched(sender: UIButton) {

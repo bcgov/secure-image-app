@@ -22,9 +22,16 @@ import UIKit
 
 class AddImageCollectionViewCell: UICollectionViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    @IBOutlet var offsetViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var offsetViewWidthToZeroConstraint: NSLayoutConstraint!
 
+    internal var shouldOffsetImage: Bool = true
+    
+    override func layoutSubviews() {
+        
+        super.layoutSubviews()
+        
+        offsetViewWidthConstraint.isActive = shouldOffsetImage
+        offsetViewWidthToZeroConstraint.isActive = !shouldOffsetImage
+    }
 }
