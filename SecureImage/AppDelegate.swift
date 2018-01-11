@@ -79,7 +79,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      // MARK:
     
     func hideLockScreen(animated: Bool = true) {
+
         lockScreenWindow.hide(animated: animated, completion: { [weak self] in
+            // If these are not reorderd then the lock screen will get some
+            // events like the query for `prefersStatusBarHidden`
+            self?.window?.windowLevel = 1.0
+            self?.lockScreenWindow.windowLevel = 0.0
             self?.window?.makeKeyAndVisible()
         })
     }

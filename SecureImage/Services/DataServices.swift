@@ -122,7 +122,7 @@ class DataServices: NSObject {
             let album = Album()
             
             for file in files {
-                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, 0.5) {
+                if let image = UIImage(named: file, in: Bundle(for: DataServices.self), compatibleWith: nil), let imageData = UIImageJPEGRepresentation(image, CGFloat(Constants.Defaults.jPEGCompressionRatio)) {
                     
                     let doc = Document()
                     doc.id = UUID().uuidString
@@ -139,6 +139,32 @@ class DataServices: NSObject {
             }
         }  catch {
             fatalError("Unable to seed Realm")
+        }
+    }
+    
+    internal class func add(image: Data, to album: Album) {
+
+        print("image size = \(ByteCountFormatter.string(fromByteCount: Int64(image.count), countStyle: .file))")
+        
+        guard let realm = try? Realm() else {
+            print("Unable open realm")
+            return
+        }
+        
+        if let myAlbum = realm.objects(Album.self).filter("id == %@", album.id).first {
+            let doc = Document()
+            doc.id = UUID().uuidString
+            doc.imageData = image
+            doc.createdAt = Date()
+            doc.modifiedAt = Date()
+            
+            do {
+                try realm.write {
+                    myAlbum.documents.append(doc)
+                }
+            } catch {
+                fatalError("Unable to write to realm")
+            }
         }
     }
 }

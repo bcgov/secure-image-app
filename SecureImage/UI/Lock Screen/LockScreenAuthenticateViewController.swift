@@ -28,7 +28,7 @@ class LockScreenAuthenticateViewController: UIViewController {
         
         return vc
     }
-    
+
     @IBAction func go() { // TODO(jl): Rename when during implementation
         NotificationCenter.default.post(Notification(name: .userAuthenticated))
     }
