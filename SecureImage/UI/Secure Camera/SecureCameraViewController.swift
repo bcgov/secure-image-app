@@ -318,16 +318,23 @@ class SecureCameraViewController: UIViewController {
     
     private func performImageCapturedAnimations() {
 
-        let fadeInAnimationDuration = 0.22
-        let fadeOutAnimationDuration = 0.33
-        
-        UIView.animate(withDuration: fadeInAnimationDuration, animations: {
-            self.cameraPortalOverlayView.alpha = 0.7
-        }, completion: { success in
-            UIView.animate(withDuration: fadeOutAnimationDuration, animations: {
+        let expandAnimationDuration = 0.22
+        let contractionAnimationDuration = 0.15
+        let expandedTransformScale = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        let contractedTransformScale = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        let opts: UIViewAnimationOptions = [.allowUserInteraction]
+
+        UIView.animate(withDuration: expandAnimationDuration, delay: 0.0, options: opts, animations: {
+            self.captureImageButton.transform = expandedTransformScale
+            self.cameraPortalOverlayView.alpha = 0.8
+        }) { (completed: Bool) in
+            UIView.animate(withDuration: contractionAnimationDuration, delay: 0.0, options: opts, animations: {
+                self.captureImageButton.transform = contractedTransformScale
                 self.cameraPortalOverlayView.alpha = 0
-            })
-        })
+            }) { (completed: Bool) in
+                ()
+            }
+        }
     }
 
     // MARK: Cemera Authorization
