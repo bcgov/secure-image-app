@@ -24,6 +24,8 @@ import RealmSwift
 class AlbumDetailsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var networkAvailabilityViewZeroHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var networkAvailabilityViewNormalHeightConstraint: NSLayoutConstraint!
     
     private static let captureImageSegueID = "CaptureImageSegue"
     private static let showImageSegueID = "ShowImageSegue"
@@ -105,6 +107,17 @@ class AlbumDetailsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsSelection = false
+        
+        if NetworkManager.shared.isReachableOnEthernetOrWiFi {
+            networkAvailabilityViewZeroHeightConstraint.isActive = true
+            networkAvailabilityViewNormalHeightConstraint.isActive = false
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
+                                               name: Notification.Name.wifiAvailabilityChanged, object: nil)
     }
     
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
@@ -181,6 +194,18 @@ class AlbumDetailsViewController: UIViewController {
             }
         } catch {
             fatalError("Unable to update album properties")
+        }
+    }
+    
+    @objc dynamic private func handleWiFiAvailabilityChanged(notification: Notification) {
+        
+        networkAvailabilityViewZeroHeightConstraint.isActive = NetworkManager.shared.isReachableOnEthernetOrWiFi
+        networkAvailabilityViewNormalHeightConstraint.isActive = !NetworkManager.shared.isReachableOnEthernetOrWiFi
+        let animationDuration: Double = 0.33
+
+        UIView.animate(withDuration: animationDuration) {
+            
+            self.view.layoutIfNeeded()
         }
     }
     

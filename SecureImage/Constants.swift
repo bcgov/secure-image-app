@@ -43,4 +43,5 @@ struct Constants {
 
 extension Notification.Name {
     static let userAuthenticated = Notification.Name("userAuthenticated")
+    static let wifiAvailabilityChanged = Notification.Name("wifiAvailabilityChanged")
 }
