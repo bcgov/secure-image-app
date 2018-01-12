@@ -318,8 +318,8 @@ class SecureCameraViewController: UIViewController {
     
     private func performImageCapturedAnimations() {
 
-        let fadeInAnimationDuration = 0.1
-        let fadeOutAnimationDuration = 0.2
+        let fadeInAnimationDuration = 0.22
+        let fadeOutAnimationDuration = 0.33
         
         UIView.animate(withDuration: fadeInAnimationDuration, animations: {
             self.cameraPortalOverlayView.alpha = 0.7
