@@ -91,6 +91,8 @@ class AlbumsViewController: UIViewController {
             tableView.isHidden = false
             createFirstAlbumView.isHidden = true
             createAlbumButton.isHidden = false
+            createAlbumButton.backgroundColor = Theme.governmentDarkBlue
+            createAlbumButton.setTitleColor(UIColor.white, for: .normal)
             view.backgroundColor = UIColor.white
             
             return
@@ -99,6 +101,8 @@ class AlbumsViewController: UIViewController {
         tableView.isHidden = true
         createFirstAlbumView.isHidden = false
         createAlbumButton.isHidden = false
+        createAlbumButton.backgroundColor = Theme.governmentDeepYellow
+        createAlbumButton.setTitleColor(Theme.blueText, for: .normal)
         view.backgroundColor = Theme.governmentDarkBlue
     }
     
