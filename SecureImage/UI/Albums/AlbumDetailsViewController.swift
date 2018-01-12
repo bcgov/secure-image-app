@@ -128,6 +128,9 @@ class AlbumDetailsViewController: UIViewController {
             cell.onAddImageTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
+            cell.onPresentAlertRequested = { (alertView: UIAlertController) in
+                self.present(alertView, animated: true, completion: nil)
+            }
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
             

@@ -23,6 +23,7 @@ import RealmSwift
 
 typealias AddNewImageCallback = () -> Void
 typealias ViewImageCallback = (_ document: Document) -> Void
+typealias PresentAlertCallback = (_ alertView: UIAlertController) -> Void
 
 class ImagePreviewTableViewCell: UITableViewCell {
 
@@ -40,6 +41,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
     internal var albumCollectionViewManager: AlbumCollectionViewManager!
     internal var onAddImageTouched: AddNewImageCallback?
     internal var onViewImageTouched: ViewImageCallback?
+    internal var onPresentAlertRequested: PresentAlertCallback?
     private let addPhotoGestureRecognizer: UITapGestureRecognizer = {
         let gr = UITapGestureRecognizer()
         gr.numberOfTouchesRequired = 1
@@ -100,9 +102,27 @@ class ImagePreviewTableViewCell: UITableViewCell {
         guard let previewImages = previewImages, let index = previewImages.index(of: document) else {
             fatalError("Unable unwrap data source")
         }
+
+        guard let foo = onPresentAlertRequested else {
+            deleteFromDataSource(document: document)
+            deleteFromCollectionView(index: index)
+            
+            return
+        }
         
-        deleteFromDataSource(document: document)
-        deleteFromCollectionView(index: index)
+        let title = "Delete Photo"
+        let message = "Are you sure you want to delete this photo?"
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let delete = UIAlertAction(title: "Delete", style: .default) { (sender: UIAlertAction) in
+            self.deleteFromDataSource(document: document)
+            self.deleteFromCollectionView(index: index)
+        }
+
+        ac.addAction(cancel)
+        ac.addAction(delete)
+
+        foo(ac)
     }
 
     private func deleteFromDataSource(document: Document) {
