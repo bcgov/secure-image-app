@@ -41,12 +41,12 @@ class FuncitonTableViewCell: UITableViewCell {
     
     private func commonInit() {
         
-        viewAllImagesButton.backgroundColor = UIColor.governmentDeepYellow()
-        viewAllImagesButton.setTitleColor(UIColor.blueText(), for: .normal)
+        viewAllImagesButton.backgroundColor = Theme.governmentDarkBlue
+        viewAllImagesButton.setTitleColor(UIColor.white, for: .normal)
         viewAllImagesButton.layer.cornerRadius = viewAllImagesButton.bounds.size.height / 2
         
-        uploadButton.backgroundColor = UIColor.governmentDeepYellow()
-        uploadButton.setTitleColor(UIColor.blueText(), for: .normal)
+        uploadButton.backgroundColor = Theme.governmentDarkBlue
+        uploadButton.setTitleColor(UIColor.white, for: .normal)
         uploadButton.layer.cornerRadius = uploadButton.bounds.size.height / 2
     }
     

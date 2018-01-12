@@ -107,8 +107,8 @@ class SecureCameraViewController: UIViewController {
         captureImageButton.backgroundColor = UIColor.white
         previewViewHeightConstraint.constant = view.bounds.height / 2
         cameraPortalOverlayView.alpha = 0.0
-        screenHeader.backgroundColor = UIColor.governmentDarkBlue()
-        screenFooter.backgroundColor = UIColor.governmentDarkBlue()
+        screenHeader.backgroundColor = Theme.governmentDarkBlue
+        screenFooter.backgroundColor = Theme.governmentDarkBlue
         
         resetFlashFunctions()
         
@@ -232,7 +232,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
 
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .on
@@ -243,7 +243,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
         
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .off
@@ -254,7 +254,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
     
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .auto

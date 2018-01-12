@@ -54,9 +54,9 @@ class AlbumPropertyTableViewCell: UITableViewCell {
     private func commonInit() {
         
         attributeTextField.delegate = self
-        attributeTextField.textColor = UIColor.blueText()
-        cellDividerView.backgroundColor = UIColor.governmentDarkBlue()
-        attributeTitleLabel.textColor = UIColor.blueText()
+        attributeTextField.textColor = Theme.blueText
+        cellDividerView.backgroundColor = Theme.governmentDarkBlue
+        attributeTitleLabel.textColor = Theme.blueText
         attributeTextField.backgroundColor = UIColor.clear
     }
 }

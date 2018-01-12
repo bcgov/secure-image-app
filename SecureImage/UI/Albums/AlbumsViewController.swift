@@ -35,7 +35,7 @@ class AlbumsViewController: UIViewController {
     private let createFirstAlbumView: UIView = {
         let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! UIView
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.governmentDarkBlue()
+        v.backgroundColor = Theme.governmentDarkBlue
 
         return v
     }()
@@ -76,8 +76,8 @@ class AlbumsViewController: UIViewController {
 
         createAlbumButton.layer.cornerRadius = createAlbumButton.frame.height / 2
         createAlbumButton.clipsToBounds = true
-        createAlbumButton.backgroundColor = UIColor.governmentDeepYellow()
-        createAlbumButton.setTitleColor(UIColor.blueText(), for: .normal)
+        createAlbumButton.backgroundColor = Theme.governmentDarkBlue
+        createAlbumButton.setTitleColor(UIColor.white, for: .normal)
         
         createFirstAlbumView.widthAnchor.constraint(equalToConstant: 300).isActive = true
         createFirstAlbumView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -99,7 +99,7 @@ class AlbumsViewController: UIViewController {
         tableView.isHidden = true
         createFirstAlbumView.isHidden = false
         createAlbumButton.isHidden = false
-        view.backgroundColor = UIColor.governmentDarkBlue()
+        view.backgroundColor = Theme.governmentDarkBlue
     }
     
     private func configureCell(cell: AlbumTableViewCell, at indexPath: IndexPath) {

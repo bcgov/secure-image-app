@@ -27,6 +27,15 @@ class Theme {
     
     static let preferredStatusBarStyle: UIStatusBarStyle = UIStatusBarStyle.lightContent
 
+    // Pallet
+    static let governmentDarkBlue =  UIColor(red:0.12, green:0.21, blue:0.42, alpha:1)
+    static let governmentDeepYellow =  UIColor(red:0.96, green:0.66, blue:0.11, alpha:1)
+    static let albumOverlayBlue = UIColor(red:0, green:0.2, blue:0.4, alpha:0.8)
+    static let blueText =  UIColor(red:0, green:0.2, blue:0.4, alpha:1)
+    static let disabledButtonBlue =  UIColor(red:0.33, green:0.46, blue:0.65, alpha:1)
+    static let alertRed =  UIColor(red:0.82, green:0.01, blue:0.11, alpha:1)
+    static let lightGreyBorder =  UIColor(red:0.59, green:0.59, blue:0.59, alpha:1)
+
     internal class func apply() {
 
         styleNavbar()
@@ -34,40 +43,9 @@ class Theme {
         
     private class func styleNavbar() {
         
-        UINavigationBar.appearance().barTintColor = UIColor.governmentDarkBlue()
+        UINavigationBar.appearance().barTintColor = Theme.governmentDarkBlue
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         UINavigationBar.appearance().isTranslucent = false
-    }
-}
-
-extension UIColor {
-    
-    class func governmentDarkBlue() -> UIColor {
-        return UIColor(red:0.12, green:0.21, blue:0.42, alpha:1)
-    }
-    
-    class func governmentDeepYellow() -> UIColor {
-        return UIColor(red:0.96, green:0.66, blue:0.11, alpha:1)
-    }
-    
-    class func albumOverlayBlue() -> UIColor {
-        return UIColor(red:0, green:0.2, blue:0.4, alpha:0.8)
-    }
-    
-    class func blueText() -> UIColor {
-        return UIColor(red:0, green:0.2, blue:0.4, alpha:1)
-    }
-    
-    class func disabledButtonBlue() -> UIColor {
-        return UIColor(red:0.33, green:0.46, blue:0.65, alpha:1)
-    }
-    
-    class func alertRed() -> UIColor {
-        return UIColor(red:0.82, green:0.01, blue:0.11, alpha:1)
-    }
-    
-    class func lightGreyBorder() -> UIColor {
-        return UIColor(red:0.59, green:0.59, blue:0.59, alpha:1)
     }
 }

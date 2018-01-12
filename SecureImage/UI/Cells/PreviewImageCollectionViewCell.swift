@@ -87,7 +87,7 @@ class PreviewImageCollectionViewCell: UICollectionViewCell {
         backgroundColor = UIColor.white
         
         deleteButton.clipsToBounds = true
-        deleteButton.backgroundColor = UIColor.governmentDarkBlue()
+        deleteButton.backgroundColor = Theme.governmentDarkBlue
 
         multiSelectIndicatorView.isHidden = true
         multiSelectIndicatorView.backgroundColor = UIColor.clear

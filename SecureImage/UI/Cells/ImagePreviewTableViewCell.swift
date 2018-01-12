@@ -90,7 +90,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         
         addPhotosView.isUserInteractionEnabled = true
         addPhotosView.addGestureRecognizer(addPhotoGestureRecognizer)
-        addPhotosView.layer.borderColor = UIColor.lightGreyBorder().cgColor
+        addPhotosView.layer.borderColor = Theme.lightGreyBorder.cgColor
         addPhotosView.layer.borderWidth = 1.0
         addPhotosView.clipsToBounds = true
     }
