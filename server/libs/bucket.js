@@ -69,6 +69,7 @@ export const getObject = (bucket, name) => new Promise((resolve, reject) => {
   client.getObject(bucket, name, (error, stream) => {
     if (error) {
       reject(error);
+      return;
     }
 
     stream.on('data', (chunk) => {
@@ -95,5 +96,15 @@ export const getPresignedUrl = (bucket, name) => new Promise((resolve, reject) =
     }
 
     resolve(presignedUrl);
+  });
+});
+
+export const removeObject = (bucket, name) => new Promise((resolve, reject) => {
+  client.removeObject(bucket, name, (error) => {
+    if (error) {
+      reject(error);
+    }
+
+    resolve();
   });
 });

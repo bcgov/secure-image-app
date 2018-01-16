@@ -38,6 +38,10 @@ nconf.overrides({
   environment: env,
   host: process.env.HOST || '127.0.0.1',
   port: process.env.PORT || 8000,
+  minio: {
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+  },
 });
 
 // load other properties from file.

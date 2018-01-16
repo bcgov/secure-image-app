@@ -41,6 +41,7 @@ import {
   putObject,
   listBucket,
   getObject,
+  removeObject,
 } from '../../libs/bucket';
 
 const bucket = config.get('minio:bucket');
@@ -93,11 +94,11 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
   */
 
   const { albumId } = req.params;
-  const { filename, tempFilePath } = req.file;
-  const stream = fs.createReadStream(tempFilePath);
+  const { filename } = req.file;
+  const stream = fs.createReadStream(req.file.path);
   const etag = await putObject(bucket, path.join(albumId, filename), stream);
 
-  fs.unlinkSync(tempFilePath);
+  fs.unlinkSync(req.file.path);
 
   if (etag) {
     return res.status(200).json({ id: req.file.filename });
@@ -110,6 +111,7 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
 router.get('/:albumId', asyncMiddleware(async (req, res) => {
   logger.log('GET /:albumId');
 
+  const cleanup = [];
   const { albumId } = req.params;
   const archive = archiver('zip', {
     zlib: {
@@ -136,13 +138,18 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   for (const obj of objects) {
     // eslint-disable-next-line no-await-in-loop
     const buffer = await getObject(bucket, obj.name);
+
     archive.append(buffer, {
-      name: `${archiveFileBaseName}${index}`,
+      name: `${archiveFileBaseName}${index}.jpg`,
     });
     index += 1;
+
+    // eslint-disable-next-line no-await-in-loop
+    cleanup.push(removeObject(bucket, obj.name));
   }
 
   archive.finalize();
+  await Promise.all(cleanup);
 
   const file = await writeToTemporaryFile(archive);
   const stream = fs.createReadStream(file);
@@ -158,7 +165,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   const port = config.get('port');
   const host = `http://${ip.address()}:${port}`;
   const archiveFileName = `${path.basename(file)}.zip`;
-  const archiveFilePath = url.resolve(`v1/album/${albumId}/download/${archiveName}`, archiveFileName);
+  const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
   const downloadUrl = url.resolve(host, archiveFilePath);
 
   return res.status(200).json({ url: downloadUrl });
@@ -166,7 +173,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
 
 // Download the album as a ZIP archive
 router.get('/:albumId/download/:fileName', asyncMiddleware(async (req, res) => {
-  logger.log('GET /:albumId/download');
+  logger.log('GET /:albumId/download/:fileName');
 
   const { albumId, fileName } = req.params;
   const buffer = await getObject(bucket, path.join(albumId, fileName));
