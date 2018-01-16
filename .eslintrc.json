@@ -1,0 +1,16 @@
+{
+  "ecmaFeatures": {
+    "modules": true
+   },
+   "parserOptions": {
+     "ecmaVersion": 6,
+     "sourceType": "module"
+  },
+  "plugins": [
+  ],
+  "parser": "babel-eslint",
+  "extends": "airbnb-base",
+  "rules": {
+    "strict": 0
+  }
+}

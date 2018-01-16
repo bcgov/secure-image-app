@@ -1,0 +1,66 @@
+{
+  "name": "secimg-api",
+  "version": "0.0.1",
+  "description": "Secure Image API",
+  "engine": "node 9.3.0",
+  "engines": {
+    "node": "9.3.0"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "archiver": "^2.1.1",
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.0",
+    "compression": "^1.7.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "hashids": "^1.1.4",
+    "hewer": "^0.4.0",
+    "ip": "^1.1.4",
+    "minio": "^3.2.3",
+    "multer": "^1.3.0",
+    "nconf": "^0.8.5",
+    "urlencode": "^1.1.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-airbnb": "^2.4.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "chai-http": "^3.0.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-import": "^2.8.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-zip": "^4.0.0",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
+    "sinon": "^4.0.2"
+  },
+  "scripts": {
+    "start": "node server",
+    "build": "NODE_ENV=production ./node_modules/.bin/gulp",
+    "deploy:st": "./scripts/awsecsdeploy.sh",
+    "deploy:pr": "echo 'not implemented'",
+    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon server --exec babel-node",
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:bcgov/secure-image-api.git"
+  },
+  "author": "Jason C. Leach <jaosn.leach@fullboar.ca>",
+  "license": "Apache License",
+  "homepage": "https://github.com:bcgov/secure-image-api#readme"
+}
