@@ -24,6 +24,9 @@
 
 import * as minio from 'minio';
 import config from '../config';
+// import {
+//   logger,
+// } from '../libs/logger';
 
 const client = new minio.Client({
   endPoint: config.get('minio:endPoint'),

@@ -74,14 +74,14 @@ function writeToTemporaryFile(archive) {
 
 // Create a new album
 router.post('/', asyncMiddleware(async (req, res) => {
-  logger.log('POST /');
-  return res.status(200).json({ id: uuid() });
+  const albumId = uuid();
+
+  logger.log({ id: albumId }).info('Creating album.');
+  return res.status(200).json({ id: albumId });
 }));
 
 // Add a document (image) to an item
 router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res) => {
-  logger.log('POST /:albumId');
-
   /*
     { fieldname: 'file',
     originalname: 'IMG_0112.jpg',
@@ -96,21 +96,24 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
   const { albumId } = req.params;
   const { filename } = req.file;
   const stream = fs.createReadStream(req.file.path);
-  const etag = await putObject(bucket, path.join(albumId, filename), stream);
 
-  fs.unlinkSync(req.file.path);
+  const etag = await putObject(bucket, path.join(albumId, filename), stream)
+    .catch((error) => {
+      logger.log(error).error('Unable to put object');
+      return res.status(500).end();
+    });
 
   if (etag) {
-    return res.status(200).json({ id: req.file.filename });
+    fs.unlinkSync(req.file.path);
   }
 
-  return res.status(500).json();
+  logger.log({ id: req.file.filename, etag }).info('Adding image to album.');
+
+  return res.status(200).json({ id: req.file.filename });
 }));
 
 // Get the download URL for an album
 router.get('/:albumId', asyncMiddleware(async (req, res) => {
-  logger.log('GET /:albumId');
-
   const cleanup = [];
   const { albumId } = req.params;
   const archive = archiver('zip', {
@@ -120,8 +123,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   });
 
   archive.on('error', (error) => {
-    console.log('fail', error);
-    // logger.log({ error }).error('unable to create archive.');
+    logger.log({ error }).error('Unable to create archive.');
   });
 
   /*
@@ -168,17 +170,19 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
   const downloadUrl = url.resolve(host, archiveFilePath);
 
+  logger.log({ url: downloadUrl }).info('Packgaging album for download.');
+
   return res.status(200).json({ url: downloadUrl });
 }));
 
 // Download the album as a ZIP archive
 router.get('/:albumId/download/:fileName', asyncMiddleware(async (req, res) => {
-  logger.log('GET /:albumId/download/:fileName');
-
   const { albumId, fileName } = req.params;
   const buffer = await getObject(bucket, path.join(albumId, fileName));
 
   res.contentType('application/octet-stream');
+
+  logger.log({ bucket, path: path.join(albumId, fileName) }).info('Download album ZIP archive.');
 
   return res.end(buffer, 'binary');
 }));
