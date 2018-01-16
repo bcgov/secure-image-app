@@ -190,7 +190,7 @@ class AlbumDetailsViewController: UIViewController {
  
                 let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
 
-                queue.addAsyncOperation { callback in
+                queue.addAsyncOperation { done in
                     BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
                         
                         do {
@@ -207,7 +207,7 @@ class AlbumDetailsViewController: UIViewController {
                             self.sendAlbumToMe()
                         }
                         
-                        callback()
+                        done()
                     }
                 }
             }
