@@ -166,8 +166,6 @@ class AlbumDetailsViewController: UIViewController {
             guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
                 return
             }
-            
-            defer { self.sendAlbumToMe() }
 
             do {
                 if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
@@ -179,24 +177,37 @@ class AlbumDetailsViewController: UIViewController {
                 print("WARN: Unable to create a remote album")
             }
             
+            // We need to make sure all the images are uploaded before packaging the
+            // album, to do this (quickly) the images are uploaded serially and the packaging
+            // is done when the last image is done.
+            
+            let queue = OperationQueue()
+            queue.maxConcurrentOperationCount = 1
+            
             for item in self.album.documents.enumerated() {
                 let offset = item.offset
                 let doc = item.element
-                
-                BackendAPI.add(doc.imageData!, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
-                    
-                    do {
-                        if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
-                            try realm.write {
-                                myDocument.remoteDocumentId = remoteDocumentId
+ 
+                let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
+
+                queue.addAsyncOperation { callback in
+                    BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                        
+                        do {
+                            if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
+                                try realm.write {
+                                    myDocument.remoteDocumentId = remoteDocumentId
+                                }
                             }
+                        } catch {
+                            print("WARN: Unable to add image to remote album")
                         }
-                    } catch {
-                        print("WARN: Unable to add image to remote album")
-                    }
-                    
-                    if offset == self.album.documents.count {
-                        self.sendAlbumToMe()
+                        
+                        if offset == self.album.documents.count - 1 {
+                            self.sendAlbumToMe()
+                        }
+                        
+                        callback()
                     }
                 }
             }
