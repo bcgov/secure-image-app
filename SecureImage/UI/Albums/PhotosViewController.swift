@@ -256,13 +256,9 @@ extension PhotosViewController: AlbumCollectionManagerProtocol {
         if !DataServices.canAddToAlbum(album: album) {
             let title = "Album Limit"
             let message = "You have reached the maximum photo count for this album."
-            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            
-            ac.addAction(cancel)
-            
-            present(ac, animated: true, completion: nil)
-            
+
+            showAlert(with: title, message: message)
+
             return
         }
         

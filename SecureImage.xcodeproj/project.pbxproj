@@ -19,6 +19,7 @@
 		565417A91FEDD7B900D0B2AC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */; };
 		56579EA0200E7D9E00B2AF3E /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579E9F200E7D9E00B2AF3E /* AsyncBlockOperation.swift */; };
 		56579EA2200E7DCD00B2AF3E /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA1200E7DCD00B2AF3E /* ConcurrentOperation.swift */; };
+		56579EA4200FFE7000B2AF3E /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */; };
 		569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84EC1FE1DD770054173D /* LockScreenWindow.swift */; };
 		569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */; };
 		569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */; };
@@ -88,6 +89,7 @@
 		565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		56579E9F200E7D9E00B2AF3E /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		56579EA1200E7DCD00B2AF3E /* ConcurrentOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentOperation.swift; sourceTree = "<group>"; };
+		56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
 		569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockScreenAuthenticateViewController.storyboard; sourceTree = "<group>"; };
 		569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAuthenticateViewController.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */,
 				56103C891FFEE69600BCCAAA /* UINavigationControllerExtensions.swift */,
 				562527FD2003F50F00E14004 /* UIColor.swift */,
+				56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56579EA0200E7D9E00B2AF3E /* AsyncBlockOperation.swift in Sources */,
+				56579EA4200FFE7000B2AF3E /* UIViewControllerExtensions.swift in Sources */,
 				56E543791FE33F6300327591 /* Album.swift in Sources */,
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
 				562A75DE20067A8A00D55426 /* LocationServices.swift in Sources */,

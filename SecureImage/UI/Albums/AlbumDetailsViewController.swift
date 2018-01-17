@@ -144,12 +144,8 @@ class AlbumDetailsViewController: UIViewController {
                 if !DataServices.canAddToAlbum(album: self.album) {
                     let title = "Album Limit"
                     let message = "You have reached the maximum photo count for this album."
-                    let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-                    
-                    ac.addAction(cancel)
-                    
-                    self.present(ac, animated: true, completion: nil)
+  
+                    self.showAlert(with: title, message: message)
                     
                     return
                 }
@@ -293,11 +289,8 @@ class AlbumDetailsViewController: UIViewController {
         
         let title = "Messaging"
         let message = "This devices is not able to send messages."
-        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-        ac.addAction(cancel)
-        
-        present(ac, animated: true, completion: nil)
+
+        showAlert(with: title, message: message)
         
         return false
     }
@@ -412,10 +405,8 @@ extension AlbumDetailsViewController: MFMailComposeViewControllerDelegate {
         case .failed:
             let title = "Messaging"
             let message = "The email message was not able to be sent. Please try again later"
-            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            
-            ac.addAction(cancel)
+
+            showAlert(with: title, message: message)
         default:
             ()
         }
