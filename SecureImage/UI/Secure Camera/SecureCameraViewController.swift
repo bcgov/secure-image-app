@@ -122,8 +122,8 @@ class SecureCameraViewController: UIViewController {
         captureImageButton.backgroundColor = UIColor.white
         previewViewHeightConstraint.constant = view.bounds.height / 2
         cameraPortalOverlayView.alpha = 0.0
-        screenHeader.backgroundColor = UIColor.governmentDarkBlue()
-        screenFooter.backgroundColor = UIColor.governmentDarkBlue()
+        screenHeader.backgroundColor = Theme.governmentDarkBlue
+        screenFooter.backgroundColor = Theme.governmentDarkBlue
         
         resetFlashFunctions()
         
@@ -247,7 +247,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
 
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .on
@@ -258,7 +258,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
         
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .off
@@ -269,7 +269,7 @@ class SecureCameraViewController: UIViewController {
         resetFlashFunctions()
     
         if let view = sender.view?.viewWithTag(SecureCameraViewController.imageViewTag) {
-            view.tintColor = UIColor.governmentDeepYellow()
+            view.tintColor = Theme.governmentDeepYellow
         }
 
         flashMode = .auto
@@ -333,16 +333,23 @@ class SecureCameraViewController: UIViewController {
     
     private func performImageCapturedAnimations() {
 
-        let fadeInAnimationDuration = 0.1
-        let fadeOutAnimationDuration = 0.2
-        
-        UIView.animate(withDuration: fadeInAnimationDuration, animations: {
-            self.cameraPortalOverlayView.alpha = 0.7
-        }, completion: { success in
-            UIView.animate(withDuration: fadeOutAnimationDuration, animations: {
+        let expandAnimationDuration = 0.22
+        let contractionAnimationDuration = 0.15
+        let expandedTransformScale = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        let contractedTransformScale = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        let opts: UIViewAnimationOptions = [.allowUserInteraction]
+
+        UIView.animate(withDuration: expandAnimationDuration, delay: 0.0, options: opts, animations: {
+            self.captureImageButton.transform = expandedTransformScale
+            self.cameraPortalOverlayView.alpha = 0.8
+        }) { (completed: Bool) in
+            UIView.animate(withDuration: contractionAnimationDuration, delay: 0.0, options: opts, animations: {
+                self.captureImageButton.transform = contractedTransformScale
                 self.cameraPortalOverlayView.alpha = 0
-            })
-        })
+            }) { (completed: Bool) in
+                ()
+            }
+        }
     }
 
     // MARK: Cemera Authorization

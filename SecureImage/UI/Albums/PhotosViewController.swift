@@ -108,8 +108,8 @@ class PhotosViewController: UIViewController {
 
         deleteButton.alpha = 0.0
         deleteButton.layer.cornerRadius = deleteButton.bounds.height / 2
-        deleteButton.backgroundColor = UIColor.governmentDeepYellow()
-        deleteButton.setTitleColor(UIColor.blueText(), for: .normal)
+        deleteButton.backgroundColor = Theme.governmentDarkBlue
+        deleteButton.setTitleColor(UIColor.white, for: .normal)
 
         let select = UIBarButtonItem(title: "Select", style: .done, target: self, action: #selector(PhotosViewController.selectTouched(sender:)))
         navigationItem.rightBarButtonItem = select

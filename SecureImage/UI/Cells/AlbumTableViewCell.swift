@@ -58,7 +58,7 @@ class AlbumTableViewCell: UITableViewCell {
         
         contentView.backgroundColor = UIColor.white
         
-        titleOverlayView.backgroundColor = UIColor.albumOverlayBlue()
+        titleOverlayView.backgroundColor = Theme.albumOverlayBlue
         
         coverImageView.layer.cornerRadius = AlbumTableViewCell.cornerRadius
         coverImageView.layer.masksToBounds = true

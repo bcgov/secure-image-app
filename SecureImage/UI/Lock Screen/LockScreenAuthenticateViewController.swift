@@ -44,7 +44,7 @@ class LockScreenAuthenticateViewController: UIViewController {
     
     private func commonInit() {
         
-        view.backgroundColor = UIColor.governmentDarkBlue()
+        view.backgroundColor = Theme.governmentDarkBlue
     }
 
     @IBAction func go() { // TODO(jl): Rename when during implementation

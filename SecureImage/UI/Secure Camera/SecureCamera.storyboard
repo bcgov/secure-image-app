@@ -86,7 +86,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flash-auto" translatesAutoresizingMaskIntoConstraints="NO" id="huL-Xj-og7">
-                                                        <rect key="frame" x="17.5" y="3" width="34.5" height="34"/>
+                                                        <rect key="frame" x="19" y="5" width="31.5" height="31"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="huL-Xj-og7" secondAttribute="height" multiplier="1:1" id="9s7-6F-dwo"/>
@@ -96,10 +96,10 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="IR2-x5-Aet" firstAttribute="leading" secondItem="aYr-LD-aNS" secondAttribute="leading" id="4E9-3I-8b5"/>
-                                                    <constraint firstItem="IR2-x5-Aet" firstAttribute="top" secondItem="huL-Xj-og7" secondAttribute="bottom" id="JPi-2K-RQl"/>
+                                                    <constraint firstItem="IR2-x5-Aet" firstAttribute="top" secondItem="huL-Xj-og7" secondAttribute="bottom" constant="1" id="JPi-2K-RQl"/>
                                                     <constraint firstItem="huL-Xj-og7" firstAttribute="centerX" secondItem="aYr-LD-aNS" secondAttribute="centerX" id="aVs-4x-pYi"/>
                                                     <constraint firstAttribute="trailing" secondItem="IR2-x5-Aet" secondAttribute="trailing" id="d9c-q1-TVr"/>
-                                                    <constraint firstItem="huL-Xj-og7" firstAttribute="top" secondItem="aYr-LD-aNS" secondAttribute="top" constant="3" id="fsh-Bt-Zdl"/>
+                                                    <constraint firstItem="huL-Xj-og7" firstAttribute="top" secondItem="aYr-LD-aNS" secondAttribute="top" constant="5" id="fsh-Bt-Zdl"/>
                                                     <constraint firstAttribute="width" secondItem="aYr-LD-aNS" secondAttribute="height" multiplier="1:0.8" id="s5d-kq-HT3"/>
                                                     <constraint firstAttribute="bottom" secondItem="IR2-x5-Aet" secondAttribute="bottom" id="zge-qk-Kz0"/>
                                                 </constraints>
@@ -120,7 +120,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-flash" translatesAutoresizingMaskIntoConstraints="NO" id="SfI-BK-I82">
-                                                        <rect key="frame" x="18" y="3" width="34" height="34"/>
+                                                        <rect key="frame" x="19.5" y="5" width="31" height="31"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="SfI-BK-I82" secondAttribute="height" multiplier="1:1" id="spb-UO-eUG"/>
@@ -133,8 +133,8 @@
                                                     <constraint firstItem="SfI-BK-I82" firstAttribute="centerX" secondItem="8c2-8d-vl2" secondAttribute="centerX" id="GEy-DA-0I7"/>
                                                     <constraint firstItem="wAt-pg-F0H" firstAttribute="leading" secondItem="8c2-8d-vl2" secondAttribute="leading" id="QGD-wx-gru"/>
                                                     <constraint firstAttribute="bottom" secondItem="wAt-pg-F0H" secondAttribute="bottom" id="by3-eg-5ug"/>
-                                                    <constraint firstItem="SfI-BK-I82" firstAttribute="top" secondItem="8c2-8d-vl2" secondAttribute="top" constant="3" id="tff-UY-zrU"/>
-                                                    <constraint firstItem="wAt-pg-F0H" firstAttribute="top" secondItem="SfI-BK-I82" secondAttribute="bottom" id="wpX-mO-Byx"/>
+                                                    <constraint firstItem="SfI-BK-I82" firstAttribute="top" secondItem="8c2-8d-vl2" secondAttribute="top" constant="5" id="tff-UY-zrU"/>
+                                                    <constraint firstItem="wAt-pg-F0H" firstAttribute="top" secondItem="SfI-BK-I82" secondAttribute="bottom" constant="1" id="wpX-mO-Byx"/>
                                                 </constraints>
                                                 <connections>
                                                     <outletCollection property="gestureRecognizers" destination="U8w-r1-vKt" appends="YES" id="Dir-Ef-qjZ"/>
@@ -153,7 +153,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flash" translatesAutoresizingMaskIntoConstraints="NO" id="c96-0E-Q4a">
-                                                        <rect key="frame" x="17.5" y="3" width="34" height="34"/>
+                                                        <rect key="frame" x="19" y="5" width="31" height="31"/>
                                                         <color key="backgroundColor" red="1" green="0.24437601649999999" blue="0.68431829129999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="c96-0E-Q4a" secondAttribute="height" multiplier="1:1" id="Oo4-7e-xks"/>
@@ -164,8 +164,8 @@
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="dha-zh-GpE" secondAttribute="bottom" id="4jL-q6-gUK"/>
                                                     <constraint firstItem="c96-0E-Q4a" firstAttribute="centerX" secondItem="whM-vO-SDb" secondAttribute="centerX" id="HHf-hY-Wky"/>
-                                                    <constraint firstItem="c96-0E-Q4a" firstAttribute="top" secondItem="whM-vO-SDb" secondAttribute="top" constant="3" id="WO3-Gl-veg"/>
-                                                    <constraint firstItem="dha-zh-GpE" firstAttribute="top" secondItem="c96-0E-Q4a" secondAttribute="bottom" id="fhi-89-yUT"/>
+                                                    <constraint firstItem="c96-0E-Q4a" firstAttribute="top" secondItem="whM-vO-SDb" secondAttribute="top" constant="5" id="WO3-Gl-veg"/>
+                                                    <constraint firstItem="dha-zh-GpE" firstAttribute="top" secondItem="c96-0E-Q4a" secondAttribute="bottom" constant="1" id="fhi-89-yUT"/>
                                                     <constraint firstItem="dha-zh-GpE" firstAttribute="leading" secondItem="whM-vO-SDb" secondAttribute="leading" id="vhe-vd-yFc"/>
                                                     <constraint firstAttribute="trailing" secondItem="dha-zh-GpE" secondAttribute="trailing" id="yq5-CI-3wd"/>
                                                 </constraints>
