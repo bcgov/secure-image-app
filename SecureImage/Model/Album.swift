@@ -24,6 +24,7 @@ import RealmSwift
 class Album: Object {
     
     @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var remoteAlbumId: String?
     @objc dynamic var albumName: String = {
         let date = Date()
         let dateFormat = DateFormatter()

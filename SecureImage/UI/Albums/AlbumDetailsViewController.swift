@@ -20,6 +20,7 @@
 
 import UIKit
 import RealmSwift
+import MessageUI
 
 class AlbumDetailsViewController: UIViewController {
     
@@ -90,7 +91,7 @@ class AlbumDetailsViewController: UIViewController {
         
         if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == AlbumDetailsViewController.captureImageSegueID {
             dvc.delegate = self
-            
+
             return
         }
     }
@@ -139,6 +140,20 @@ class AlbumDetailsViewController: UIViewController {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showImageSegueID, sender: nil)
             }
             cell.onAddImageTouched = {
+                
+                if !DataServices.canAddToAlbum(album: self.album) {
+                    let title = "Album Limit"
+                    let message = "You have reached the maximum photo count for this album."
+                    let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                    
+                    ac.addAction(cancel)
+                    
+                    self.present(ac, animated: true, completion: nil)
+                    
+                    return
+                }
+        
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
         case AlbumDetailsViewController.functionsCellReuseID:
@@ -148,7 +163,7 @@ class AlbumDetailsViewController: UIViewController {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showAllImagesSegueID, sender: nil)
             }
             cell.onUploadAlbumTouched = {
-                print("I should upload")
+               self.uploadAlbum()
             }
         default:
             let cell = cell as! AlbumPropertyTableViewCell
@@ -167,6 +182,123 @@ class AlbumDetailsViewController: UIViewController {
         }
     }
     
+    private func uploadAlbum() {
+        
+        if !checkForMessagingCapability() {
+            return
+        }
+        
+        BackendAPI.createAlbum { (remoteAlbumId: String?) in
+            
+            guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
+                return
+            }
+
+            do {
+                if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
+                    try realm.write {
+                        myAlbum.remoteAlbumId = remoteAlbumId
+                    }
+                }
+            } catch {
+                print("WARN: Unable to create a remote album")
+            }
+            
+            // We need to make sure all the images are uploaded before packaging the
+            // album, to do this (quickly) the images are uploaded serially and the packaging
+            // is done when the last image is done.
+            
+            let queue = OperationQueue()
+            queue.maxConcurrentOperationCount = 1
+            
+            for item in self.album.documents.enumerated() {
+                let offset = item.offset
+                let doc = item.element
+ 
+                let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
+
+                queue.addAsyncOperation { done in
+                    BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                        
+                        do {
+                            if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
+                                try realm.write {
+                                    myDocument.remoteDocumentId = remoteDocumentId
+                                }
+                            }
+                        } catch {
+                            print("WARN: Unable to add image to remote album")
+                        }
+                        
+                        if offset == self.album.documents.count - 1 {
+                            self.sendAlbumToMe()
+                        }
+                        
+                        done()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func sendAlbumToMe() {
+        
+        guard let remoteAlbumId = album.remoteAlbumId else {
+            return
+        }
+        
+        BackendAPI.package(remoteAlbumId) { (url: URL?) in
+        
+            guard let url = url else {
+                print("WARN: Unable to get the download url for the album")
+                return
+            }
+            
+            let composeVC = MFMailComposeViewController()
+            composeVC.mailComposeDelegate = self
+            
+            var fields = ""
+            for field in Constants.Album.Fields {
+                if let key = field.name.toCammelCase(), let value = self.album.value(forKey: key) as? String {
+                    fields = fields + "\n\(field.name): \(value)"
+                }
+            }
+
+            let body = """
+            Here is an album I exported from SecureImage App:
+            
+            \(fields)
+            
+            You can downlaod the images from this album at the following URL:
+            \(url)
+            """
+            // Configure the fields of the interface.
+            // composeVC.setToRecipients(["address@example.com"])
+            composeVC.setSubject("Album from SecureImage App")
+            composeVC.setMessageBody(body, isHTML: false)
+            
+            // Present the view controller modally.
+            self.present(composeVC, animated: true, completion: nil)
+        }
+    }
+    
+    private func checkForMessagingCapability() -> Bool {
+        
+        if MFMailComposeViewController.canSendMail() {
+            return true
+        }
+        
+        let title = "Messaging"
+        let message = "This devices is not able to send messages."
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        ac.addAction(cancel)
+        
+        present(ac, animated: true, completion: nil)
+        
+        return false
+    }
+
     private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
         
         var identifier = ""
@@ -266,6 +398,29 @@ extension AlbumDetailsViewController: UITableViewDataSource {
     }
 }
 
+// MARK: MFMailComposeViewControllerDelegate
+extension AlbumDetailsViewController: MFMailComposeViewControllerDelegate {
+    
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult,
+                               error: Error?) {
+        
+        switch result {
+        case .failed:
+            let title = "Messaging"
+            let message = "The email message was not able to be sent. Please try again later"
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            
+            ac.addAction(cancel)
+        default:
+            ()
+        }
+        
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
 // MARK: UITableViewDelegate
 extension AlbumDetailsViewController: UITableViewDelegate {
     
@@ -287,14 +442,18 @@ extension AlbumDetailsViewController: UITableViewDelegate {
 // MARK: SecureCameraImageCaptureDelegate
 extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
     
-    func captured(image: Data) {
-        
+    func secureCamera(_ secureCameraViewController: SecureCameraViewController, captured image: Data) {
+
         guard let album = album else {
             fatalError("Unable unwrap album")
         }
         
-        if let doc = DataServices.add(image: image, to: album) {
-            locationServices.addLocation(to: doc)
+        DataServices.add(image: image, to: album)
+        
+        if !DataServices.canAddToAlbum(album: album) {
+            let title = "Album Limit"
+            let message = "You have reached the maximum photo count for this album."
+            secureCameraViewController.disable(title: title, message: message)
         }
     }
 }

@@ -25,6 +25,7 @@ struct Constants {
     struct Defaults {
         static let jPEGCompressionRatio = 0.5
         static let dateFormat = "YYYY-MM-dd\'T\'HH:mm"
+        static let maxAlbumImageCount = 100
     }
     
     struct Keychain {
@@ -38,6 +39,13 @@ struct Constants {
                              (name: "Case Number", placeHolderText: "JCL12345"),
                              (name: "Address", placeHolderText: "1965 Blue St"),
                              (name: "Comments", placeHolderText: "Your text here")]
+    }
+    
+    struct API {
+        static let serverURL = URL(string: "http://10.10.10.64:8000/v1/")
+        static let createAlbumPath = "album/"
+        static let addPhotoToAlbumPath = "album/:id"
+        static let getAlbumDownloadUrlPath = "album/:id"
     }
 }
 

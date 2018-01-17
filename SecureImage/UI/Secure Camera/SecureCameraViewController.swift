@@ -27,7 +27,7 @@ typealias cameraSessionConfigurationCallback = ((_ success: Bool) -> Void)
 
 protocol SecureCameraImageCaptureDelegate: class {
     
-    func captured(image: Data)
+    func secureCamera(_ secureCameraViewController: SecureCameraViewController, captured image: Data)
 }
 
 class SecureCameraViewController: UIViewController {
@@ -74,6 +74,8 @@ class SecureCameraViewController: UIViewController {
         
         super.viewWillAppear(animated)
         
+        navigationController?.navigationBar.isHidden = true
+
         guard !session.isRunning else { return }
         
         checkCameraAuthorization { authorized in
@@ -91,16 +93,29 @@ class SecureCameraViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         
-        super.viewWillDisappear(animated)
-        
+        navigationController?.navigationBar.isHidden = false
+
         if session.isRunning {
             session.stopRunning()
         }
+        
+        super.viewWillDisappear(animated)
+    }
+    
+    public func disable(title: String, message: String) {
+        
+        showAlert(title: title, message: message)
+        self.captureImageButton.isEnabled = false
+    }
+    
+    public func enable(title: String, message: String) {
+        
+        showAlert(title: title, message: message)
+        self.captureImageButton.isEnabled = true
     }
 
     private func commonInit() {
         
-        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = UIColor.black
 
         captureImageButton.layer.cornerRadius = captureImageButton.bounds.width / 2
@@ -359,9 +374,14 @@ class SecureCameraViewController: UIViewController {
             You can change this by going to Settings -> Privacy -> Camera and granting permission.
         """
         
+        showAlert(title: title, message: message)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-
+        
         ac.addAction(cancel)
         
         present(ac, animated: true, completion: nil)
@@ -391,7 +411,7 @@ extension SecureCameraViewController: AVCapturePhotoCaptureDelegate {
 
             performImageCapturedAnimations()
             
-            delegate?.captured(image: data)
+            delegate?.secureCamera(self, captured: data)
         }
     }
 }
