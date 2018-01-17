@@ -187,53 +187,61 @@ class AlbumDetailsViewController: UIViewController {
             return
         }
         
-        BackendAPI.createAlbum { (remoteAlbumId: String?) in
+        confirmNetworkAvailabilityBeforUpload(handler: uploadHandler())
+    }
+    
+    private func uploadHandler() -> ((_ sender: UIAlertAction) -> Void) {
+        
+        return { (sender: UIAlertAction) in
             
-            guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
-                return
-            }
-
-            do {
-                if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
-                    try realm.write {
-                        myAlbum.remoteAlbumId = remoteAlbumId
-                    }
+            BackendAPI.createAlbum { (remoteAlbumId: String?) in
+                
+                guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
+                    return
                 }
-            } catch {
-                print("WARN: Unable to create a remote album")
-            }
-            
-            // We need to make sure all the images are uploaded before packaging the
-            // album, to do this (quickly) the images are uploaded serially and the packaging
-            // is done when the last image is done.
-            
-            let queue = OperationQueue()
-            queue.maxConcurrentOperationCount = 1
-            
-            for item in self.album.documents.enumerated() {
-                let offset = item.offset
-                let doc = item.element
- 
-                let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
-
-                queue.addAsyncOperation { done in
-                    BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
-                        
-                        do {
-                            if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
-                                try realm.write {
-                                    myDocument.remoteDocumentId = remoteDocumentId
+                
+                do {
+                    if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
+                        try realm.write {
+                            myAlbum.remoteAlbumId = remoteAlbumId
+                        }
+                    }
+                } catch {
+                    print("WARN: Unable to create a remote album")
+                }
+                
+                // We need to make sure all the images are uploaded before packaging the
+                // album, to do this (quickly) the images are uploaded serially and the packaging
+                // is done when the last image is done.
+                
+                let queue = OperationQueue()
+                queue.maxConcurrentOperationCount = 1
+                
+                for item in self.album.documents.enumerated() {
+                    let offset = item.offset
+                    let doc = item.element
+                    
+                    let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
+                    
+                    queue.addAsyncOperation { done in
+                        BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                            
+                            do {
+                                if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
+                                    try realm.write {
+                                        myDocument.remoteDocumentId = remoteDocumentId
+                                    }
                                 }
+                            } catch {
+                                print("WARN: Unable to add image to remote album")
                             }
-                        } catch {
-                            print("WARN: Unable to add image to remote album")
+                            
+                            if offset == self.album.documents.count - 1 {
+                                self.sendAlbumToMe()
+                            }
+                            
+                            done()
                         }
-                        
-                        if offset == self.album.documents.count - 1 {
-                            self.sendAlbumToMe()
-                        }
-                        
-                        done()
                     }
                 }
             }
@@ -293,6 +301,20 @@ class AlbumDetailsViewController: UIViewController {
         showAlert(with: title, message: message)
         
         return false
+    }
+    
+    private func confirmNetworkAvailabilityBeforUpload(handler: @escaping ((UIAlertAction) -> Swift.Void)) {
+        
+        let title = "Network Availability"
+        let message = "You are not connected to a WiFi network. Uploading now will use your mobile data."
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let upload = UIAlertAction(title: "Upload", style: .default, handler: handler)
+        
+        ac.addAction(cancel)
+        ac.addAction(upload)
+        
+        present(ac, animated: true, completion: nil)
     }
 
     private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
