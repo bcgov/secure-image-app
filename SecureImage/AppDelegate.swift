@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Realm must be initalized here, in `init` because `didFinishLaunchingWithOptions`
         // often executes after `viewDidLoad` et al.
         DataServices.setup()
-
+        NetworkManager.shared.start()
         Theme.apply()
 
         super.init()

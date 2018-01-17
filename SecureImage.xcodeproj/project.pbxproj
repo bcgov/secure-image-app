@@ -47,6 +47,7 @@
 		56D17DD21FE1D3BD002DF790 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DD11FE1D3BD002DF790 /* README.md */; };
 		56D17DD41FE1D521002DF790 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DD31FE1D520002DF790 /* Podfile */; };
 		56E4165B2007FD74005CC941 /* BackendAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E4165A2007FD74005CC941 /* BackendAPI.swift */; };
+		56E416632008489C005CC941 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E416622008489C005CC941 /* NetworkManager.swift */; };
 		56E543731FE32AE100327591 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543721FE32AE100327591 /* Document.swift */; };
 		56E543791FE33F6300327591 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E543781FE33F6300327591 /* Album.swift */; };
 		56E5438B1FE4912A00327591 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E5438A1FE4912A00327591 /* DataExtensions.swift */; };
@@ -122,6 +123,7 @@
 		56D17DD31FE1D520002DF790 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		56E4165A2007FD74005CC941 /* BackendAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendAPI.swift; sourceTree = "<group>"; };
 		56E4165D20081787005CC941 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		56E416622008489C005CC941 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		56E543721FE32AE100327591 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		56E543781FE33F6300327591 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		56E5438A1FE4912A00327591 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				569D85091FE2FEA00054173D /* DataServices.swift */,
 				562A75DD20067A8A00D55426 /* LocationServices.swift */,
 				5625FEC61FFD532C00E1F6BD /* AlbumCollectionViewManager.swift */,
+				56E416622008489C005CC941 /* NetworkManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
 				562A75DE20067A8A00D55426 /* LocationServices.swift in Sources */,
 				56C1D0A81FEADE6A004B0266 /* ImagePreviewTableViewCell.swift in Sources */,
+				56E416632008489C005CC941 /* NetworkManager.swift in Sources */,
 				5625FEC91FFD5FCA00E1F6BD /* SecureCameraViewController.swift in Sources */,
 				562527FE2003F50F00E14004 /* UIColor.swift in Sources */,
 				56579EA2200E7DCD00B2AF3E /* ConcurrentOperation.swift in Sources */,

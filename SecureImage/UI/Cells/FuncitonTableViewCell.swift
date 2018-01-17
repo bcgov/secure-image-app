@@ -48,6 +48,9 @@ class FuncitonTableViewCell: UITableViewCell {
         uploadButton.backgroundColor = UIColor.governmentDeepYellow()
         uploadButton.setTitleColor(UIColor.blueText(), for: .normal)
         uploadButton.layer.cornerRadius = uploadButton.bounds.size.height / 2
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(FuncitonTableViewCell.handleWiFiAvailabilityChanged(notification:)),
+                                               name: Notification.Name.wifiAvailabilityChanged, object: nil)
     }
     
     @IBAction dynamic private func uploadAlbumTouched(sender: UIButton) {
@@ -58,5 +61,17 @@ class FuncitonTableViewCell: UITableViewCell {
     @IBAction dynamic private func viewAllImagesTouched(sender: UIButton) {
 
         onViewAllImagesTouched?()
+    }
+    
+    @objc dynamic private func handleWiFiAvailabilityChanged(notification: Notification) {
+        
+        if NetworkManager.shared.isReachableOnEthernetOrWiFi {
+            uploadButton.isEnabled = true
+            uploadButton.alpha = 1.0
+            return
+        }
+        
+        uploadButton.isEnabled = false
+        uploadButton.alpha = 0.5
     }
 }

@@ -240,7 +240,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SyJ-ra-Ww5">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagePreviewCellID" rowHeight="143" id="60H-TL-nFA" customClass="ImagePreviewTableViewCell" customModule="SecureImage" customModuleProvider="target">
@@ -398,18 +398,43 @@
                                 </prototypes>
                                 <sections/>
                             </tableView>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xa5-8y-eDp">
+                                <rect key="frame" x="0.0" y="64" width="375" height="36"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are currently offline. Please connect to a network to upload this album." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOP-wI-3PR">
+                                        <rect key="frame" x="38" y="4" width="299" height="29"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.30295209567142861" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="mOP-wI-3PR" firstAttribute="leading" secondItem="Xa5-8y-eDp" secondAttribute="leading" constant="38" id="3he-mH-zVD"/>
+                                    <constraint firstItem="mOP-wI-3PR" firstAttribute="centerX" secondItem="Xa5-8y-eDp" secondAttribute="centerX" id="JGa-tr-RGv"/>
+                                    <constraint firstAttribute="height" priority="999" id="Nw7-bk-3w0"/>
+                                    <constraint firstAttribute="height" constant="36" id="TFj-i9-ifD"/>
+                                    <constraint firstAttribute="trailing" secondItem="mOP-wI-3PR" secondAttribute="trailing" constant="38" id="blM-du-R6J"/>
+                                    <constraint firstItem="mOP-wI-3PR" firstAttribute="centerY" secondItem="Xa5-8y-eDp" secondAttribute="centerY" id="m6x-hg-zFK"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Xa5-8y-eDp" firstAttribute="leading" secondItem="xVL-3y-6vc" secondAttribute="leading" id="E8P-l3-fbu"/>
+                            <constraint firstItem="SyJ-ra-Ww5" firstAttribute="top" secondItem="Xa5-8y-eDp" secondAttribute="bottom" id="MdJ-E9-Ogj"/>
                             <constraint firstItem="SyJ-ra-Ww5" firstAttribute="leading" secondItem="xVL-3y-6vc" secondAttribute="leading" id="a9R-bT-1Ok"/>
+                            <constraint firstItem="Xa5-8y-eDp" firstAttribute="top" secondItem="xVL-3y-6vc" secondAttribute="top" id="jlV-HR-NDU"/>
                             <constraint firstItem="xVL-3y-6vc" firstAttribute="trailing" secondItem="SyJ-ra-Ww5" secondAttribute="trailing" id="lPI-j5-U1A"/>
-                            <constraint firstItem="SyJ-ra-Ww5" firstAttribute="top" secondItem="xVL-3y-6vc" secondAttribute="top" id="m6Z-iX-gP3"/>
+                            <constraint firstItem="xVL-3y-6vc" firstAttribute="trailing" secondItem="Xa5-8y-eDp" secondAttribute="trailing" id="vL4-MZ-q1o"/>
                             <constraint firstItem="xVL-3y-6vc" firstAttribute="bottom" secondItem="SyJ-ra-Ww5" secondAttribute="bottom" id="wyd-rs-Iee"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xVL-3y-6vc"/>
                     </view>
                     <navigationItem key="navigationItem" title="Details" id="w3h-wV-9ct"/>
                     <connections>
+                        <outlet property="networkAvailabilityViewNormalHeightConstraint" destination="TFj-i9-ifD" id="x4y-ru-PqB"/>
+                        <outlet property="networkAvailabilityViewZeroHeightConstraint" destination="Nw7-bk-3w0" id="Ido-Rl-lyl"/>
                         <outlet property="tableView" destination="SyJ-ra-Ww5" id="lAo-pn-5lC"/>
                         <segue destination="0yp-iC-f7d" kind="show" identifier="ShowImageSegue" id="Wg1-Pc-Fbg"/>
                         <segue destination="U3Y-4F-ktD" kind="show" identifier="CaptureImageSegue" id="IxR-nL-kP8"/>
