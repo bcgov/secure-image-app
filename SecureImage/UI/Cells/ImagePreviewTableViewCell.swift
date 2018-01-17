@@ -103,7 +103,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
             fatalError("Unable unwrap data source")
         }
 
-        guard let foo = onPresentAlertRequested else {
+        guard let callback = onPresentAlertRequested else {
             deleteFromDataSource(document: document)
             deleteFromCollectionView(index: index)
             
@@ -122,7 +122,7 @@ class ImagePreviewTableViewCell: UITableViewCell {
         ac.addAction(cancel)
         ac.addAction(delete)
 
-        foo(ac)
+        callback(ac)
     }
 
     private func deleteFromDataSource(document: Document) {
