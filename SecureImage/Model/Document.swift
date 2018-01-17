@@ -24,6 +24,7 @@ import RealmSwift
 class Document: Object {
     
     @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var remoteDocumentId: String?
     @objc dynamic var createdAt: Date = Date()
     @objc dynamic var modifiedAt: Date = Date()
     @objc dynamic var imageData: Data?
