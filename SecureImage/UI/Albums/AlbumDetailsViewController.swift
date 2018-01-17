@@ -88,7 +88,7 @@ class AlbumDetailsViewController: UIViewController {
         
         if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == AlbumDetailsViewController.captureImageSegueID {
             dvc.delegate = self
-            
+
             return
         }
     }
@@ -126,6 +126,20 @@ class AlbumDetailsViewController: UIViewController {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showImageSegueID, sender: nil)
             }
             cell.onAddImageTouched = {
+                
+                if !DataServices.canAddToAlbum(album: self.album) {
+                    let title = "Album Limit"
+                    let message = "You have reached the maximum photo count for this album."
+                    let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                    
+                    ac.addAction(cancel)
+                    
+                    self.present(ac, animated: true, completion: nil)
+                    
+                    return
+                }
+        
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
         case AlbumDetailsViewController.functionsCellReuseID:
@@ -262,14 +276,18 @@ extension AlbumDetailsViewController: UITableViewDelegate {
 // MARK: SecureCameraImageCaptureDelegate
 extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
     
-    func captured(image: Data) {
-        
+    func secureCamera(_ secureCameraViewController: SecureCameraViewController, captured image: Data) {
+
         guard let album = album else {
             fatalError("Unable unwrap album")
         }
         
-        if let doc = DataServices.add(image: image, to: album) {
-            locationServices.addLocation(to: doc)
+        DataServices.add(image: image, to: album)
+        
+        if !DataServices.canAddToAlbum(album: album) {
+            let title = "Album Limit"
+            let message = "You have reached the maximum photo count for this album."
+            secureCameraViewController.disable(title: title, message: message)
         }
     }
 }

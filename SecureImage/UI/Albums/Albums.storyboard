@@ -201,7 +201,7 @@
             </objects>
             <point key="canvasLocation" x="1561" y="170"/>
         </scene>
-        <!--Photo View Controller-->
+        <!--View-->
         <scene sceneID="yX1-Eg-lb4">
             <objects>
                 <viewController id="0yp-iC-f7d" customClass="PhotoViewController" customModule="SecureImage" customModuleProvider="target" sceneMemberID="viewController">
@@ -222,6 +222,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kzq-Dg-2UX"/>
                     </view>
+                    <navigationItem key="navigationItem" title="View" id="2XN-WE-tqu"/>
                     <connections>
                         <outlet property="currentPhotoImageView" destination="gGF-iN-kJN" id="sy5-M9-XNh"/>
                     </connections>

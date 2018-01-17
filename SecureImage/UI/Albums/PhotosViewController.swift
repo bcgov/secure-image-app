@@ -249,6 +249,23 @@ extension PhotosViewController: AlbumCollectionManagerProtocol {
     
     func addPhoto() {
 
+        guard let album = album else {
+            return
+        }
+        
+        if !DataServices.canAddToAlbum(album: album) {
+            let title = "Album Limit"
+            let message = "You have reached the maximum photo count for this album."
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            
+            ac.addAction(cancel)
+            
+            present(ac, animated: true, completion: nil)
+            
+            return
+        }
+        
         performSegue(withIdentifier: PhotosViewController.captureImageSegueID, sender: nil)
     }
     
@@ -282,14 +299,18 @@ extension PhotosViewController: AlbumCollectionManagerProtocol {
 // MARK: SecureCameraImageCaptureDelegate
 extension PhotosViewController: SecureCameraImageCaptureDelegate {
     
-    func captured(image: Data) {
+    func secureCamera(_ secureCameraViewController: SecureCameraViewController, captured image: Data) {
 
         guard let album = album else {
             fatalError("Unable unwrap album")
         }
 
-        if let doc = DataServices.add(image: image, to: album) {
-            locationServices.addLocation(to: doc)
+        DataServices.add(image: image, to: album)
+        
+        if !DataServices.canAddToAlbum(album: album) {
+            let title = "Album Limit"
+            let message = "You have reached the maximum photo count for this album."
+            secureCameraViewController.disable(title: title, message: message)
         }
     }
 }
