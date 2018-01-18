@@ -36,7 +36,6 @@ const client = new minio.Client({
   secretKey: config.get('minio:secretKey'),
 });
 
-// eslint-disable-next-line import/prefer-default-export
 export const listBucket = (bucket, prefix = '') => new Promise((resolve, reject) => {
   const stream = client.listObjectsV2(bucket, prefix, false);
   const objects = [];

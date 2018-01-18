@@ -72,6 +72,55 @@ function writeToTemporaryFile(archive) {
   });
 }
 
+function isValid(str) {
+  return str && /^\w+$/.test(str);
+}
+
+async function archiveImagesInAlbum(bucketName, prefix, cleanup = true) {
+  const objectsToRemove = [];
+  const archive = archiver('zip', {
+    zlib: {
+      level: 6,
+    }, // Sets the compression level.
+  });
+  const objects = await listBucket(bucket, `${prefix}/`);
+
+  /* Expected object format
+  { name: 'IMG_0112.jpg',
+    lastModified: 2018-01-15T22:00:15.462Z,
+    etag: 'c2435ac578f75ff9ab0c725e4b4c117c',
+    size: 2000636 }
+  */
+
+  archive.on('error', (error) => {
+    logger.log({ error }).error('Unable to create archive.');
+  });
+
+  let index = 0;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const obj of objects) {
+    // Fetch objects synchronously in case we have lots of objects that will
+    // consume too much memory.
+    // eslint-disable-next-line no-await-in-loop
+    const buffer = await getObject(bucket, obj.name);
+
+    archive.append(buffer, {
+      name: `${archiveFileBaseName}${index}.jpg`,
+    });
+    index += 1;
+
+    if (cleanup) {
+      objectsToRemove.push(removeObject(bucket, obj.name));
+    }
+  }
+
+  archive.finalize();
+
+  await Promise.all(objectsToRemove);
+
+  return Promise.resolve(archive);
+}
+
 // Create a new album
 router.post('/', asyncMiddleware(async (req, res) => {
   const albumId = uuid();
@@ -82,7 +131,13 @@ router.post('/', asyncMiddleware(async (req, res) => {
 
 // Add a document (image) to an item
 router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res) => {
-  /*
+  const { albumId } = req.params;
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'Unabe to process attached form.' });
+  }
+
+  /* This is the document format from multer:
     { fieldname: 'file',
     originalname: 'IMG_0112.jpg',
     encoding: '7bit',
@@ -93,80 +148,70 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
     size: 2000636 }
   */
 
-  const { albumId } = req.params;
   const { filename } = req.file;
   const stream = fs.createReadStream(req.file.path);
 
-  const etag = await putObject(bucket, path.join(albumId, filename), stream)
-    .catch((error) => {
-      logger.log(error).error('Unable to put object');
-      return res.status(500).end();
-    });
-
-  if (etag) {
-    fs.unlinkSync(req.file.path);
+  if (!stream) {
+    return res.status(500).json({ message: 'Unable read attached file.' });
   }
 
-  logger.log({ id: req.file.filename, etag }).info('Adding image to album.');
+  try {
+    const etag = await putObject(bucket, path.join(albumId, filename), stream);
+    if (etag) {
+      fs.unlinkSync(req.file.path, (err) => {
+        logger.log({ err }).error('Unable to unlink temprary file.');
+      });
+    }
 
-  return res.status(200).json({ id: req.file.filename });
+    logger.log({ id: req.file.filename, etag }).info('Adding image to album.');
+
+    return res.status(200).json({ id: req.file.filename });
+  } catch (error) {
+    logger.log(error).error('Unable to put object');
+    return res.status(500).json({
+      message: 'Unable to store attached file.',
+    });
+  }
 }));
 
 // Get the download URL for an album
 router.get('/:albumId', asyncMiddleware(async (req, res) => {
-  const cleanup = [];
+  const archiveName = req.query.name;
   const { albumId } = req.params;
-  const archive = archiver('zip', {
-    zlib: {
-      level: 6,
-    }, // Sets the compression level.
-  });
 
-  archive.on('error', (error) => {
-    logger.log({ error }).error('Unable to create archive.');
-  });
-
-  /*
-  { name: 'IMG_0112.jpg',
-    lastModified: 2018-01-15T22:00:15.462Z,
-    etag: 'c2435ac578f75ff9ab0c725e4b4c117c',
-    size: 2000636 }
-  */
-
-  const objects = await listBucket(bucket, `${albumId}/`);
-
-  let index = 0;
-  // eslint-disable-next-line no-restricted-syntax
-  for (const obj of objects) {
-    // eslint-disable-next-line no-await-in-loop
-    const buffer = await getObject(bucket, obj.name);
-
-    archive.append(buffer, {
-      name: `${archiveFileBaseName}${index}.jpg`,
-    });
-    index += 1;
-
-    // eslint-disable-next-line no-await-in-loop
-    cleanup.push(removeObject(bucket, obj.name));
+  if (archiveName && !isValid(archiveName)) {
+    return res.status(400).json({ message: 'The optional archive name must contain letters or numbers.' });
   }
 
-  archive.finalize();
-  await Promise.all(cleanup);
+  const archive = await archiveImagesInAlbum(bucket, albumId);
+
+  if (!archive) {
+    return res.status(500).json({ message: 'Unable to archive album.' });
+  }
 
   const file = await writeToTemporaryFile(archive);
   const stream = fs.createReadStream(file);
-  const archiveName = `${albumId}/${path.basename(file)}.zip`;
-  const etag = await putObject(bucket, archiveName, stream);
 
-  if (!etag) {
-    return res.status(500);
+  if (!file || !stream) {
+    return res.status(500).json({ message: 'Internal Error.' });
   }
 
-  fs.unlinkSync(file);
+  const fileName = `${albumId}/${archiveName || path.basename(file)}.zip`;
+  const etag = await putObject(bucket, fileName, stream);
 
+  // Cleanup the temorary archive file.
+  fs.unlink(file);
+
+  // If we don't have an etag the file was not written to the backing
+  // store.
+  if (!etag) {
+    return res.status(500).json({ message: 'Unable to store image.' });
+  }
+
+  // Construct the download URI.
   const port = config.get('port');
   const host = `http://${ip.address()}:${port}`;
-  const archiveFileName = `${path.basename(file)}.zip`;
+  const archiveFileName = `${path.basename(fileName)}`;
   const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
   const downloadUrl = url.resolve(host, archiveFilePath);
 
@@ -179,6 +224,10 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
 router.get('/:albumId/download/:fileName', asyncMiddleware(async (req, res) => {
   const { albumId, fileName } = req.params;
   const buffer = await getObject(bucket, path.join(albumId, fileName));
+
+  if (!buffer) {
+    return res.status(500).json({ message: 'Unable to fetch album archive.' });
+  }
 
   res.contentType('application/octet-stream');
 
