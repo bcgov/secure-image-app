@@ -50,8 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         lockScreenWindow.show()
-        
-//        DataServices.seed()
 
         return true
     }

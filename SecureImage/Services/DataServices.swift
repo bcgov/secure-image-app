@@ -111,6 +111,8 @@ class DataServices: NSObject {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
 
+    // This is meant for the simulator only for developer testing.
+    #if (arch(i386) || arch(x86_64)) && os(iOS) && DEBUG
     internal class func seed() {
         // This is for testing only !!!
         do {
@@ -141,6 +143,7 @@ class DataServices: NSObject {
             fatalError("Unable to seed Realm")
         }
     }
+    #endif
     
     internal class func add(image: Data, to album: Album) -> Document? {
 
