@@ -53,7 +53,7 @@ class AlbumDetailsViewController: UIViewController {
         
         return ls
     }()
-    internal var album: Album! // TODO:(jl) Should this be force unwraped?
+    internal var album: Album!
     
     override func viewDidLoad() {
         
@@ -82,24 +82,25 @@ class AlbumDetailsViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let document = document, let dvc = segue.destination as? PhotoViewController,
-            segue.identifier == AlbumDetailsViewController.showImageSegueID {
-            
-            dvc.document = document
+        guard let segueID = segue.identifier else {
             return
         }
-        
-        if let dvc = segue.destination as? PhotosViewController,
-            segue.identifier == AlbumDetailsViewController.showAllImagesSegueID {
-            
-            dvc.album = album
-            return
-        }
-        
-        if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == AlbumDetailsViewController.captureImageSegueID {
-            dvc.delegate = self
 
-            return
+        switch segueID {
+        case AlbumDetailsViewController.showImageSegueID:
+            if let document = document, let dvc = segue.destination as? PhotoViewController {
+                dvc.document = document
+            }
+        case AlbumDetailsViewController.showAllImagesSegueID:
+            if let dvc = segue.destination as? PhotosViewController {
+                dvc.album = album
+            }
+        case AlbumDetailsViewController.showAllImagesSegueID:
+            if let dvc = segue.destination as? PhotosViewController {
+                dvc.album = album
+            }
+        default:
+            ()
         }
     }
     
@@ -120,7 +121,6 @@ class AlbumDetailsViewController: UIViewController {
             networkAvailabilityViewZeroHeightConstraint.isActive = true
             networkAvailabilityViewNormalHeightConstraint.isActive = false
             view.setNeedsLayout()
-            view.layoutIfNeeded()
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
@@ -196,14 +196,14 @@ class AlbumDetailsViewController: UIViewController {
         confirmNetworkAvailabilityBeforUpload(handler: uploadHandler())
     }
     
-    private func uploadHandler() -> ((_ sender: UIAlertAction) -> Void) {
+    private func uploadHandler() -> (() -> Void) {
         
-        return { (sender: UIAlertAction) in
+        return {
             
             self.presentingViewController?.providesPresentationContextTransitionStyle = true
             self.presentingViewController?.definesPresentationContext = true
-            
             self.present(self.progressOverlay, animated: true, completion: nil)
+
             DispatchQueue.main.async {
                 self.progressOverlay.updateProgress(to: 0.0)
             }
@@ -211,6 +211,9 @@ class AlbumDetailsViewController: UIViewController {
             BackendAPI.createAlbum { (remoteAlbumId: String?) in
                 
                 guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
+                    let message = "I wasn't able to create the remote album. Please try again later."
+                    self.handleNetworkOperationFailed(message)
+                    
                     return
                 }
                 
@@ -238,6 +241,14 @@ class AlbumDetailsViewController: UIViewController {
                     
                     queue.addAsyncOperation { done in
                         BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                            
+                            guard let remoteDocumentId = remoteDocumentId, let realm = try? Realm() else {
+                                let message = "I wasn't able to add an image to the remote album. Please try later."
+                                self.handleNetworkOperationFailed(message)
+                                
+                                return
+                            }
+
                             DispatchQueue.main.async {
                                 print("progress = \(Float(offset) / Float(self.album.documents.count - 1))")
                                 self.progressOverlay.updateProgress(to: (Float(offset) / Float(self.album.documents.count - 1)))
@@ -267,6 +278,14 @@ class AlbumDetailsViewController: UIViewController {
         }
     }
     
+    private func handleNetworkOperationFailed(_ message: String) {
+        
+        self.progressOverlay.dismiss(animated: true, completion: {
+            let title = "Upload Problem"
+            self.showAlert(with: title, message: message)
+        })
+    }
+    
     private func sendAlbumToMe() {
         
         guard let remoteAlbumId = album.remoteAlbumId else {
@@ -276,7 +295,9 @@ class AlbumDetailsViewController: UIViewController {
         BackendAPI.package(remoteAlbumId) { (url: URL?) in
         
             guard let url = url else {
-                print("WARN: Unable to get the download url for the album")
+                let message = "I wasn't able to get the download URL for this album. Please try later."
+                self.handleNetworkOperationFailed(message)
+
                 return
             }
             
@@ -322,13 +343,21 @@ class AlbumDetailsViewController: UIViewController {
         return false
     }
     
-    private func confirmNetworkAvailabilityBeforUpload(handler: @escaping ((UIAlertAction) -> Swift.Void)) {
+    private func confirmNetworkAvailabilityBeforUpload(handler: @escaping (() -> Void)) {
+        
+        if  NetworkManager.shared.isReachableOnEthernetOrWiFi {
+            handler()
+            
+            return
+        }
         
         let title = "Network Availability"
         let message = "You are not connected to a WiFi network. Uploading now will use your mobile data."
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let upload = UIAlertAction(title: "Upload", style: .default, handler: handler)
+        let upload = UIAlertAction(title: "Upload", style: .default) { (sender: UIAlertAction) in
+            handler()
+        }
         
         ac.addAction(cancel)
         ac.addAction(upload)
