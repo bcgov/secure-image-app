@@ -19,3 +19,12 @@
 //
 
 import Foundation
+
+
+// Rounds the double to decimal places value
+func round(value: Float, to places: Int) -> Float {
+
+    let divisor = pow(10.0, Float(places))
+    return round(value * divisor) / divisor
+}
+

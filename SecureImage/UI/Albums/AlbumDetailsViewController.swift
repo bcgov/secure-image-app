@@ -40,6 +40,13 @@ class AlbumDetailsViewController: UIViewController {
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
     private var previewCellHeight: CGFloat = 250.0
+    private var progressOverlay: ProgressViewController = {
+        let storyboard = UIStoryboard(name: "Progress", bundle: nil)
+        let vc = storyboard.instantiateInitialViewController() as! ProgressViewController
+        vc.modalPresentationStyle = .overCurrentContext
+
+        return vc
+    }()
     private let locationServices: LocationServices = {
         let ls = LocationServices()
         ls.start()
@@ -114,7 +121,6 @@ class AlbumDetailsViewController: UIViewController {
             networkAvailabilityViewNormalHeightConstraint.isActive = false
             view.setNeedsLayout()
             view.layoutIfNeeded()
-            
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
@@ -186,13 +192,21 @@ class AlbumDetailsViewController: UIViewController {
         if !checkForMessagingCapability() {
             return
         }
-        
+    
         confirmNetworkAvailabilityBeforUpload(handler: uploadHandler())
     }
     
     private func uploadHandler() -> ((_ sender: UIAlertAction) -> Void) {
         
         return { (sender: UIAlertAction) in
+            
+            self.presentingViewController?.providesPresentationContextTransitionStyle = true
+            self.presentingViewController?.definesPresentationContext = true
+            
+            self.present(self.progressOverlay, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.progressOverlay.updateProgress(to: 0.0)
+            }
             
             BackendAPI.createAlbum { (remoteAlbumId: String?) in
                 
@@ -220,12 +234,15 @@ class AlbumDetailsViewController: UIViewController {
                 for item in self.album.documents.enumerated() {
                     let offset = item.offset
                     let doc = item.element
-                    
                     let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
                     
                     queue.addAsyncOperation { done in
                         BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
-                            
+                            DispatchQueue.main.async {
+                                print("progress = \(Float(offset) / Float(self.album.documents.count - 1))")
+                                self.progressOverlay.updateProgress(to: (Float(offset) / Float(self.album.documents.count - 1)))
+                            }
+
                             do {
                                 if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
                                     try realm.write {
@@ -237,7 +254,9 @@ class AlbumDetailsViewController: UIViewController {
                             }
                             
                             if offset == self.album.documents.count - 1 {
-                                self.sendAlbumToMe()
+                                self.progressOverlay.dismiss(animated: true, completion: {
+                                    self.sendAlbumToMe()
+                                })
                             }
                             
                             done()
