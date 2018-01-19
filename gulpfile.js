@@ -25,7 +25,6 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const clean = require('gulp-clean');
-const zip = require('gulp-zip');
 
 gulp.task('clean', () => gulp.src('build', { read: false })
   .pipe(clean({
@@ -45,11 +44,6 @@ gulp.task('copy-node-config', ['clean'], () => gulp.src(['package.json', 'packag
 gulp.task('copy-docker-config', ['clean'], () => gulp.src(['config/Dockerfile'])
   .pipe(gulp.dest('build')));
 
-gulp.task('archive', ['transpile', 'copy-config', 'copy-node-config',
-  'copy-docker-config'], () => gulp.src('build/**', { dot: true })
-  .pipe(zip('archive.zip'))
-  .pipe(gulp.dest('dist')));
-
 gulp.task('default', ['clean', 'transpile', 'copy-config',
-  'copy-node-config', 'copy-docker-config', 'archive',
+  'copy-node-config', 'copy-docker-config',
 ]);
