@@ -29,6 +29,6 @@ COPY server /home/nodejs/app/server
 COPY .env /home/nodejs/app
 ENV NODE_PATH /home/nodejs/app/server
 
-EXPOSE 8100
+EXPOSE 8080
 
 CMD ["npm", "run", "dev"]
