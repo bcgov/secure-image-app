@@ -44,7 +44,6 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-clean": "^0.3.2",
-    "gulp-zip": "^4.0.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
     "sinon": "^4.0.2"
@@ -52,8 +51,6 @@
   "scripts": {
     "start": "node server",
     "build": "NODE_ENV=production ./node_modules/.bin/gulp",
-    "deploy:st": "./scripts/awsecsdeploy.sh",
-    "deploy:pr": "echo 'not implemented'",
     "dev": "NODE_ENV=development ./node_modules/.bin/nodemon server --exec babel-node",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register"
   },
