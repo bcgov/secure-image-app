@@ -2,8 +2,10 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "${NAME}-build-template",
-    "creationTimestamp": null
+    "name": "${NAME}-build",
+    "labels": {
+      "application": "${NAME}"
+    }
   },
   "objects": [{
       "kind": "ImageStream",
@@ -33,15 +35,22 @@
           "contextDir": "${SOURCE_CONTEXT_DIR}"
         },
         "strategy": {
-          "type": "Docker",
-          "dockerStrategy": {
-            "dockerfilePath": "${DOCKER_FILE_PATH}",
-            "from": {
-              "kind": "${SOURCE_IMAGE_KIND}",
-              "name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
-            }
-          }
-        },
+					"type": "Source",
+					"sourceStrategy": {
+						"from": {
+							"kind": "ImageStreamTag",
+							"namespace": "${BUILD_PROJECT}",
+							"name": "{$SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
+						},
+						"env": [
+							{
+								"name": "BUILD_LOGLEVEL",
+								"value": "5"
+							}
+						],
+						"incremental": false
+					}
+				},
         "output": {
           "to": {
             "kind": "ImageStreamTag",
@@ -66,6 +75,42 @@
           }
         ]
       }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}-pipeline",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}-pipeline",
+          "name": "${NAME}-pipeline",
+          "template": "${NAME}-pipeline"
+        }
+      },
+      "spec": {
+        "runPolicy": "Parallel",
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${GIT_REPO_URL}",
+            "ref": "${GIT_REF}"
+          }
+        },
+        "strategy": {
+          "type": "JenkinsPipeline",
+          "jenkinsPipelineStrategy": {
+            "jenkinsfilePath": "Jenkinsfile"
+          }
+        },
+        "output": {},
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null
+      },
+      "status": {
+        "lastVersion": 0
+      }
     }
   ],
   "parameters": [{
@@ -75,6 +120,13 @@
       "required": true,
       "value": "secure-image-api"
     },
+    {
+      "name": "BUILD_PROJECT",
+      "displayName": "Build Project",
+      "description": "The openshift project where builds and target images are stored.",
+      "required": true,
+      "value": "devex-mpf-secure-tools"
+    }, 
     {
       "name": "GIT_REPO_URL",
       "displayName": "Git Repo URL",
@@ -87,7 +139,7 @@
       "displayName": "Git Reference",
       "description": "The git reference or branch.",
       "required": true,
-      "value": "master"
+      "value": "develop"
     },
     {
       "name": "SOURCE_CONTEXT_DIR",
@@ -108,7 +160,7 @@
       "displayName": "Docker File Path",
       "description": "The path to the docker file.",
       "required": true,
-      "value": "build/Dockerfile"
+      "value": "Dockerfile"
     },
     {
       "name": "SOURCE_IMAGE_KIND",
@@ -122,8 +174,8 @@
       "displayName": "Source Image Name",
       "description": "The name of the source image.",
       "required": true,
-      "value": "python-libindy"
-    },
+      "value": "nodejs-8-rhel7"
+    }, 
     {
       "name": "SOURCE_IMAGE_TAG",
       "displayName": "Source Image Tag",

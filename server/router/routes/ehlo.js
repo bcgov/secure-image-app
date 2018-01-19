@@ -33,3 +33,5 @@ const router = new Router();
 
 // probe(s)
 router.get('/', asyncMiddleware(async (req, res) => res.status(200).end()));
+
+module.exports = router;
