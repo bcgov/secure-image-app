@@ -104,13 +104,13 @@ class SecureCameraViewController: UIViewController {
     
     public func disable(title: String, message: String) {
         
-        showAlert(title: title, message: message)
+        showAlert(with: title, message: message)
         self.captureImageButton.isEnabled = false
     }
     
     public func enable(title: String, message: String) {
         
-        showAlert(title: title, message: message)
+        showAlert(with: title, message: message)
         self.captureImageButton.isEnabled = true
     }
 
@@ -381,17 +381,7 @@ class SecureCameraViewController: UIViewController {
             You can change this by going to Settings -> Privacy -> Camera and granting permission.
         """
         
-        showAlert(title: title, message: message)
-    }
-    
-    private func showAlert(title: String, message: String) {
-        
-        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-        
-        ac.addAction(cancel)
-        
-        present(ac, animated: true, completion: nil)
+        showAlert(with: title, message: message)
     }
 }
 

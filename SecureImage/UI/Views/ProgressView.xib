@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ProgressView" customModule="SecureImage" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ql-bS-Uhv" userLabel="anchor">
+                    <rect key="frame" x="171.5" y="156" width="32" height="3"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="32" id="6Io-SW-IoX"/>
+                        <constraint firstAttribute="height" constant="3" id="YWM-dV-mKj"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QGc-Mc-N6W">
+                    <rect key="frame" x="172.5" y="174" width="30" height="25.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="completed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEN-Iv-a9D">
+                    <rect key="frame" x="139.5" y="127.5" width="97" height="25.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.73080851859999996" green="0.4494619829" blue="0.78922441710000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="QGc-Mc-N6W" firstAttribute="centerX" secondItem="7Ql-bS-Uhv" secondAttribute="centerX" id="DlH-AD-PWe"/>
+                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-30" id="Ii4-oF-bHQ"/>
+                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="atc-1J-yb6"/>
+                <constraint firstItem="MEN-Iv-a9D" firstAttribute="centerX" secondItem="7Ql-bS-Uhv" secondAttribute="centerX" id="df7-mD-2PQ"/>
+                <constraint firstItem="QGc-Mc-N6W" firstAttribute="top" secondItem="7Ql-bS-Uhv" secondAttribute="bottom" constant="15" id="h3f-T9-fOu"/>
+                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="top" secondItem="MEN-Iv-a9D" secondAttribute="bottom" constant="3" id="qwX-09-4X7"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="progressLabel" destination="QGc-Mc-N6W" id="RfO-Ux-5nU"/>
+                <outlet property="titleLabel" destination="MEN-Iv-a9D" id="aYy-0w-c3V"/>
+            </connections>
+            <point key="canvasLocation" x="13.5" y="202.5"/>
+        </view>
+    </objects>
+</document>

@@ -40,13 +40,20 @@ class AlbumDetailsViewController: UIViewController {
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
     private var document: Document?
     private var previewCellHeight: CGFloat = 250.0
+    private var progressOverlay: ProgressViewController = {
+        let storyboard = UIStoryboard(name: "Progress", bundle: nil)
+        let vc = storyboard.instantiateInitialViewController() as! ProgressViewController
+        vc.modalPresentationStyle = .overCurrentContext
+
+        return vc
+    }()
     private let locationServices: LocationServices = {
         let ls = LocationServices()
         ls.start()
         
         return ls
     }()
-    internal var album: Album! // TODO:(jl) Should this be force unwraped?
+    internal var album: Album!
     
     override func viewDidLoad() {
         
@@ -75,24 +82,25 @@ class AlbumDetailsViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let document = document, let dvc = segue.destination as? PhotoViewController,
-            segue.identifier == AlbumDetailsViewController.showImageSegueID {
-            
-            dvc.document = document
+        guard let segueID = segue.identifier else {
             return
         }
-        
-        if let dvc = segue.destination as? PhotosViewController,
-            segue.identifier == AlbumDetailsViewController.showAllImagesSegueID {
-            
-            dvc.album = album
-            return
-        }
-        
-        if let dvc = segue.destination as? SecureCameraViewController, segue.identifier == AlbumDetailsViewController.captureImageSegueID {
-            dvc.delegate = self
 
-            return
+        switch segueID {
+        case AlbumDetailsViewController.showImageSegueID:
+            if let document = document, let dvc = segue.destination as? PhotoViewController {
+                dvc.document = document
+            }
+        case AlbumDetailsViewController.showAllImagesSegueID:
+            if let dvc = segue.destination as? PhotosViewController {
+                dvc.album = album
+            }
+        case AlbumDetailsViewController.showAllImagesSegueID:
+            if let dvc = segue.destination as? PhotosViewController {
+                dvc.album = album
+            }
+        default:
+            ()
         }
     }
     
@@ -113,8 +121,6 @@ class AlbumDetailsViewController: UIViewController {
             networkAvailabilityViewZeroHeightConstraint.isActive = true
             networkAvailabilityViewNormalHeightConstraint.isActive = false
             view.setNeedsLayout()
-            view.layoutIfNeeded()
-            
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
@@ -144,12 +150,8 @@ class AlbumDetailsViewController: UIViewController {
                 if !DataServices.canAddToAlbum(album: self.album) {
                     let title = "Album Limit"
                     let message = "You have reached the maximum photo count for this album."
-                    let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                    let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-                    
-                    ac.addAction(cancel)
-                    
-                    self.present(ac, animated: true, completion: nil)
+  
+                    self.showAlert(with: title, message: message)
                     
                     return
                 }
@@ -190,58 +192,98 @@ class AlbumDetailsViewController: UIViewController {
         if !checkForMessagingCapability() {
             return
         }
+    
+        confirmNetworkAvailabilityBeforUpload(handler: uploadHandler())
+    }
+    
+    private func uploadHandler() -> (() -> Void) {
         
-        BackendAPI.createAlbum { (remoteAlbumId: String?) in
+        return {
             
-            guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
-                return
-            }
+            self.presentingViewController?.providesPresentationContextTransitionStyle = true
+            self.presentingViewController?.definesPresentationContext = true
+            self.present(self.progressOverlay, animated: true, completion: nil)
 
-            do {
-                if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
-                    try realm.write {
-                        myAlbum.remoteAlbumId = remoteAlbumId
-                    }
+            DispatchQueue.main.async {
+                self.progressOverlay.updateProgress(to: 0.0)
+            }
+            
+            BackendAPI.createAlbum { (remoteAlbumId: String?) in
+                
+                guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
+                    let message = "I wasn't able to create the remote album. Please try again later."
+                    self.handleNetworkOperationFailed(message)
+                    
+                    return
                 }
-            } catch {
-                print("WARN: Unable to create a remote album")
-            }
-            
-            // We need to make sure all the images are uploaded before packaging the
-            // album, to do this (quickly) the images are uploaded serially and the packaging
-            // is done when the last image is done.
-            
-            let queue = OperationQueue()
-            queue.maxConcurrentOperationCount = 1
-            
-            for item in self.album.documents.enumerated() {
-                let offset = item.offset
-                let doc = item.element
- 
-                let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
-
-                queue.addAsyncOperation { done in
-                    BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
-                        
-                        do {
-                            if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
-                                try realm.write {
-                                    myDocument.remoteDocumentId = remoteDocumentId
-                                }
+                
+                do {
+                    if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
+                        try realm.write {
+                            myAlbum.remoteAlbumId = remoteAlbumId
+                        }
+                    }
+                } catch {
+                    print("WARN: Unable to create a remote album")
+                }
+                
+                // We need to make sure all the images are uploaded before packaging the
+                // album, to do this (quickly) the images are uploaded serially and the packaging
+                // is done when the last image is done.
+                
+                let queue = OperationQueue()
+                queue.maxConcurrentOperationCount = 1
+                
+                for item in self.album.documents.enumerated() {
+                    let offset = item.offset
+                    let doc = item.element
+                    let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
+                    
+                    queue.addAsyncOperation { done in
+                        BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                            
+                            guard let remoteDocumentId = remoteDocumentId, let realm = try? Realm() else {
+                                let message = "I wasn't able to add an image to the remote album. Please try later."
+                                self.handleNetworkOperationFailed(message)
+                                
+                                return
                             }
-                        } catch {
-                            print("WARN: Unable to add image to remote album")
+
+                            DispatchQueue.main.async {
+                                print("progress = \(Float(offset) / Float(self.album.documents.count - 1))")
+                                self.progressOverlay.updateProgress(to: (Float(offset) / Float(self.album.documents.count - 1)))
+                            }
+
+                            do {
+                                if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
+                                    try realm.write {
+                                        myDocument.remoteDocumentId = remoteDocumentId
+                                    }
+                                }
+                            } catch {
+                                print("WARN: Unable to add image to remote album")
+                            }
+                            
+                            if offset == self.album.documents.count - 1 {
+                                self.progressOverlay.dismiss(animated: true, completion: {
+                                    self.sendAlbumToMe()
+                                })
+                            }
+                            
+                            done()
                         }
-                        
-                        if offset == self.album.documents.count - 1 {
-                            self.sendAlbumToMe()
-                        }
-                        
-                        done()
                     }
                 }
             }
         }
+    }
+    
+    private func handleNetworkOperationFailed(_ message: String) {
+        
+        self.progressOverlay.dismiss(animated: true, completion: {
+            let title = "Upload Problem"
+            self.showAlert(with: title, message: message)
+        })
     }
     
     private func sendAlbumToMe() {
@@ -253,7 +295,9 @@ class AlbumDetailsViewController: UIViewController {
         BackendAPI.package(remoteAlbumId) { (url: URL?) in
         
             guard let url = url else {
-                print("WARN: Unable to get the download url for the album")
+                let message = "I wasn't able to get the download URL for this album. Please try later."
+                self.handleNetworkOperationFailed(message)
+
                 return
             }
             
@@ -293,13 +337,32 @@ class AlbumDetailsViewController: UIViewController {
         
         let title = "Messaging"
         let message = "This devices is not able to send messages."
-        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-        ac.addAction(cancel)
-        
-        present(ac, animated: true, completion: nil)
+
+        showAlert(with: title, message: message)
         
         return false
+    }
+    
+    private func confirmNetworkAvailabilityBeforUpload(handler: @escaping (() -> Void)) {
+        
+        if  NetworkManager.shared.isReachableOnEthernetOrWiFi {
+            handler()
+            
+            return
+        }
+        
+        let title = "Network Availability"
+        let message = "You are not connected to a WiFi network. Uploading now will use your mobile data."
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let upload = UIAlertAction(title: "Upload", style: .default) { (sender: UIAlertAction) in
+            handler()
+        }
+        
+        ac.addAction(cancel)
+        ac.addAction(upload)
+        
+        present(ac, animated: true, completion: nil)
     }
 
     private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
@@ -412,10 +475,8 @@ extension AlbumDetailsViewController: MFMailComposeViewControllerDelegate {
         case .failed:
             let title = "Messaging"
             let message = "The email message was not able to be sent. Please try again later"
-            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            
-            ac.addAction(cancel)
+
+            showAlert(with: title, message: message)
         default:
             ()
         }

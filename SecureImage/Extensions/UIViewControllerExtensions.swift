@@ -1,11 +1,11 @@
 //
 // SecureImage
 //
-// Copyright © 2017 Province of British Columbia
+// Copyright © 2018 Province of British Columbia
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// You may obtain a copy of the License at 
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -15,16 +15,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2017-12-13.
+// Created by Jason Leach on 2018-01-17.
 //
 
 import Foundation
+import UIKit
 
+extension UIViewController {
+    
+    internal func showAlert(with title: String, message: String) {
 
-// Rounds the double to decimal places value
-func round(value: Float, to places: Int) -> Float {
-
-    let divisor = pow(10.0, Float(places))
-    return round(value * divisor) / divisor
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        ac.addAction(cancel)
+        
+        present(ac, animated: true, completion: nil)
+    }
 }
-

@@ -19,6 +19,11 @@
 		565417A91FEDD7B900D0B2AC /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */; };
 		56579EA0200E7D9E00B2AF3E /* AsyncBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579E9F200E7D9E00B2AF3E /* AsyncBlockOperation.swift */; };
 		56579EA2200E7DCD00B2AF3E /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA1200E7DCD00B2AF3E /* ConcurrentOperation.swift */; };
+		56579EA4200FFE7000B2AF3E /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */; };
+		56579EA62010086000B2AF3E /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA52010086000B2AF3E /* ProgressView.swift */; };
+		56579EA820100A8300B2AF3E /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56579EA720100A8300B2AF3E /* ProgressViewController.swift */; };
+		56579EAB20100AB600B2AF3E /* Progress.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56579EAA20100AB600B2AF3E /* Progress.storyboard */; };
+		56579EAD201011D600B2AF3E /* ProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56579EAC201011D600B2AF3E /* ProgressView.xib */; };
 		569D84ED1FE1DD770054173D /* LockScreenWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84EC1FE1DD770054173D /* LockScreenWindow.swift */; };
 		569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */; };
 		569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */; };
@@ -88,6 +93,11 @@
 		565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		56579E9F200E7D9E00B2AF3E /* AsyncBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockOperation.swift; sourceTree = "<group>"; };
 		56579EA1200E7DCD00B2AF3E /* ConcurrentOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentOperation.swift; sourceTree = "<group>"; };
+		56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
+		56579EA52010086000B2AF3E /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		56579EA720100A8300B2AF3E /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		56579EAA20100AB600B2AF3E /* Progress.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Progress.storyboard; sourceTree = "<group>"; };
+		56579EAC201011D600B2AF3E /* ProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressView.xib; sourceTree = "<group>"; };
 		569D84EC1FE1DD770054173D /* LockScreenWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenWindow.swift; sourceTree = "<group>"; };
 		569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LockScreenAuthenticateViewController.storyboard; sourceTree = "<group>"; };
 		569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAuthenticateViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +184,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		56579EA920100A9200B2AF3E /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				56579EAA20100AB600B2AF3E /* Progress.storyboard */,
+				56579EA720100A8300B2AF3E /* ProgressViewController.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
 		569D84F31FE1ECFB0054173D /* Lock Screen */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +230,8 @@
 			children = (
 				569D84F71FE1F22E0054173D /* CreateFirstAlbumView.xib */,
 				5625FECA1FFD65E100E1F6BD /* VideoPreviewView.swift */,
+				56579EAC201011D600B2AF3E /* ProgressView.xib */,
+				56579EA52010086000B2AF3E /* ProgressView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -283,6 +304,7 @@
 				569D84F41FE1EFBC0054173D /* Albums */,
 				569D84F31FE1ECFB0054173D /* Lock Screen */,
 				569D84FF1FE2F6430054173D /* Secure Camera */,
+				56579EA920100A9200B2AF3E /* Progress */,
 				56D17D971FE1A3DC002DF790 /* Main.storyboard */,
 				563F228A1FE839F600E33986 /* Assets.xcassets */,
 			);
@@ -342,6 +364,7 @@
 				565417A81FEDD7B900D0B2AC /* UIViewExtensions.swift */,
 				56103C891FFEE69600BCCAAA /* UINavigationControllerExtensions.swift */,
 				562527FD2003F50F00E14004 /* UIColor.swift */,
+				56579EA3200FFE7000B2AF3E /* UIViewControllerExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -473,6 +496,8 @@
 				569D85031FE2FCD10054173D /* AddImageCollectionViewCell.xib in Resources */,
 				56D17D9E1FE1A3DC002DF790 /* LaunchScreen.storyboard in Resources */,
 				56D17DC61FE1BC68002DF790 /* Albums.storyboard in Resources */,
+				56579EAB20100AB600B2AF3E /* Progress.storyboard in Resources */,
+				56579EAD201011D600B2AF3E /* ProgressView.xib in Resources */,
 				56D17D991FE1A3DC002DF790 /* Main.storyboard in Resources */,
 				56C1D0AB1FEADE78004B0266 /* PreviewImageCollectionViewCell.xib in Resources */,
 				569D84F81FE1F22E0054173D /* CreateFirstAlbumView.xib in Resources */,
@@ -622,6 +647,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56579EA0200E7D9E00B2AF3E /* AsyncBlockOperation.swift in Sources */,
+				56579EA4200FFE7000B2AF3E /* UIViewControllerExtensions.swift in Sources */,
 				56E543791FE33F6300327591 /* Album.swift in Sources */,
 				569D85021FE2FCD10054173D /* AddImageCollectionViewCell.swift in Sources */,
 				562A75DE20067A8A00D55426 /* LocationServices.swift in Sources */,
@@ -630,6 +656,7 @@
 				5625FEC91FFD5FCA00E1F6BD /* SecureCameraViewController.swift in Sources */,
 				562527FE2003F50F00E14004 /* UIColor.swift in Sources */,
 				56579EA2200E7DCD00B2AF3E /* ConcurrentOperation.swift in Sources */,
+				56579EA820100A8300B2AF3E /* ProgressViewController.swift in Sources */,
 				56F524F51FEB39AA0093D8E0 /* FuncitonTableViewCell.swift in Sources */,
 				56E4165B2007FD74005CC941 /* BackendAPI.swift in Sources */,
 				5625FEC71FFD532C00E1F6BD /* AlbumCollectionViewManager.swift in Sources */,
@@ -643,6 +670,7 @@
 				56D17D941FE1A3DC002DF790 /* AppDelegate.swift in Sources */,
 				5625FECB1FFD65E100E1F6BD /* VideoPreviewView.swift in Sources */,
 				569D850A1FE2FEA00054173D /* DataServices.swift in Sources */,
+				56579EA62010086000B2AF3E /* ProgressView.swift in Sources */,
 				56D17DCE1FE1D379002DF790 /* Constants.swift in Sources */,
 				569D84F11FE1DE860054173D /* LockScreenAuthenticateViewController.swift in Sources */,
 				56C1D0C51FEAE7E2004B0266 /* StringExtensions.swift in Sources */,
