@@ -40,7 +40,7 @@
 						"from": {
 							"kind": "ImageStreamTag",
 							"namespace": "${BUILD_PROJECT}",
-							"name": "{$SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
+							"name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
 						},
 						"env": [
 							{

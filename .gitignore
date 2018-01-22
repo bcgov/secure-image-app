@@ -30,10 +30,6 @@ npm-debug.log
 !logs/.gitkeep
 task-definition.json
 
-# Each developer can configure there own development
-# settings. See development.json.sample
-server/config/development.json
-
 # These files contain credentials, do not add them to
 # the repo.
 .env
