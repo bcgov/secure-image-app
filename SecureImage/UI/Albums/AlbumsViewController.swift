@@ -73,6 +73,7 @@ class AlbumsViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.allowsSelectionDuringEditing = false
 
         createAlbumButton.layer.cornerRadius = createAlbumButton.frame.height / 2
         createAlbumButton.clipsToBounds = true
@@ -120,6 +121,22 @@ class AlbumsViewController: UIViewController {
         }
 
         cell.albumTitleLabel.text = album.albumName
+    }
+    
+    private func deleteAlbum(at indexPath: IndexPath) {
+        
+        guard let albums = albums else {
+            print("Unable to unpack album information")
+            return
+        }
+        
+        let album = albums[indexPath.row]
+
+        if DataServices.remove(album: album) {
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.endUpdates()
+        }
     }
     
     @IBAction dynamic private func createAlbumTouched(sender: Any?) {
@@ -180,5 +197,17 @@ extension AlbumsViewController: UITableViewDelegate {
         
         selectedAlbum = albums[indexPath.row]
         performSegue(withIdentifier: AlbumsViewController.albumDetailsSegueID, sender: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            deleteAlbum(at: indexPath)
+        }
     }
 }
