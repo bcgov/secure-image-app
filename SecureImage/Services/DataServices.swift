@@ -145,13 +145,13 @@ class DataServices: NSObject {
     }
     #endif
     
-    internal class func add(image: Data, to album: Album) -> Document? {
+    internal class func add(image: Data, to album: Album) {
 
         print("image size = \(ByteCountFormatter.string(fromByteCount: Int64(image.count), countStyle: .file))")
         
         guard let realm = try? Realm() else {
             print("Unable open realm")
-            return nil
+            return
         }
         
         if let myAlbum = realm.objects(Album.self).filter("id == %@", album.id).first {
@@ -169,10 +169,10 @@ class DataServices: NSObject {
                 fatalError("Unable to write to realm")
             }
             
-            return doc
+            return
         }
         
-        return nil
+        return
     }
     
     internal class func canAddToAlbum(album: Album) -> Bool {
