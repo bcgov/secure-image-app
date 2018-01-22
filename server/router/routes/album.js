@@ -29,7 +29,6 @@ import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
 import archiver from 'archiver';
-import ip from 'ip';
 import config from '../../config';
 import {
   logger,
@@ -209,11 +208,9 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   }
 
   // Construct the download URI.
-  const port = config.get('port');
-  const host = `http://${ip.address()}:${port}`;
   const archiveFileName = `${path.basename(fileName)}`;
   const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
-  const downloadUrl = url.resolve(host, archiveFilePath);
+  const downloadUrl = url.resolve(config.get('appUrl'), archiveFilePath);
 
   logger.log({ url: downloadUrl }).info('Packgaging album for download.');
 
