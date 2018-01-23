@@ -95,9 +95,9 @@ class AlbumDetailsViewController: UIViewController {
             if let dvc = segue.destination as? PhotosViewController {
                 dvc.album = album
             }
-        case AlbumDetailsViewController.showAllImagesSegueID:
-            if let dvc = segue.destination as? PhotosViewController {
-                dvc.album = album
+        case AlbumDetailsViewController.captureImageSegueID:
+            if let dvc = segue.destination as? SecureCameraViewController {
+                dvc.delegate = self
             }
         default:
             ()
