@@ -35,22 +35,20 @@
           "contextDir": "${SOURCE_CONTEXT_DIR}"
         },
         "strategy": {
-					"type": "Source",
-					"sourceStrategy": {
-						"from": {
-							"kind": "ImageStreamTag",
-							"namespace": "${BUILD_PROJECT}",
-							"name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
-						},
-						"env": [
-							{
-								"name": "BUILD_LOGLEVEL",
-								"value": "5"
-							}
-						],
-						"incremental": false
-					}
-				},
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${BUILD_PROJECT}",
+              "name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
+            },
+            "env": [{
+              "name": "BUILD_LOGLEVEL",
+              "value": "5"
+            }],
+            "incremental": false
+          }
+        },
         "output": {
           "to": {
             "kind": "ImageStreamTag",
@@ -126,7 +124,7 @@
       "description": "The openshift project where builds and target images are stored.",
       "required": true,
       "value": "devex-mpf-secure-tools"
-    }, 
+    },
     {
       "name": "GIT_REPO_URL",
       "displayName": "Git Repo URL",
@@ -175,7 +173,7 @@
       "description": "The name of the source image.",
       "required": true,
       "value": "nodejs-8-rhel7"
-    }, 
+    },
     {
       "name": "SOURCE_IMAGE_TAG",
       "displayName": "Source Image Tag",
