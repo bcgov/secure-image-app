@@ -1,34 +1,43 @@
 def APP_NAME = 'secure-image-api'
-def TAG_NAMES = ['dev', 'test']
 def BUILD_CONFIG = APP_NAME
+def IMAGESTREAM_NAME = APP_NAME
+def TAG_NAMES = ['dev', 'test']
 def CMD_PREFIX = 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin'
-//def IMAGESTREAM_NAME = APP_NAME
+def NODE_URI = 'https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz'
 
 node {
 
   stage('Checkout') {
-    echo "checking out source"
+    echo "Checking out source"
     checkout scm
+  }
+  
+  stage('Install') {
+    echo "Setup: ${BUILD_ID}"
+    
+    // The version of node in the `node` that comes with OpenShift is too old
+    // so I use a generic Linux and install my own node from LTS.
+    sh "curl ${NODE_URI} | tar -Jx"
+
+    // setup the node dev environment
+    sh "${CMD_PREFIX} npm i --only=dev"
+    // not sure if this needs to be added to package.json.
+    sh "${CMD_PREFIX} npm i escape-string-regexp"
+    sh "${CMD_PREFIX} npm i nsp"
+    sh "${CMD_PREFIX} npm -v"
+    sh "${CMD_PREFIX} node -v"
+  }
+
+  stage('Test') {
+    echo "Testing: ${BUILD_ID}"
+    // Run a security check on our packages
+    sh "${CMD_PREFIX} ./node_modules/.bin/nsp check"
+    // Run our unit tests et al.
+    // sh "${CMD_PREFIX} npm run test"
   }
 
   stage('Build') {
     echo "Build: ${BUILD_ID}"
-
-    // The version of node in the `node` that comes with OpenShift is too old
-    // so I use a generic Linux and install my own node from LTS.
-    // sh 'curl https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz | tar -Jx'
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin npm -v'
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin node -v'
-
-    // // setup the node dev environment
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin npm install --only=dev'
-    // // not sure if this needs to be added to package.json.
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin npm install escape-string-regexp'
-
-    // // run the build specified in pacage.json
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin npm run build'
-    // sh 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin npm run test'
-
     // run the oc build to package the artifacts into a docker image
     openshiftBuild bldCfg: 'secure-image-api', showBuildLogs: 'true', verbose: 'true'
 
@@ -39,8 +48,4 @@ node {
       returnStdout: true).trim()
     echo ">> IMAGE_HASH: ${IMAGE_HASH}"
   }
-
-  // stage('deploy-' + TAG_NAMES[0]) {
-  //   openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-  // }
 }
