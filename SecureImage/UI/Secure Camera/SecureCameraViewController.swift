@@ -220,10 +220,11 @@ class SecureCameraViewController: UIViewController {
     private func adjustPreviewViewHeight(inputDevice: AVCaptureDeviceInput) {
 
         let resizeAnimationDuraiton = 0.2
-        let scale = UIScreen.main.scale
         let dims = CMVideoFormatDescriptionGetDimensions(inputDevice.device.activeFormat.formatDescription)
-        previewViewHeightConstraint.constant = (CGFloat(dims.height)/scale/2) - (navigationController?.navigationBar.frame.height ?? 0.0)
-
+        // Determine the scalar for the height that allows the preview view to fill the entire width
+        // of the screen.
+        let scale = CGFloat(dims.width) / CGFloat(dims.height)
+        previewViewHeightConstraint.constant = view.bounds.size.width * scale
         view.setNeedsUpdateConstraints()
         
         UIView.animate(withDuration: resizeAnimationDuraiton) {
