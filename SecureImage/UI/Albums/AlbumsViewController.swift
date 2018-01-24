@@ -53,12 +53,8 @@ class AlbumsViewController: UIViewController {
         
         setNeedsStatusBarAppearanceUpdate()
 
-        do {
-            albums = try Realm().objects(Album.self).sorted(byKeyPath: "createdAt", ascending: false)
-            tableView.reloadData()
-        } catch {
-            print("Unable to load Albums")
-        }
+        loadAlbums()
+        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,6 +63,15 @@ class AlbumsViewController: UIViewController {
          dvc.album  = selectedAlbum
     }
     
+    private func loadAlbums() {
+        
+        do {
+            albums = try Realm().objects(Album.self).sorted(byKeyPath: "createdAt", ascending: false)
+        } catch {
+            print("Unable to load Albums")
+        }
+    }
+
     private func commonInit() {
 
         view.addSubview(createFirstAlbumView)
@@ -133,9 +138,15 @@ class AlbumsViewController: UIViewController {
         let album = albums[indexPath.row]
 
         if DataServices.remove(album: album) {
-            tableView.beginUpdates()
+//            tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.endUpdates()
+//            tableView.endUpdates()
+
+            // This is to fix an issue described here:
+            // https://stackoverflow.com/questions/48431718/blank-space-between-cells-in-a-uitableview
+            // ?noredirect=1#comment83856043_48431718
+            loadAlbums()
+            tableView.reloadData()
         }
     }
     
