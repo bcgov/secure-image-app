@@ -16,22 +16,14 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ql-bS-Uhv" userLabel="anchor">
-                    <rect key="frame" x="171.5" y="156" width="32" height="3"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="32" id="6Io-SW-IoX"/>
-                        <constraint firstAttribute="height" constant="3" id="YWM-dV-mKj"/>
-                    </constraints>
-                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QGc-Mc-N6W">
-                    <rect key="frame" x="172.5" y="174" width="30" height="25.5"/>
+                    <rect key="frame" x="172.5" y="155" width="30" height="25.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="21"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="completed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEN-Iv-a9D">
-                    <rect key="frame" x="139.5" y="127.5" width="97" height="25.5"/>
+                    <rect key="frame" x="139" y="325.5" width="97" height="25.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="21"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -39,12 +31,10 @@
             </subviews>
             <color key="backgroundColor" red="0.73080851859999996" green="0.4494619829" blue="0.78922441710000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
-                <constraint firstItem="QGc-Mc-N6W" firstAttribute="centerX" secondItem="7Ql-bS-Uhv" secondAttribute="centerX" id="DlH-AD-PWe"/>
-                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-30" id="Ii4-oF-bHQ"/>
-                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="atc-1J-yb6"/>
-                <constraint firstItem="MEN-Iv-a9D" firstAttribute="centerX" secondItem="7Ql-bS-Uhv" secondAttribute="centerX" id="df7-mD-2PQ"/>
-                <constraint firstItem="QGc-Mc-N6W" firstAttribute="top" secondItem="7Ql-bS-Uhv" secondAttribute="bottom" constant="15" id="h3f-T9-fOu"/>
-                <constraint firstItem="7Ql-bS-Uhv" firstAttribute="top" secondItem="MEN-Iv-a9D" secondAttribute="bottom" constant="3" id="qwX-09-4X7"/>
+                <constraint firstItem="QGc-Mc-N6W" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-20" id="394-bg-Nkd"/>
+                <constraint firstItem="QGc-Mc-N6W" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="6b7-rt-Afr"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="MEN-Iv-a9D" secondAttribute="bottom" constant="24" id="UGr-V1-bNU"/>
+                <constraint firstItem="MEN-Iv-a9D" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="cey-05-izk"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
