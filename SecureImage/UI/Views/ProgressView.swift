@@ -38,7 +38,7 @@ class ProgressView: UIView {
     private let endAngle = CGFloat(Double.pi * 3 + Double.pi / 2)
     private let lineWidth: CGFloat = 9.0
     private let animationDuration = 0.33
-    private let radiusOffset: CGFloat = 10.0
+    private let radiusOffset: CGFloat = 50.0
     
     override func awakeFromNib() {
         
@@ -87,7 +87,7 @@ class ProgressView: UIView {
 
         // Dont use `center` because it isn't where we think it should because
         // we're not initalized with a frame.
-        let centerPoint = CGPoint(x: bounds.width / 2 , y: bounds.height / 2)
+        let centerPoint = progressLabel.center
 
         if progressLayer != nil {
             progressLayer!.removeFromSuperlayer()
