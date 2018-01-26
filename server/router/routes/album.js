@@ -49,7 +49,12 @@ const temporaryUploadPath = config.get('temporaryUploadPath');
 const tempFilePath = '/tmp';
 const router = new Router();
 const upload = multer({ dest: temporaryUploadPath });
-
+/**
+ * Write a ZIP `archive` to a temporary file
+ *
+ * @param {Object} archive An ZIP `archive` object
+ * @returns Promose for pending operation
+ */
 function writeToTemporaryFile(archive) {
   return new Promise((resolve, reject) => {
     const tempFileName = Math.random().toString(36).slice(2);
@@ -70,11 +75,23 @@ function writeToTemporaryFile(archive) {
     archive.pipe(output);
   });
 }
-
+/**
+ * Check if a string consits of [Aa-Az] or [0-0] and is not undefined
+ *
+ * @param {String} str The string to be tested
+ * @returns true if the string is valid, false otherwise
+ */
 function isValid(str) {
   return str && /^\w+$/.test(str);
 }
-
+/**
+ * Create a ZIP `archive` with all the files from a bucket
+ *
+ * @param {String} bucketName The name of the bucket
+ * @param {String} prefix Object prefix to filter bucket contents on
+ * @param {boolean} [cleanup=true] If `true` archived objects will be removed when archived
+ * @returns A `Promise` representing the pending operation
+ */
 async function archiveImagesInAlbum(bucketName, prefix, cleanup = true) {
   const objectsToRemove = [];
   const archive = archiver('zip', {
@@ -120,7 +137,32 @@ async function archiveImagesInAlbum(bucketName, prefix, cleanup = true) {
   return Promise.resolve(archive);
 }
 
-// Create a new album
+/* eslint-disable */
+/**
+ * @api {POST} /albums/ Create a new album
+ * @apiVersion 0.0.1
+ * @apiName CreateAlbum
+ * @apiGroup Albums
+ *
+ * @apiSuccess (200) {String}   id    The album's unique ID.
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example usage:
+ *  curl -X POST http://localhost:8000/v1/album/
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "id": "d7995710-f665-11e7-8298-1b10696245bd"
+ *    }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
 router.post('/', asyncMiddleware(async (req, res) => {
   const albumId = uuid();
 
@@ -128,7 +170,35 @@ router.post('/', asyncMiddleware(async (req, res) => {
   return res.status(200).json({ id: albumId });
 }));
 
-// Add a document (image) to an item
+/* eslint-disable */
+/**
+ * @api {POST} /albums/:albumId Add a image to an album
+ * @apiVersion 0.0.1
+ * @apiName AddImageToAlbum
+ * @apiGroup Albums
+ *
+ * @apiParam {String} {albumId}       The ID of the album that the image will be added to
+ * @apiParam {String} {file}          The `Body` of the request must contain a multi-part mime encoded file object
+ * 
+ * @apiSuccess (200) {String} id      The image (object) unique ID
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example usage:
+ *  curl -X POST -v -F 'file=@IMG_0112.jpg' http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "id": "9f1785b9c72a1c34138b7e0dbdb06c3a"
+ *    }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
 router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res) => {
   const { albumId } = req.params;
 
@@ -173,7 +243,34 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
   }
 }));
 
-// Get the download URL for an album
+/* eslint-disable */
+/**
+ * @api {GET} /albums/:albumId Package the album into a archive file
+ * @apiVersion 0.0.1
+ * @apiName PackageAlbum
+ * @apiGroup Albums
+ *
+ * @apiParam {String} {albumId}       The ID of the album that the image will be added to
+ * 
+ * @apiSuccess (200) {String} url     A `URL` to the downloadable archive
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example usage:
+ *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "url": "http:/localhost:8000/download/57mq68m3cm7.zip"
+ *    }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
 router.get('/:albumId', asyncMiddleware(async (req, res) => {
   const archiveName = req.query.name;
   const { albumId } = req.params;
@@ -217,7 +314,32 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
   return res.status(200).json({ url: downloadUrl });
 }));
 
-// Download the album as a ZIP archive
+/* eslint-disable */
+/**
+ * @api {GET} /:albumId/download/:fileName Download an album as a ZIP archive
+ * @apiVersion  0.0.1
+ * @apiName     DownloadAlbum
+ * @apiGroup    Albums
+ *
+ * @apiParam {String} {albumId}       The ID of the album that the image will be added to
+ * @apiParam {String} {fileName}      The name of the album archive file
+ *
+ * @apiSuccess (200) {Object}         The mime encoded binary representation of the archive
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example usage:
+ *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
 router.get('/:albumId/download/:fileName', asyncMiddleware(async (req, res) => {
   const { albumId, fileName } = req.params;
   const buffer = await getObject(bucket, path.join(albumId, fileName));

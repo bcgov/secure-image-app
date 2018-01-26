@@ -22,6 +22,11 @@
 
 'use strict';
 
+/**
+ * Helper function to wrap express rountes to handle rejected promises
+ *
+ * @param {Function} fn The `next()` function to call
+ */
 // eslint-disable-next-line import/prefer-default-export
 export const asyncMiddleware = fn =>
   // Make sure to `.catch()` any errors and pass them along to the `next()`

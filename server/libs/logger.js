@@ -19,6 +19,7 @@
 //
 
 /* eslint-env es6 */
+/* eslint-disable no-console */
 
 'use strict';
 
@@ -28,12 +29,25 @@ import ip from 'ip';
 
 const divider = chalk.gray('\n-----------------------------------');
 
+/**
+ * Formatting log
+ *
+ */
 function Formatter() {
   this.format = (message, level, meta) => `${level} ${message} ${JSON.stringify(meta)}`;
 }
 
+/**
+ * Re-export logger object
+ *
+ */
 export const logger = new hewer.Logger(null, null, new Formatter());
 
+/**
+ * Print canned message when the server starts
+ *
+ * @param {String} port The port the server is running on
+ */
 export const started = (port) => {
   // don't report this information during testing.
   if (process.env.NODE_ENV === 'test') {

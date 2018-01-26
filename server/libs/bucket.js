@@ -24,9 +24,6 @@
 
 import * as minio from 'minio';
 import config from '../config';
-// import {
-//   logger,
-// } from '../libs/logger';
 
 const client = new minio.Client({
   endPoint: config.get('minio:endPoint'),
@@ -36,6 +33,12 @@ const client = new minio.Client({
   secretKey: config.get('minio:secretKey'),
 });
 
+/**
+ * List contest of a bucket.
+ *
+ * @param {String} bucket The name of the bucket.
+ * @param {String} [prefix=''] Prefix to filter the contents on.
+ */
 export const listBucket = (bucket, prefix = '') => new Promise((resolve, reject) => {
   const stream = client.listObjectsV2(bucket, prefix, false);
   const objects = [];
@@ -53,7 +56,13 @@ export const listBucket = (bucket, prefix = '') => new Promise((resolve, reject)
   });
 });
 
-// data and be a buffer or stream
+/**
+ * Add an object to a bucket
+ *
+ * @param {String} bucket The name of the bucket
+ * @param {String} name The name the object will have in the bucket
+ * @param {Buffer} data The object data `Stream` or `Buffer`
+ */
 export const putObject = (bucket, name, data) => new Promise((resolve, reject) => {
   client.putObject(bucket, name, data, (error, etag) => {
     if (error) {
@@ -64,6 +73,12 @@ export const putObject = (bucket, name, data) => new Promise((resolve, reject) =
   });
 });
 
+/**
+ * Fetch an object from an existing bucket
+ *
+ * @param {String} bucket The name of the bucket
+ * @param {String} name The name of the object to retrieve
+ */
 export const getObject = (bucket, name) => new Promise((resolve, reject) => {
   let size = 0;
   const data = [];
@@ -89,6 +104,12 @@ export const getObject = (bucket, name) => new Promise((resolve, reject) => {
   });
 });
 
+/**
+ * Get a resigned URL for an object
+ *
+ * @param {String} bucket The name of the bucket
+ * @param {String} name The name of the object
+ */
 export const getPresignedUrl = (bucket, name) => new Promise((resolve, reject) => {
   const expiryInSeconds = config.get('minio:expiry');
 
@@ -101,6 +122,12 @@ export const getPresignedUrl = (bucket, name) => new Promise((resolve, reject) =
   });
 });
 
+/**
+ * Remove an object from a bucket
+ *
+ * @param {String} bucket The name of the bucket
+ * @param {String} name The name of the object
+ */
 export const removeObject = (bucket, name) => new Promise((resolve, reject) => {
   client.removeObject(bucket, name, (error) => {
     if (error) {
