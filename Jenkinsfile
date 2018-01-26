@@ -23,7 +23,6 @@ node {
     sh "${CMD_PREFIX} npm i --only=dev"
     // not sure if this needs to be added to package.json.
     sh "${CMD_PREFIX} npm i escape-string-regexp"
-    sh "${CMD_PREFIX} npm i nsp"
     sh "${CMD_PREFIX} npm -v"
     sh "${CMD_PREFIX} node -v"
   }
@@ -33,7 +32,7 @@ node {
     // Run a security check on our packages
     sh "${CMD_PREFIX} ./node_modules/.bin/nsp check"
     // Run our unit tests et al.
-    // sh "${CMD_PREFIX} npm run test"
+    sh "${CMD_PREFIX} npm run test"
   }
 
   stage('Build') {
