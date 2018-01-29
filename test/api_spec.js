@@ -37,7 +37,7 @@ chai.use(chttp);
 // process.env.NODE_ENV = 'test';
 
 describe('API', () => {
-  it('POST / should a new album', (done) => {
+  it('POST / should a new album ID', (done) => {
     chai.request.agent(server)
       .post('/v1/album')
       .end((err, res) => {
