@@ -1,0 +1,11 @@
+{
+	"temporaryUploadPath": "uploads",
+	"archiveFileBaseName": "IMG_",
+	"minio": {
+		"bucket": "secure-image-dv",
+		"endPoint": "127.0.0.1",
+		"port": 8088,
+		"secure": false,
+		"expiry": 604800
+	}
+}

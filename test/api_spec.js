@@ -34,8 +34,6 @@ let should = chai.should();
 
 chai.use(chttp);
 
-// process.env.NODE_ENV = 'test';
-
 describe('API', () => {
   it('POST / should a new album ID', (done) => {
     chai.request.agent(server)
