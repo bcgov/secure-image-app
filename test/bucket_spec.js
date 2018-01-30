@@ -39,11 +39,15 @@ const PassThrough = require('stream').PassThrough;
 //   };
 // };
 
-const object = {
+const object1 = {
   name: 'IMG_0112.jpg',
   lastModified: new Date(),
   etag: 'c2435ac578f75ff9ab0c725e4b4c117c',
   size: 2000636
+}
+
+const object2 = {
+  etag: '12345'
 }
 
 describe('minio bucket helpers', function() {
@@ -62,11 +66,32 @@ describe('minio bucket helpers', function() {
 
     const objects = await bucket.listBucket('foo', 'bar');
 
-    stream.emit('data', object);
-    stream.emit('data', object);
+    stream.emit('data', object1);
+    stream.emit('data', object1);
 
     expect(objects).to.be.instanceof(Array);  // return type array
-    expect(objects).to.contain(object);       // contents are JSON
+    expect(objects).to.contain(object1);       // contents are JSON
     expect(objects.length).to.equal(2);       // count is OK
+  });
+
+  it('putObject returns a JSON object with etag property or throws', async () => { // mochaAsync(async () => {
+    const stub = sinon.stub(minio.Client.prototype, 'putObject');
+    stub.onFirstCall().yields(undefined, object2);
+    stub.onSecondCall().yields(new Error('Hello World'), undefined);
+
+    bucket.client = stub;
+
+    const result = await bucket.putObject('foo', 'bar', new Buffer(32));
+
+    expect(result).to.be.instanceof(Object);                // return type object
+    expect(result).to.equal(object2);                       // contents are JSON
+    expect(result).to.have.property('etag', object2.etag);  // has correct props
+
+    try {
+      const _ = await bucket.putObject('foo', 'bar', new Buffer(32));
+      expect(false).to.be(true);                           // never reach this line
+    } catch (e) {
+      expect(e).to.be.instanceof(Error);                   // return type object
+    }
   });
 });
