@@ -23,25 +23,29 @@
 
 'use strict';
 
-import hewer from 'hewer';
+import winston from 'winston';
 import chalk from 'chalk';
 import ip from 'ip';
 
 const divider = chalk.gray('\n-----------------------------------');
+const options = {};
 
-/**
- * Formatting log
- *
- */
-function Formatter() {
-  this.format = (message, level, meta) => `${level} ${message} ${JSON.stringify(meta)}`;
+// When testing log to a file for further analysis.
+if (process.env.NODE_ENV === 'test') {
+  options.transports = [
+    new (winston.transports.File)({ filename: 'test_run.log' }),
+  ];
+} else {
+  options.transports = [
+    new (winston.transports.Console)(),
+  ];
 }
 
 /**
  * Re-export logger object
  *
  */
-export const logger = new hewer.Logger(null, null, new Formatter());
+export const logger = new (winston.Logger)(options);
 
 /**
  * Print canned message when the server starts
@@ -49,11 +53,6 @@ export const logger = new hewer.Logger(null, null, new Formatter());
  * @param {String} port The port the server is running on
  */
 export const started = (port) => {
-  // don't report this information during testing.
-  if (process.env.NODE_ENV === 'test') {
-    return;
-  }
-
   console.log(`${chalk.cyan('\nProbateapp')} API started ${chalk.green('✓')}`);
   console.log(`${chalk.bold('\nAccess URLs:')}${divider}
                \nLocalhost: ${chalk.magenta(`http://localhost:${port}`)}

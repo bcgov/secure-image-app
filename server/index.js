@@ -61,8 +61,7 @@ require('./router')(app);
 // Error handleing middleware. This needs to be last in or it will
 // not get called.
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-  logger.log(err).error(err.message);
-
+  logger.error(err.message);
   const code = err.code ? err.code : 500;
   const message = err.message ? err.message : 'Internal Server Error';
 
@@ -71,12 +70,12 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
-    return logger.log(err).error('There was a problem starting the server');
+    return logger.error(`There was a problem starting the server, ${err.message}`);
   }
   if (isDev) {
     return started(port);
   }
-  return logger.log(`Production server running on port: ${port}`);
+  return logger.info(`Production server running on port: ${port}`);
 });
 
 module.exports = app;
