@@ -22,10 +22,10 @@
 
 'use strict';
 
-const assert = require('assert');
-const expect = require('chai').expect;
-const minio = require('minio');
-const sinon = require('sinon');
+import * as minio from 'minio';
+import jest from 'jest';
+import sinon from 'sinon';
+
 const bucket = require('../server/libs/bucket');
 const PassThrough = require('stream').PassThrough;
 
@@ -52,11 +52,15 @@ const object2 = {
 
 describe('minio bucket helpers', function() {
 
-  beforeEach(function() {
+  beforeEach(() => {
     // nothig to do
   });
 
-  it('listBucket returns an array of JSON objects', async () => { // mochaAsync(async () => {
+  afterEach(() => {
+    // nothig to do
+  });
+
+  test('listBucket returns an array of JSON objects', async () => {
     const stream = new PassThrough()
     stream.end();
 
@@ -69,29 +73,25 @@ describe('minio bucket helpers', function() {
     stream.emit('data', object1);
     stream.emit('data', object1);
 
-    expect(objects).to.be.instanceof(Array);  // return type array
-    expect(objects).to.contain(object1);       // contents are JSON
-    expect(objects.length).to.equal(2);       // count is OK
+    expect(typeof objects).toBe('object'); // return type array
+    expect(objects.length).toEqual(2); // count is OK
+    expect(objects[0]).toEqual(object1); // contents are JSON   
   });
 
-  it('putObject returns a JSON object with etag property or throws', async () => { // mochaAsync(async () => {
+  test('putObject returns a JSON object with etag property or throws', async () => {
     const stub = sinon.stub(minio.Client.prototype, 'putObject');
+    const error = new Error('Hello World');
     stub.onFirstCall().yields(undefined, object2);
-    stub.onSecondCall().yields(new Error('Hello World'), undefined);
+    stub.onSecondCall().yields(error, undefined);
 
     bucket.client = stub;
 
     const result = await bucket.putObject('foo', 'bar', new Buffer(32));
 
-    expect(result).to.be.instanceof(Object);                // return type object
-    expect(result).to.equal(object2);                       // contents are JSON
-    expect(result).to.have.property('etag', object2.etag);  // has correct props
+    expect(typeof result).toBe('object'); // return type array
+    expect(result).toEqual(object2); // contents are JSON   
+    expect(result).toHaveProperty('etag') // has correct props
 
-    try {
-      const _ = await bucket.putObject('foo', 'bar', new Buffer(32));
-      expect(false).to.be(true);                           // never reach this line
-    } catch (e) {
-      expect(e).to.be.instanceof(Error);                   // return type object
-    }
+    await expect(bucket.putObject('foo', 'bar', new Buffer(32))).rejects.toEqual(error);
   });
 });

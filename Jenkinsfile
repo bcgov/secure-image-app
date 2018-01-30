@@ -32,7 +32,7 @@ node {
     // Run a security check on our packages
     sh "${CMD_PREFIX} ./node_modules/.bin/nsp check"
     // Run our unit tests et al.
-    sh "${CMD_PREFIX} npm run test"
+    sh "${CMD_PREFIX} npm test"
   }
 
   stage('Build') {
