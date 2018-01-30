@@ -30,7 +30,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Go -&gt;"/>
                                 <connections>
-                                    <action selector="go" destination="LdA-L8-Bby" eventType="touchUpInside" id="1tC-wV-qMt"/>
+                                    <action selector="authenticate" destination="LdA-L8-Bby" eventType="touchUpInside" id="fBS-7L-RZP"/>
                                 </connections>
                             </button>
                         </subviews>

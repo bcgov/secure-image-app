@@ -19,6 +19,7 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class LockScreenAuthenticateViewController: UIViewController {
 
@@ -28,18 +29,26 @@ class LockScreenAuthenticateViewController: UIViewController {
         
         return vc
     }
+
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         
         get {
             return Theme.preferredStatusBarStyle
         }
     }
-    
+
     override func viewDidLoad() {
-        
+
         super.viewDidLoad()
         
         commonInit()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+
+        super.viewDidAppear(animated)
+        
+        authenticate()
     }
     
     private func commonInit() {
@@ -47,7 +56,35 @@ class LockScreenAuthenticateViewController: UIViewController {
         view.backgroundColor = Theme.governmentDarkBlue
     }
 
-    @IBAction func go() { // TODO(jl): Rename when during implementation
-        NotificationCenter.default.post(Notification(name: .userAuthenticated))
+    private func checkAuthenticaitonPolicy() {
+        
+        let context = LAContext()
+        var authError: NSError?
+        // The reson comes from the plist iOS 10+. Not sure why its still needed
+        // here.
+        let reason = "This is used to secure the application and its contents"
+
+        // policy `deviceOwnerAuthentication` should do biometric || passcode depending on how
+        // the device is configured.
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) {
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, error in
+                if success {
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(Notification(name: .userAuthenticated))
+                    }
+                } else {
+                    // Typically "Canceled by user."
+                    print("WARN: Local authentication failed, message = \(String(describing: error?.localizedDescription))")
+                }
+            }
+        } else {
+            // Could not evaluate policy; look at authError and present an appropriate message to user
+            print("no go")
+        }
+    }
+    
+    @IBAction func authenticate() {
+
+        checkAuthenticaitonPolicy()
     }
 }
