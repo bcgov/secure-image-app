@@ -23,6 +23,9 @@ import LocalAuthentication
 
 class LockScreenAuthenticateViewController: UIViewController {
 
+    @IBOutlet weak var authenticationFailedLabel: UILabel!
+    @IBOutlet weak var tryAgainButton: UIButton!
+    
     static func viewController() -> LockScreenAuthenticateViewController {
         let storyboard = UIStoryboard(name: String(describing: self), bundle: nil)
         let vc = storyboard.instantiateInitialViewController() as! LockScreenAuthenticateViewController
@@ -54,6 +57,12 @@ class LockScreenAuthenticateViewController: UIViewController {
     private func commonInit() {
         
         view.backgroundColor = Theme.governmentDarkBlue
+        tryAgainButton.backgroundColor = Theme.governmentDeepYellow
+        tryAgainButton.setTitleColor(Theme.governmentDarkBlue, for: .normal)
+        tryAgainButton.layer.cornerRadius = tryAgainButton.frame.height / 2
+        
+        tryAgainButton.alpha = 0.0
+        authenticationFailedLabel.alpha = 0.0
     }
 
     private func checkAuthenticaitonPolicy() {
@@ -73,18 +82,43 @@ class LockScreenAuthenticateViewController: UIViewController {
                         NotificationCenter.default.post(Notification(name: .userAuthenticated))
                     }
                 } else {
-                    // Typically "Canceled by user."
+                    DispatchQueue.main.async {
+                        self.preformAuthenticationFailedAnimations()
+                    }
+                    // Typically "Canceled by user." If passocde authentication fails after 3 tries
+                    // the user will not be able to retry for 1, 5, ... minutes (normal lockout times).
                     print("WARN: Local authentication failed, message = \(String(describing: error?.localizedDescription))")
                 }
             }
         } else {
-            // Could not evaluate policy; look at authError and present an appropriate message to user
-            print("no go")
+            // Unable to evaluate policy. Check authError as needed.
+            preformAuthenticationFailedAnimations()
+        }
+    }
+    
+    private func preformHideRetryAnimations() {
+        
+        let animationDuration = 0.33
+        
+        UIView.animate(withDuration: animationDuration) {
+            self.tryAgainButton.alpha = 0.0
+            self.authenticationFailedLabel.alpha = 0.0
+        }
+    }
+    
+    private func preformAuthenticationFailedAnimations() {
+        
+        let animationDuration = 0.33
+        
+        UIView.animate(withDuration: animationDuration) {
+            self.tryAgainButton.alpha = 1.0
+            self.authenticationFailedLabel.alpha = 1.0
         }
     }
     
     @IBAction func authenticate() {
 
+        preformHideRetryAnimations()
         checkAuthenticaitonPolicy()
     }
 }
