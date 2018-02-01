@@ -28,6 +28,7 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "apidoc": "^0.17.6",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
@@ -56,7 +57,8 @@
     "dev": "NODE_ENV=development ./node_modules/.bin/nodemon server --exec babel-node",
     "test": "NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js",
     "test:watch": "NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js --watch",
-    "lint": "./node_modules/.bin/eslint --env node --ext .js server"
+    "lint": "./node_modules/.bin/eslint --env node --ext .js server",
+    "docgen": "./node_modules/.bin/apidoc -i server/ -o apidoc/"
   },
   "repository": {
     "type": "git",
@@ -64,5 +66,12 @@
   },
   "author": "Jason C. Leach <jaosn.leach@fullboar.ca>",
   "license": "Apache License",
-  "homepage": "https://github.com:bcgov/secure-image-api#readme"
+  "homepage": "https://github.com:bcgov/secure-image-api#readme",
+  "apidoc": {
+    "name": "SecureImage API",
+    "version": "0.1.0",
+    "description": "RESTfull API for SecureImage.",
+    "title": "SecureImage API Docummentation",
+    "url": "http://localhost:8080/v1"
+  }
 }
