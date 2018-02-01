@@ -28,114 +28,27 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
-import archiver from 'archiver';
 import config from '../../config';
 import {
   logger,
 } from '../../libs/logger';
 import {
+  isValid,
   asyncMiddleware,
 } from '../../libs/utils';
 import {
   putObject,
-  listBucket,
   getObject,
-  removeObject,
 } from '../../libs/bucket';
+import {
+  writeToTemporaryFile,
+  archiveImagesInAlbum,
+} from '../../libs/archive';
 
 const bucket = config.get('minio:bucket');
-const archiveFileBaseName = config.get('archiveFileBaseName');
 const temporaryUploadPath = config.get('temporaryUploadPath');
-const tempFilePath = '/tmp';
 const router = new Router();
 const upload = multer({ dest: temporaryUploadPath });
-/**
- * Write a ZIP `archive` to a temporary file
- *
- * @param {Object} archive An ZIP `archive` object
- * @returns Promose for pending operation
- */
-function writeToTemporaryFile(archive) {
-  return new Promise((resolve, reject) => {
-    const tempFileName = Math.random().toString(36).slice(2);
-    const file = path.join(tempFilePath, tempFileName);
-    const output = fs.createWriteStream(file);
-
-    output.on('close', () => {
-      logger.info(`${archive.pointer()} total bytes`);
-      logger.info('archiver has been finalized and the output file descriptor has closed.');
-
-      resolve(file);
-    });
-
-    output.on('error', (err) => {
-      reject(err);
-    });
-
-    archive.pipe(output);
-  });
-}
-/**
- * Check if a string consits of [Aa-Az] or [0-0] and is not undefined
- *
- * @param {String} str The string to be tested
- * @returns true if the string is valid, false otherwise
- */
-function isValid(str) {
-  return str && /^\w+$/.test(str);
-}
-/**
- * Create a ZIP `archive` with all the files from a bucket
- *
- * @param {String} bucketName The name of the bucket
- * @param {String} prefix Object prefix to filter bucket contents on
- * @param {boolean} [cleanup=true] If `true` archived objects will be removed when archived
- * @returns A `Promise` representing the pending operation
- */
-async function archiveImagesInAlbum(bucketName, prefix, cleanup = true) {
-  const objectsToRemove = [];
-  const archive = archiver('zip', {
-    zlib: {
-      level: 6,
-    }, // Sets the compression level.
-  });
-  const objects = await listBucket(bucket, `${prefix}/`);
-
-  /* Expected object format
-  { name: 'IMG_0112.jpg',
-    lastModified: 2018-01-15T22:00:15.462Z,
-    etag: 'c2435ac578f75ff9ab0c725e4b4c117c',
-    size: 2000636 }
-  */
-
-  archive.on('error', (error) => {
-    logger.error(`Unable to create archive, error = ${error}`);
-  });
-
-  let index = 0;
-  // eslint-disable-next-line no-restricted-syntax
-  for (const obj of objects) {
-    // Fetch objects synchronously in case we have lots of objects that will
-    // consume too much memory.
-    // eslint-disable-next-line no-await-in-loop
-    const buffer = await getObject(bucket, obj.name);
-
-    archive.append(buffer, {
-      name: `${archiveFileBaseName}${index}.jpg`,
-    });
-    index += 1;
-
-    if (cleanup) {
-      objectsToRemove.push(removeObject(bucket, obj.name));
-    }
-  }
-
-  archive.finalize();
-
-  await Promise.all(objectsToRemove);
-
-  return Promise.resolve(archive);
-}
 
 /* eslint-disable */
 /**

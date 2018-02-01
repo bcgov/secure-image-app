@@ -22,24 +22,28 @@
 
 'use strict';
 
-/**
- * Helper function to wrap express rountes to handle rejected promises
- *
- * @param {Function} fn The `next()` function to call
- */
-// eslint-disable-next-line import/prefer-default-export
-export const asyncMiddleware = fn =>
-  // Make sure to `.catch()` any errors and pass them along to the `next()`
-  // middleware in the chain, in this case the error handler.
-  (req, res, next) => {
-    Promise.resolve(fn(req, res, next))
-      .catch(next);
-  };
+import jest from 'jest';
+import { isValid } from '../server/libs/utils'
 
-  /**
- * Check if a string consits of [Aa-Az] or [0-0] and is not undefined
- *
- * @param {String} str The string to be tested
- * @returns true if the string is valid, false otherwise
- */
-export const isValid = str => str && /^\w+$/.test(str);
+describe('utility helpers', function() {
+
+    beforeEach(() => {
+      // nothig to do
+    });
+  
+    afterEach(() => {
+      // nothig to do
+    });
+  
+    test('isValid handles an alphanumeric string', async () => {
+        let testString = 'abc123';
+
+        expect(isValid(testString)).toBe(true); 
+    });
+
+    test('isValid handles a string containing non-alphanumeric characters', async () => {
+        let testString = 'abc#123';
+
+        expect(isValid(testString)).toBe(false); 
+    });
+});
