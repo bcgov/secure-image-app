@@ -46,9 +46,8 @@ import {
 } from '../../libs/archive';
 
 const bucket = config.get('minio:bucket');
-const temporaryUploadPath = config.get('temporaryUploadPath');
+const upload = multer({ dest: config.get('temporaryUploadPath') });
 const router = new Router();
-const upload = multer({ dest: temporaryUploadPath });
 
 /* eslint-disable */
 /**
