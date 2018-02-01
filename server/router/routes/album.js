@@ -62,8 +62,8 @@ function writeToTemporaryFile(archive) {
     const output = fs.createWriteStream(file);
 
     output.on('close', () => {
-      logger.log().info(`${archive.pointer()} total bytes`);
-      logger.log().info('archiver has been finalized and the output file descriptor has closed.');
+      logger.info(`${archive.pointer()} total bytes`);
+      logger.info('archiver has been finalized and the output file descriptor has closed.');
 
       resolve(file);
     });
@@ -109,7 +109,7 @@ async function archiveImagesInAlbum(bucketName, prefix, cleanup = true) {
   */
 
   archive.on('error', (error) => {
-    logger.log({ error }).error('Unable to create archive.');
+    logger.error(`Unable to create archive, error = ${error}`);
   });
 
   let index = 0;
@@ -228,7 +228,7 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
     const etag = await putObject(bucket, path.join(albumId, filename), stream);
     if (etag) {
       fs.unlinkSync(req.file.path, (err) => {
-        logger.log({ err }).error('Unable to unlink temprary file.');
+        logger.error(`Unable to unlink temprary file, error = ${err}`);
       });
     }
 
