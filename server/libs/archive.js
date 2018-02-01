@@ -78,7 +78,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
       level: 6,
     }, // Sets the compression level.
   });
-  const objects = await listBucket(bucket, `${prefix}/`);
+  const objects = await listBucket(bucketName, `${prefix}/`);
 
   /* Expected object format
   { name: 'IMG_0112.jpg',
@@ -97,7 +97,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
     // Fetch objects synchronously in case we have lots of objects that will
     // consume too much memory.
     // eslint-disable-next-line no-await-in-loop
-    const buffer = await getObject(bucket, obj.name);
+    const buffer = await getObject(bucketName, obj.name);
 
     archive.append(buffer, {
       name: `${archiveFileBaseName}${index}.jpg`,
@@ -105,7 +105,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
     index += 1;
 
     if (cleanup) {
-      objectsToRemove.push(removeObject(bucket, obj.name));
+      objectsToRemove.push(removeObject(bucketName, obj.name));
     }
   }
 
