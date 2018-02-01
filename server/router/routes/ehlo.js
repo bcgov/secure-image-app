@@ -38,7 +38,7 @@ const router = new Router();
  * @apiName HelloPing
  * @apiGroup ehlo
  * 
- * @apiSuccess (200)
+ * @apiSuccess (200)  Sucesfull ping
  *
  * @apiExample {curl} Example usage:
  *  curl -X GET http://localhost:8000/v1/ehlo

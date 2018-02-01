@@ -64,13 +64,13 @@ const router = new Router();
  * @apiExample {curl} Example usage:
  *  curl -X POST http://localhost:8000/v1/album/
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success-Response
  *    HTTP/1.1 200 OK
  *    {
  *      "id": "d7995710-f665-11e7-8298-1b10696245bd"
  *    }
  *
- * @apiErrorExample {json} Error-Response:
+ * @apiErrorExample {json} Error-Response
  *    HTTP/1.1 401 Unauthorized
  *
  */
@@ -89,8 +89,8 @@ router.post('/', asyncMiddleware(async (req, res) => {
  * @apiName AddImageToAlbum
  * @apiGroup Albums
  *
- * @apiParam {String} {albumId}       The ID of the album that the image will be added to
- * @apiParam {String} {file}          The `Body` of the request must contain a multi-part mime encoded file object
+ * @apiParam {String} albumId         The ID of the album that the image will be added to
+ * @apiParam {String} file            The `Body` of the request must contain a multi-part mime encoded file object
  * 
  * @apiSuccess (200) {String} id      The image (object) unique ID
  *
@@ -100,13 +100,13 @@ router.post('/', asyncMiddleware(async (req, res) => {
  * @apiExample {curl} Example usage:
  *  curl -X POST -v -F 'file=@IMG_0112.jpg' http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success-Response
  *    HTTP/1.1 200 OK
  *    {
  *      "id": "9f1785b9c72a1c34138b7e0dbdb06c3a"
  *    }
  *
- * @apiErrorExample {json} Error-Response:
+ * @apiErrorExample {json} Error-Response
  *    HTTP/1.1 401 Unauthorized
  *
  */
@@ -162,23 +162,32 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
  * @apiName PackageAlbum
  * @apiGroup Albums
  *
- * @apiParam {String} {albumId}       The ID of the album that the image will be added to
+ * @apiParam {String} albumId         The ID of the album that the image will be added to
+ * @apiParam {String} [name]          Preferred name for the archive
  * 
  * @apiSuccess (200) {String} url     A `URL` to the downloadable archive
  *
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
  *
- * @apiExample {curl} Example usage:
+ * @apiExample {curl} Default
  *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Default
  *    HTTP/1.1 200 OK
  *    {
  *      "url": "http:/localhost:8000/download/57mq68m3cm7.zip"
  *    }
+ *  @apiExample {curl} Archive Name
+ *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd?archiveName=foo
  *
- * @apiErrorExample {json} Error-Response:
+ * @apiSuccessExample Specifid Name
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "url": "http:/localhost:8000/download/foo.zip"
+ *    }
+ *
+ * @apiErrorExample {json} Error-Response
  *    HTTP/1.1 401 Unauthorized
  *
  */
@@ -233,8 +242,8 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
  * @apiName     DownloadAlbum
  * @apiGroup    Albums
  *
- * @apiParam {String} {albumId}       The ID of the album that the image will be added to
- * @apiParam {String} {fileName}      The name of the album archive file
+ * @apiParam {String} albumId         The ID of the album that the image will be added to
+ * @apiParam {String} fileName        The name of the album archive file
  *
  * @apiSuccess (200) {Object}         The mime encoded binary representation of the archive
  *
@@ -244,10 +253,10 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
  * @apiExample {curl} Example usage:
  *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success-Response
  *    HTTP/1.1 200 OK
  *
- * @apiErrorExample {json} Error-Response:
+ * @apiErrorExample {json} Error-Response
  *    HTTP/1.1 401 Unauthorized
  *
  */
