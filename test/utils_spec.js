@@ -35,14 +35,14 @@ describe('utility helpers', function() {
       // nothig to do
     });
   
-    test('isValid handles an alphanumeric string', async () => {
-        let testString = 'abc123';
+    test('isValid handles a valid string', async () => {
+        let testString = 'a-b_c%123';
 
         expect(isValid(testString)).toBe(true); 
     });
 
-    test('isValid handles a string containing non-alphanumeric characters', async () => {
-        let testString = 'abc#123';
+    test('isValid handles string with invalid characters', async () => {
+        let testString = 'a-b_c#123';
 
         expect(isValid(testString)).toBe(false); 
     });

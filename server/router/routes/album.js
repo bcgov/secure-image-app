@@ -179,7 +179,7 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
  *      "url": "http:/localhost:8000/download/57mq68m3cm7.zip"
  *    }
  *  @apiExample {curl} Archive Name
- *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd?archiveName=foo
+ *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd?name=foo
  *
  * @apiSuccessExample Specifid Name
  *    HTTP/1.1 200 OK

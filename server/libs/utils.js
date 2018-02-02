@@ -37,9 +37,9 @@ export const asyncMiddleware = fn =>
   };
 
   /**
- * Check if a string consits of [Aa-Az] or [0-0] and is not undefined
+ * Check if a string consits of [Aa-Az], [0-9], -, _, and %.
  *
  * @param {String} str The string to be tested
  * @returns true if the string is valid, false otherwise
  */
-export const isValid = str => str && /^\w+$/.test(str);
+export const isValid = str => str && /^[0-9A-Za-z\s\-_%]+$/.test(str);
