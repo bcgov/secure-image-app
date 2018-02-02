@@ -51,17 +51,17 @@ const router = new Router();
 
 /* eslint-disable */
 /**
- * @api {POST} /albums/ Create a new album
+ * @api {POST} /album/ Create a new album
  * @apiVersion 0.0.1
  * @apiName CreateAlbum
- * @apiGroup Albums
+ * @apiGroup Album
  *
  * @apiSuccess (200) {String}   id    The album's unique ID.
  *
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
  *
- * @apiExample {curl} Example usage:
+ * @apiExample {curl} Example
  *  curl -X POST http://localhost:8000/v1/album/
  *
  * @apiSuccessExample Success-Response
@@ -84,10 +84,10 @@ router.post('/', asyncMiddleware(async (req, res) => {
 
 /* eslint-disable */
 /**
- * @api {POST} /albums/:albumId Add a image to an album
+ * @api {POST} /album/:albumId Add a image to an album
  * @apiVersion 0.0.1
  * @apiName AddImageToAlbum
- * @apiGroup Albums
+ * @apiGroup Album
  *
  * @apiParam {String} albumId         The ID of the album that the image will be added to
  * @apiParam {String} file            The `Body` of the request must contain a multi-part mime encoded file object
@@ -97,7 +97,7 @@ router.post('/', asyncMiddleware(async (req, res) => {
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
  *
- * @apiExample {curl} Example usage:
+ * @apiExample {curl} Example
  *  curl -X POST -v -F 'file=@IMG_0112.jpg' http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
  *
  * @apiSuccessExample Success-Response
@@ -157,10 +157,10 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
 
 /* eslint-disable */
 /**
- * @api {GET} /albums/:albumId Package the album into a archive file
+ * @api {GET} /album/:albumId Package the album into a archive file
  * @apiVersion 0.0.1
  * @apiName PackageAlbum
- * @apiGroup Albums
+ * @apiGroup Album
  *
  * @apiParam {String} albumId         The ID of the album that the image will be added to
  * @apiParam {String} [name]          Preferred name for the archive
@@ -240,7 +240,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
  * @api {GET} /:albumId/download/:fileName Download an album as a ZIP archive
  * @apiVersion  0.0.1
  * @apiName     DownloadAlbum
- * @apiGroup    Albums
+ * @apiGroup    Album
  *
  * @apiParam {String} albumId         The ID of the album that the image will be added to
  * @apiParam {String} fileName        The name of the album archive file
@@ -250,7 +250,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
  *
- * @apiExample {curl} Example usage:
+ * @apiExample {curl} Example
  *  curl -X GET http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd
  *
  * @apiSuccessExample Success-Response
