@@ -15,6 +15,7 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
+    "cross-env": "^5.1.3",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
@@ -54,11 +55,11 @@
   },
   "scripts": {
     "start": "node build/server",
-    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon server --exec babel-node",
-    "build": "NODE_ENV=production ./node_modules/.bin/gulp",
+    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon server --exec babel-node",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/gulp",
     "build:doc": "./node_modules/.bin/apidoc -i server/ -o doc/api",
-    "test": "NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js",
-    "test:watch": "NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js --watch",
+    "test": "cross-env NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js",
+    "test:watch": "cross-env NODE_ENV=test ./node_modules/.bin/jest test/*_spec.js --watch",
     "lint": "./node_modules/.bin/eslint --env node --ext .js server"
   },
   "repository": {
