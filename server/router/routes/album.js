@@ -44,6 +44,7 @@ import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
 } from '../../libs/archive';
+import { isAuthenticated } from '../../libs/auth';
 
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
@@ -75,7 +76,7 @@ const router = new Router();
  *
  */
  /* eslint-enable */
-router.post('/', asyncMiddleware(async (req, res) => {
+router.post('/', isAuthenticated, asyncMiddleware(async (req, res) => {
   const albumId = uuid();
 
   logger.info(`Creating album with ID ${albumId}`);
