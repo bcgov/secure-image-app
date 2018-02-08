@@ -27,7 +27,6 @@
  *
  * @param {Function} fn The `next()` function to call
  */
-// eslint-disable-next-line import/prefer-default-export
 export const asyncMiddleware = fn =>
   // Make sure to `.catch()` any errors and pass them along to the `next()`
   // middleware in the chain, in this case the error handler.
