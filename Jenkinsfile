@@ -30,7 +30,7 @@ node {
   stage('Test') {
     echo "Testing: ${BUILD_ID}"
     // Run a security check on our packages
-    sh "${CMD_PREFIX} ./node_modules/.bin/nsp check"
+    sh "${CMD_PREFIX} npm test:security"
     // Run our unit tests et al.
     sh "${CMD_PREFIX} npm test"
   }
