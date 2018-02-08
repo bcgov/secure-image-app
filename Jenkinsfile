@@ -9,7 +9,7 @@ def NODE_URI = 'https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz'
 podTemplate(label: 'node-build', name: 'node-build', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
-    image: 'registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest',
+    image: 'registry.access.redhat.com/openshift3/jenkins-2-rhel7:latest',
     resourceRequestCpu: '1000m',
     resourceLimitCpu: '1500m',
     resourceRequestMemory: '3Gi',
