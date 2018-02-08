@@ -43,7 +43,7 @@ podTemplate(label: 'node-build', name: 'node-build', serviceAccount: 'jenkins', 
     stage('Test') {
       echo "Testing: ${BUILD_ID}"
       // Run a security check on our packages
-      sh "${CMD_PREFIX} npm test:security"
+      sh "${CMD_PREFIX} npm run test:security"
       // Run our unit tests et al.
       sh "${CMD_PREFIX} npm test"
     }
