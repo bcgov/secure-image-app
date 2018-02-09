@@ -48,7 +48,9 @@ nconf.overrides({
     accessKey: process.env.MINIO_ACCESS_KEY,
     secretKey: process.env.MINIO_SECRET_KEY,
   },
-  authCertsEndpoint: process.env.AUTH_CERTS_ENDPOINT,
+  sso: {
+    certsEndpoint: process.env.SSO_CERTS_ENDPOINT,
+  },
 });
 
 // load other properties from file.

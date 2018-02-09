@@ -27,12 +27,12 @@ import jwt from 'jsonwebtoken';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
 import config from '../config';
 
-function sendError(res, statusCode, message) {
+const sendError = (res, statusCode, message) => {
   res.status(statusCode).json({ error: message, success: false });
-}
+};
 
 const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
-  request.get(config.get('authCertsEndpoint'), {
+  request.get(config.get('sso:certsEndpoint'), {
 
   }, (err, res, certsBody) => {
     if (err) {
