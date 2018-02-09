@@ -25,9 +25,14 @@
 import request from 'request';
 import jwt from 'jsonwebtoken';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
+import config from '../config';
+
+function sendError(res, statusCode, message) {
+  res.status(statusCode).json({ error: message, success: false });
+}
 
 const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
-  request.get('https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/certs', {
+  request.get(config.get('authCertsEndpoint'), {
 
   }, (err, res, certsBody) => {
     if (err) {
@@ -69,10 +74,6 @@ const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
     });
   });
 });
-
-function sendError(res, statusCode, message) {
-  res.status(statusCode).json({ error: message, success: false });
-}
 
 // eslint-disable-next-line import/prefer-default-export
 export const isAuthenticated = async (req, res, next) => {
