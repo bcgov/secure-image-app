@@ -1,56 +1,72 @@
-import {
-  logger,
-} from './logger';
+//
+// SecureImage
+//
+// Copyright © 2018 Province of British Columbia
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Created by Jason Leach on 2018-02-01.
+//
 
-const request = require('request');
+/* eslint-env es6 */
 
-const authenticate = () => new Promise((resolve, reject) => {
-  request.post('https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/token/', {
-    form: {
-      grant_type: 'client_credentials',
-      client_id: 'secure-image-api',
-      client_secret: '0e6e0200-d003-46bd-8f5c-035736e94e1f',
-    },
-  }, (err, res, apiAuthBody) => {
+'use strict';
+
+import request from 'request';
+import jwt from 'jsonwebtoken';
+import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
+
+const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
+  request.get('https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/certs', {
+
+  }, (err, res, certsBody) => {
     if (err) {
       reject(err);
       return;
     }
 
-    const apiAccessToken = JSON.parse(apiAuthBody).access_token;
-    if (apiAccessToken == null) {
-      reject(new Error('No api access_token'));
+    const certsJson = JSON.parse(certsBody).keys[0];
+
+    const modulus = certsJson.n;
+    const exponent = certsJson.e;
+    const algorithm = certsJson.alg;
+
+    if (!modulus) {
+      reject(new Error('No modulus'));
       return;
     }
 
-    resolve(apiAccessToken);
-  });
-});
-
-const introspection = (apiAccessToken, clientAccessToken) => new Promise((resolve, reject) => {
-  logger.info(`api token ${apiAccessToken}`);
-  logger.info(`client token ${clientAccessToken}`);
-  request.post('https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/token/introspect', {
-    auth: {
-      bearer: apiAccessToken,
-    },
-    form: {
-      token: clientAccessToken,
-    },
-  }, (err, res, introspectionBody) => {
-    if (err) {
-      reject(err);
+    if (!exponent) {
+      reject(new Error('No exponent'));
       return;
     }
 
-    const errorDescription = JSON.parse(introspectionBody).error_description;
-    if (errorDescription) {
-      logger.info(errorDescription);
-      reject(new Error(errorDescription));
+    if (!algorithm) {
+      reject(new Error('No algorithm'));
       return;
     }
 
-    resolve();
+    // build a certificate
+    const pem = pemFromModAndExponent(modulus, exponent);
+
+    // verify
+    jwt.verify(clientAccessToken, pem, { algorithms: [algorithm] }, (verifyErr, verifyResult) => {
+      if (verifyErr) {
+        reject(verifyErr);
+        return;
+      }
+      resolve(verifyResult);
+    });
   });
 });
 
@@ -60,18 +76,20 @@ function sendError(res, statusCode, message) {
 
 // eslint-disable-next-line import/prefer-default-export
 export const isAuthenticated = async (req, res, next) => {
-  const clientAccessToken = req.headers.authorization;
-  if (!clientAccessToken) {
-    return sendError(res, 403, 'No credentials sent.');
+  const authHeader = req.headers.authorization;
+  const authHeaderArray = authHeader.split(' ');
+  if (authHeaderArray.length < 2) {
+    return sendError(res, 400, 'Please send Authorization header with bearer type first followed by a space and then access token');
   }
+  const clientAccessToken = authHeaderArray[1];
 
   try {
-    const apiAccessToken = await authenticate();
-    await introspection(apiAccessToken, clientAccessToken);
-    next();
+    const verifyResult = await verifyToken(clientAccessToken);
+    if (verifyResult) {
+      return next();
+    }
+    return sendError(res, 401, 'Invalid or expired access token');
   } catch (err) {
     return sendError(res, 401, err.message);
   }
-
-  return sendError(res, 500, 'Auth request not handled');
 };

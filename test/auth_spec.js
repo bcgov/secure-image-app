@@ -37,11 +37,11 @@ describe('archive functions', function() {
       // nothig to do
     });
   
-    test.skip('authenticate() returns an access token', async () => {
+    test.skip('verifyToken() returns a verify result when a valid access token is passed', async () => {
 
     });
 
-    test.skip('introspection() completes without errors', async () => {
+    test.skip('verifyToken() returns an error an invalid access token is passed', async () => {
 
     });
 
