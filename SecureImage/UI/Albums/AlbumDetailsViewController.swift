@@ -21,6 +21,7 @@
 import UIKit
 import RealmSwift
 import MessageUI
+import SingleSignOn
 
 class AlbumDetailsViewController: UIViewController {
     
@@ -44,7 +45,7 @@ class AlbumDetailsViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Progress", bundle: nil)
         let vc = storyboard.instantiateInitialViewController() as! ProgressViewController
         vc.modalPresentationStyle = .overCurrentContext
-
+        
         return vc
     }()
     private let locationServices: LocationServices = {
@@ -52,6 +53,10 @@ class AlbumDetailsViewController: UIViewController {
         ls.start()
         
         return ls
+    }()
+    private let authServices: AuthServices = {
+        return AuthServices(baseUrl: Constants.SSO.baseUrl, redirectUri: Constants.SSO.redirectUri,
+                            clientId: Constants.SSO.clientId, realm: Constants.SSO.realmName)
     }()
     internal var album: Album!
     
@@ -72,7 +77,7 @@ class AlbumDetailsViewController: UIViewController {
         
         tableView.reloadData()
     }
-
+    
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         
         tableView.reloadData()
@@ -85,7 +90,7 @@ class AlbumDetailsViewController: UIViewController {
         guard let segueID = segue.identifier else {
             return
         }
-
+        
         switch segueID {
         case AlbumDetailsViewController.showImageSegueID:
             if let document = document, let dvc = segue.destination as? PhotoViewController {
@@ -134,9 +139,9 @@ class AlbumDetailsViewController: UIViewController {
         }
         
         self.tableView.isEditing = false
-
+        
         cell.contentView.backgroundColor = UIColor.white
-
+        
         switch identifier {
         case AlbumDetailsViewController.previewCellReuseID:
             let cell = cell as! ImagePreviewTableViewCell
@@ -150,12 +155,12 @@ class AlbumDetailsViewController: UIViewController {
                 if !DataServices.canAddToAlbum(album: self.album) {
                     let title = "Album Limit"
                     let message = "You have reached the maximum photo count for this album."
-  
+                    
                     self.showAlert(with: title, message: message)
                     
                     return
                 }
-        
+                
                 self.performSegue(withIdentifier: AlbumDetailsViewController.captureImageSegueID, sender: nil)
             }
             cell.onPresentAlertRequested = { (alertView: UIAlertController) in
@@ -168,7 +173,7 @@ class AlbumDetailsViewController: UIViewController {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showAllImagesSegueID, sender: nil)
             }
             cell.onUploadAlbumTouched = {
-               self.uploadAlbum()
+                self.uploadAlbum()
             }
         default:
             let cell = cell as! AlbumPropertyTableViewCell
@@ -192,8 +197,8 @@ class AlbumDetailsViewController: UIViewController {
         if !checkForMessagingCapability() {
             return
         }
-    
-        confirmNetworkAvailabilityBeforUpload(handler: uploadHandler())
+        
+        authenticateIfRequred()
     }
     
     private func uploadHandler() -> (() -> Void) {
@@ -203,14 +208,18 @@ class AlbumDetailsViewController: UIViewController {
             self.presentingViewController?.providesPresentationContextTransitionStyle = true
             self.presentingViewController?.definesPresentationContext = true
             self.present(self.progressOverlay, animated: true, completion: nil)
-
+            
             DispatchQueue.main.async {
                 self.progressOverlay.updateProgress(to: 0.0)
             }
             
-            BackendAPI.createAlbum { (remoteAlbumId: String?) in
+            guard let credentials = self.authServices.credentials else {
+                return
+            }
+            
+            BackendAPI.createAlbum(credentials: credentials) { (remoteAlbumId: String?) in
                 
-                guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm() else {
+                guard let remoteAlbumId = remoteAlbumId, let realm = try? Realm(), let credentials = self.authServices.credentials else {
                     let message = "I wasn't able to create the remote album. Please try again later."
                     self.handleNetworkOperationFailed(message)
                     
@@ -238,9 +247,9 @@ class AlbumDetailsViewController: UIViewController {
                     let offset = item.offset
                     let doc = item.element
                     let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
-                    
+
                     queue.addAsyncOperation { done in
-                        BackendAPI.add(copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
+                        BackendAPI.add(credentials: credentials, image: copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
                             
                             guard let remoteDocumentId = remoteDocumentId, let realm = try? Realm() else {
                                 let message = "I wasn't able to add an image to the remote album. Please try later."
@@ -248,12 +257,12 @@ class AlbumDetailsViewController: UIViewController {
                                 
                                 return
                             }
-
+                            
                             DispatchQueue.main.async {
                                 print("progress = \(Float(offset) / Float(self.album.documents.count - 1))")
                                 self.progressOverlay.updateProgress(to: (Float(offset) / Float(self.album.documents.count - 1)))
                             }
-
+                            
                             do {
                                 if let myDocument = realm.objects(Document.self).filter("id == %@", doc.id).first {
                                     try realm.write {
@@ -288,16 +297,16 @@ class AlbumDetailsViewController: UIViewController {
     
     private func sendAlbumToMe() {
         
-        guard let remoteAlbumId = album.remoteAlbumId else {
+        guard let remoteAlbumId = album.remoteAlbumId, let credentials = authServices.credentials else {
             return
         }
         
-        BackendAPI.package(remoteAlbumId) { (url: URL?) in
-        
+        BackendAPI.package(credentials: credentials, remoteAlbumId: remoteAlbumId) { (url: URL?) in
+            
             guard let url = url else {
                 let message = "I wasn't able to get the download URL for this album. Please try later."
                 self.handleNetworkOperationFailed(message)
-
+                
                 return
             }
             
@@ -310,7 +319,7 @@ class AlbumDetailsViewController: UIViewController {
                     fields = fields + "\n\(field.name): \(value)"
                 }
             }
-
+            
             let body = """
             Here is an album I exported from SecureImage App:
             
@@ -337,7 +346,7 @@ class AlbumDetailsViewController: UIViewController {
         
         let title = "Messaging"
         let message = "This devices is not able to send messages."
-
+        
         showAlert(with: title, message: message)
         
         return false
@@ -364,7 +373,7 @@ class AlbumDetailsViewController: UIViewController {
         
         present(ac, animated: true, completion: nil)
     }
-
+    
     private func cellIdentifierForCell(at indexPath: IndexPath) -> String {
         
         var identifier = ""
@@ -379,6 +388,51 @@ class AlbumDetailsViewController: UIViewController {
         }
         
         return identifier
+    }
+    
+    private func authenticateIfRequred() {
+
+        if !authServices.isAuthenticated() {
+            let vc = authServices.viewController() { (credentials, error) in
+                
+                guard let _ = credentials, error == nil else {
+                    let title = "Authentication"
+                    let message = "Authentication didn't work. Please try again."
+                    
+                    self.showAlert(with: title, message: message)
+                    
+                    return
+                }
+                
+                self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
+            }
+            
+            present(vc, animated: true, completion: nil)
+        } else {
+            authServices.refreshCredientials(completion: { (credentials: Credentials?, error: Error?) in
+                
+                if let error = error, error == AuthenticationError.expired {
+                    let vc = self.authServices.viewController() { (credentials, error) in
+                        
+                        guard let _ = credentials, error == nil else {
+                            let title = "Authentication"
+                            let message = "Authentication didn't work. Please try again."
+                            
+                            self.showAlert(with: title, message: message)
+                            
+                            return
+                        }
+                        
+                        self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
+                    }
+                    
+                    self.present(vc, animated: true, completion: nil)
+                    return
+                }
+                
+                self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
+            });
+        }
     }
     
     internal func updateAlbum(property: String, value: String) {
@@ -400,7 +454,7 @@ class AlbumDetailsViewController: UIViewController {
         networkAvailabilityViewZeroHeightConstraint.isActive = NetworkManager.shared.isReachableOnEthernetOrWiFi
         networkAvailabilityViewNormalHeightConstraint.isActive = !NetworkManager.shared.isReachableOnEthernetOrWiFi
         let animationDuration: Double = 0.33
-
+        
         UIView.animate(withDuration: animationDuration) {
             
             self.view.layoutIfNeeded()
@@ -475,7 +529,7 @@ extension AlbumDetailsViewController: MFMailComposeViewControllerDelegate {
         case .failed:
             let title = "Messaging"
             let message = "The email message was not able to be sent. Please try again later"
-
+            
             showAlert(with: title, message: message)
         default:
             ()
@@ -507,7 +561,7 @@ extension AlbumDetailsViewController: UITableViewDelegate {
 extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
     
     func secureCamera(_ secureCameraViewController: SecureCameraViewController, captured image: Data) {
-
+        
         guard let album = album else {
             fatalError("Unable unwrap album")
         }
@@ -521,3 +575,4 @@ extension AlbumDetailsViewController: SecureCameraImageCaptureDelegate {
         }
     }
 }
+

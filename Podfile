@@ -5,7 +5,8 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'SecureImage' do
-# pod 'FeedHenry', '5.0.5'
+    # pod 'SingleSignOn', :path => '../sso-ios'
+    pod 'SingleSignOn', :git => 'https://github.com/bcgov/mobile-authentication-ios.git', :tag => 'v1.0.0'
     pod 'RealmSwift'
     pod 'SwiftKeychainWrapper'
     pod 'Alamofire'
