@@ -45,7 +45,23 @@ describe('archive functions', function() {
 
     });
 
+    test.skip('verifyToken() returns an error if modulus is not returned in certs', async () => {
+
+    });
+
+    test.skip('verifyToken() returns an error if exponent is not returned in certs', async () => {
+
+    });
+
+    test.skip('verifyToken() returns an error if algorithm is not returned in certs', async () => {
+
+    });
+
     test.skip('isAuthenticated() completes without errors', async () => {
 
     });
+
+    test.skip('isAuthenticated() returns error if req does not contain a Authorization header with bearer and token', async() => {
+
+    }); 
 });
