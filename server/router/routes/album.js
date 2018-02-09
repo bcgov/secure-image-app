@@ -44,6 +44,7 @@ import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
 } from '../../libs/archive';
+import { isAuthenticated } from '../../libs/auth';
 
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
@@ -75,7 +76,7 @@ const router = new Router();
  *
  */
  /* eslint-enable */
-router.post('/', asyncMiddleware(async (req, res) => {
+router.post('/', isAuthenticated, asyncMiddleware(async (req, res) => {
   const albumId = uuid();
 
   logger.info(`Creating album with ID ${albumId}`);
@@ -111,7 +112,7 @@ router.post('/', asyncMiddleware(async (req, res) => {
  *
  */
  /* eslint-enable */
-router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res) => {
+router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware(async (req, res) => {
   const { albumId } = req.params;
 
   if (!req.file) {
@@ -192,7 +193,7 @@ router.post('/:albumId', upload.single('file'), asyncMiddleware(async (req, res)
  *
  */
  /* eslint-enable */
-router.get('/:albumId', asyncMiddleware(async (req, res) => {
+router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   const archiveName = req.query.name;
   const { albumId } = req.params;
 
@@ -261,7 +262,7 @@ router.get('/:albumId', asyncMiddleware(async (req, res) => {
  *
  */
  /* eslint-enable */
-router.get('/:albumId/download/:fileName', asyncMiddleware(async (req, res) => {
+router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(async (req, res) => {
   const { albumId, fileName } = req.params;
   const buffer = await getObject(bucket, path.join(albumId, fileName));
 
