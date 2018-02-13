@@ -78,6 +78,10 @@ const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
 // eslint-disable-next-line import/prefer-default-export
 export const isAuthenticated = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  if (authHeader == null) {
+    return sendError(res, 400, 'Please send Authorization header');
+  }
+
   const authHeaderArray = authHeader.split(' ');
   if (authHeaderArray.length < 2) {
     return sendError(res, 400, 'Please send Authorization header with bearer type first followed by a space and then access token');
