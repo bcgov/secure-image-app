@@ -1,4 +1,3 @@
-// See https://github.com/jenkinsci/kubernetes-plugin
 def APP_NAME = 'secure-image-api'
 def BUILD_CONFIG = APP_NAME
 def IMAGESTREAM_NAME = APP_NAME
