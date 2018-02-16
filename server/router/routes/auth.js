@@ -38,6 +38,9 @@ import config from '../../config';
 import {
   TEMPLATES,
 } from '../../constants';
+import {
+  logger,
+} from '../../libs/logger';
 
 const router = new Router();
 
@@ -77,6 +80,7 @@ router.get('/callback', passport.authenticate('oauth2', {
 
     res.send(html);
   } catch (error) {
+    logger.error(`Unable to build download template: ${TEMPLATES.DOWNLOAD}`);
     res.send(500);
   }
 }));

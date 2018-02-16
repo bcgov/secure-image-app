@@ -26,8 +26,12 @@ import request from 'request';
 import jwt from 'jsonwebtoken';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
 import config from '../config';
+import {
+  logger,
+} from './logger';
 
 const sendError = (res, statusCode, message) => {
+  logger.info(`Rejecting authenticaiton, message = ${message}`);
   res.status(statusCode).json({ error: message, success: false });
 };
 
@@ -79,11 +83,13 @@ export const isAuthenticated = async (req, res, next) => {
   // The download URL requires that the user authenticates via their
   // browser which will add an 'isAuthenticated' method for testing.
   if (/^.*\/album\/[0-9A-Za-z-]*\/download\/.*$/.test(req.originalUrl)) {
+    logger.info('Verifying web user authentication');
     // This is not the same isAuthenticated() as above.
     if (req.isAuthenticated()) {
       return next();
     }
 
+    logger.info('Redirecting web user to login');
     req.session.redirect_to = req.originalUrl;
     res.redirect('/v1/auth/login');
     return null;
@@ -91,6 +97,7 @@ export const isAuthenticated = async (req, res, next) => {
 
   // Other API will use a Bearer JWT and should be verified
   // as follows.
+  logger.info('Verifying API user authentication');
 
   const authHeader = req.headers.authorization;
   if (authHeader == null) {
