@@ -65,7 +65,7 @@ router.get('/login', passport.authenticate('oauth2'));
  */
  /* eslint-enable */
 router.get('/callback', passport.authenticate('oauth2', {
-  failureRedirect: `/${TEMPLATES.AUTH_FAIL}`,
+  failureRedirect: '/failed.html',
 }), asyncMiddleware(async (req, res) => {
   const redirectTo = req.session.redirect_to;
   const baseUrl = config.get('appUrl');

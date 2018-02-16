@@ -30,5 +30,4 @@ export const ENVIRONMENTS = {
 
 export const TEMPLATES = {
   DOWNLOAD: 'download.html',
-  AUTH_FAIL: 'fail.html',
 };
