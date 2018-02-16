@@ -57,7 +57,7 @@ describe('minio bucket helpers', function() {
   });
 
   afterEach(() => {
-    // nothig to do
+    // nothing to do
   });
 
   test('listBucket returns an array of JSON objects', async () => {
@@ -133,7 +133,7 @@ describe('minio bucket helpers', function() {
   });
 
   test('removeObject retunrs correctly for success and Error', async () => {
-    const stub = sinon.stub(minio.Client.prototype, 'removeObject');
+    const stub = sinon.stub(minio.Client.prototype, 'removeObject');    
     const error = new Error('Hello World');
     stub.onFirstCall().yields(undefined, undefined);
     stub.onSecondCall().yields(error, undefined);
@@ -147,5 +147,32 @@ describe('minio bucket helpers', function() {
 
     // fails
     await expect(bucket.removeObject('aBucketName', 'aObjectName')).rejects.toEqual(error);
+  });
+
+  test.skip('makeBucket creates a bucket', async () => {
+
+  });
+
+  test('bucketExists correctly determins the existance of a bucket', async () => { 
+    const stub = sinon.stub(minio.Client.prototype, 'bucketExists');
+    const error1 = new Error('Hello World');
+    error1.code = 'NoSuchBucket'
+    const error2 = new Error('Hello World');
+    error2.code = 'ZuluFoxtrotAlpha'
+
+    bucket.client = stub;
+
+    stub.onFirstCall().yields(error1, undefined);
+    stub.onSecondCall().yields(error2, undefined);
+
+    // success
+    expect(await bucket.bucketExists('aBucketName')).toBe(false);
+
+    // fails
+    await expect(bucket.bucketExists('aBucketName')).rejects.toEqual(error2);
+  });
+
+  test.skip('bucketExists correctly determins an error state', async () => { 
+
   });
 });
