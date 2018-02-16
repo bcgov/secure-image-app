@@ -44,7 +44,9 @@ import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
 } from '../../libs/archive';
-import { isAuthenticated } from '../../libs/auth';
+import {
+  isAuthenticated,
+} from '../../libs/auth';
 
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
@@ -238,7 +240,7 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
 
 /* eslint-disable */
 /**
- * @api {GET} /:albumId/download/:fileName Download an album as a ZIP archive
+ * @api {GET} /album/:albumId/download/:fileName Download an album as a ZIP archive
  * @apiVersion  0.0.1
  * @apiName     DownloadAlbum
  * @apiGroup    Album

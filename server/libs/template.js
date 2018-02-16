@@ -15,28 +15,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2018-01-10.
+// Created by Jason Leach on 2018-01-15.
 //
 
 /* eslint-env es6 */
 
 'use strict';
 
-import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import handlebars from 'handlebars';
 import config from '../config';
-import album from './routes/album';
-import ehlo from './routes/ehlo';
-import auth from './routes/auth';
 
-const corsOptions = {
-  origin: config.get('appUrl'),
-  credentials: true,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+export const loadTemplate = fileName => new Promise((resolve, reject) => {
+  const fpath = path.join(__dirname, '../../', config.get('templates:path'), `${fileName}.html`);
 
-module.exports = (app) => {
-  app.use(cors(corsOptions));
-  app.use('/ehlo', ehlo); // probes
-  app.use('/v1/auth', auth);
-  app.use('/v1/album', album);
+  fs.access(fpath, fs.constants.R_OK, (accessErr) => {
+    if (accessErr) {
+      reject(accessErr);
+      return;
+    }
+
+    fs.readFile(fpath, 'utf8', (readErr, data) => {
+      if (readErr) {
+        reject(readErr);
+      }
+
+      resolve(data);
+    });
+  });
+});
+
+export const compile = (source, data) => {
+  const template = handlebars.compile(source);
+  return Promise.resolve(template(data));
 };
