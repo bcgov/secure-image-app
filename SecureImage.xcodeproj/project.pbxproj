@@ -43,7 +43,6 @@
 		56C1D0C71FEAF0C1004B0266 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C1D0C61FEAF0C1004B0266 /* StringExtensionTests.swift */; };
 		56D17D941FE1A3DC002DF790 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D17D931FE1A3DC002DF790 /* AppDelegate.swift */; };
 		56D17D991FE1A3DC002DF790 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D17D971FE1A3DC002DF790 /* Main.storyboard */; };
-		56D17D9E1FE1A3DC002DF790 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D17D9C1FE1A3DC002DF790 /* LaunchScreen.storyboard */; };
 		56D17DA91FE1A3DC002DF790 /* DataExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D17DA81FE1A3DC002DF790 /* DataExtensionTests.swift */; };
 		56D17DB41FE1A3DC002DF790 /* SecureImageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D17DB31FE1A3DC002DF790 /* SecureImageUITests.swift */; };
 		56D17DC61FE1BC68002DF790 /* Albums.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D17DC51FE1BC68002DF790 /* Albums.storyboard */; };
@@ -59,6 +58,7 @@
 		56F524F51FEB39AA0093D8E0 /* FuncitonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */; };
 		56F524F61FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */; };
 		56F524FA1FEC5D450093D8E0 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F524F91FEC5D450093D8E0 /* PhotosViewController.swift */; };
+		56FC00F02034C783002D00CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56FC00EF2034C783002D00CE /* LaunchScreen.storyboard */; };
 		D7EDE921552817C852CD2F4F /* Pods_SecureImageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B060B0A13E124592C91AD58 /* Pods_SecureImageTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -118,7 +118,6 @@
 		56D17D901FE1A3DC002DF790 /* SecureImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecureImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D17D931FE1A3DC002DF790 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D17D981FE1A3DC002DF790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		56D17D9D1FE1A3DC002DF790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56D17D9F1FE1A3DC002DF790 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56D17DA41FE1A3DC002DF790 /* SecureImageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SecureImageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D17DA81FE1A3DC002DF790 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
@@ -140,6 +139,7 @@
 		56F524F31FEB39AA0093D8E0 /* FuncitonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuncitonTableViewCell.swift; sourceTree = "<group>"; };
 		56F524F41FEB39AA0093D8E0 /* AlbumPropertyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumPropertyTableViewCell.swift; sourceTree = "<group>"; };
 		56F524F91FEC5D450093D8E0 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
+		56FC00EF2034C783002D00CE /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5813D40B49A28E9484CACA72 /* Pods-SecureImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.release.xcconfig"; sourceTree = "<group>"; };
 		8F91CF12B1BD4348FEF5C67C /* Pods_SecureImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		971FDDD9C2BEB2ABD001DA68 /* Pods-SecureImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureImage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureImage/Pods-SecureImage.debug.xcconfig"; sourceTree = "<group>"; };
@@ -196,7 +196,6 @@
 		569D84F31FE1ECFB0054173D /* Lock Screen */ = {
 			isa = PBXGroup;
 			children = (
-				56D17D9C1FE1A3DC002DF790 /* LaunchScreen.storyboard */,
 				569D84EC1FE1DD770054173D /* LockScreenWindow.swift */,
 				569D84EE1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard */,
 				569D84F01FE1DE860054173D /* LockScreenAuthenticateViewController.swift */,
@@ -306,6 +305,7 @@
 				569D84FF1FE2F6430054173D /* Secure Camera */,
 				56579EA920100A9200B2AF3E /* Progress */,
 				56D17D971FE1A3DC002DF790 /* Main.storyboard */,
+				56FC00EF2034C783002D00CE /* LaunchScreen.storyboard */,
 				563F228A1FE839F600E33986 /* Assets.xcassets */,
 			);
 			path = UI;
@@ -494,7 +494,6 @@
 			files = (
 				569D84FE1FE2F63B0054173D /* SecureCamera.storyboard in Resources */,
 				569D85031FE2FCD10054173D /* AddImageCollectionViewCell.xib in Resources */,
-				56D17D9E1FE1A3DC002DF790 /* LaunchScreen.storyboard in Resources */,
 				56D17DC61FE1BC68002DF790 /* Albums.storyboard in Resources */,
 				56579EAB20100AB600B2AF3E /* Progress.storyboard in Resources */,
 				56579EAD201011D600B2AF3E /* ProgressView.xib in Resources */,
@@ -503,6 +502,7 @@
 				569D84F81FE1F22E0054173D /* CreateFirstAlbumView.xib in Resources */,
 				56D17DD41FE1D521002DF790 /* Podfile in Resources */,
 				56D17DD21FE1D3BD002DF790 /* README.md in Resources */,
+				56FC00F02034C783002D00CE /* LaunchScreen.storyboard in Resources */,
 				563F228B1FE839F600E33986 /* Assets.xcassets in Resources */,
 				569D84EF1FE1DE720054173D /* LockScreenAuthenticateViewController.storyboard in Resources */,
 			);
@@ -725,14 +725,6 @@
 				56D17D981FE1A3DC002DF790 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		56D17D9C1FE1A3DC002DF790 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				56D17D9D1FE1A3DC002DF790 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
