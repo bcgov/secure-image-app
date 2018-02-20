@@ -71,6 +71,9 @@ class DataServices: NSObject {
                                             // check oldSchemaVersion here, if we're newer call
                                             // a method(s) specifically designed to migrate to
                                             // the desired schema. ie `self.migrateSchemaV0toV1(migration)`
+                                            if (oldSchemaVersion < 1) {
+                                                // Nothing to do. Realm will automatically remove and add fields
+                                            }
         },
                                          shouldCompactOnLaunch: { totalBytes, usedBytes in
                                             // totalBytes refers to the size of the file on disk in bytes (data + free space)
@@ -145,6 +148,14 @@ class DataServices: NSObject {
     }
     #endif
     
+    // MARK: Migration
+    
+    private func f() {
+        
+    }
+    
+    // MARK: Helpers
+
     internal class func add(image: Data, to album: Album) {
 
         print("image size = \(ByteCountFormatter.string(fromByteCount: Int64(image.count), countStyle: .file))")
