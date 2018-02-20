@@ -20,16 +20,19 @@
 
 import Foundation
 import Alamofire
+import SingleSignOn
 
 class BackendAPI {
  
-    class func createAlbum(completionHandler: @escaping (_ remoteAlbumId: String?) -> ()) {
+    class func createAlbum(credentials: Credentials, completionHandler: @escaping (_ remoteAlbumId: String?) -> ()) {
 
         guard let endpoint = URL(string: Constants.API.createAlbumPath, relativeTo: Constants.API.serverURL!) else {
             return
         }
 
-        Alamofire.request(endpoint, method: .post)
+        let headers = ["Authorization": "Bearer \(credentials.accessToken)"]
+        
+        Alamofire.request(endpoint, method: .post, parameters: nil, encoding: URLEncoding.default, headers: headers)
             .responseJSON { response in
                 guard response.result.isSuccess else {
                     completionHandler(nil)
@@ -40,9 +43,12 @@ class BackendAPI {
                     print("No JSON returned in response.")
                     print("Error: \(String(describing: response.result.error))")
                     
-                    completionHandler(nil)
-
                     return
+                }
+                
+                if let status = json["success"] as? Bool, status == false {
+                    print("The request failed.")
+                    print("Error: \(String(describing: json["error"] as? String ?? "No message provided"))")
                 }
                 
                 if let albumId = json["id"] as? String {
@@ -54,7 +60,7 @@ class BackendAPI {
         }
     }
     
-    class func add(_ image: Data, toRemoteAlbum albumId: String, completionHandler: @escaping (_ remoteDocumentId: String?) -> ()) {
+    class func add(credentials: Credentials, image: Data, toRemoteAlbum albumId: String, completionHandler: @escaping (_ remoteDocumentId: String?) -> ()) {
         
         let pathKey = ":id"
         let path = Constants.API.addPhotoToAlbumPath.replacingOccurrences(of: pathKey, with: albumId, options: .literal, range: nil)
@@ -64,7 +70,7 @@ class BackendAPI {
         }
         
         let headers: HTTPHeaders = [
-            /* "Authorization": "your_access_token",  in case you need authorization header */
+            "Authorization": "Bearer \(credentials.accessToken)",
             "Content-type": "multipart/form-data"
         ]
         
@@ -103,7 +109,7 @@ class BackendAPI {
         }
     }
     
-    class func package(_ remoteAlbumId: String, completionHandler: @escaping (_ albumDownloadUrl: URL?) -> ()) {
+    class func package(credentials: Credentials, remoteAlbumId: String, completionHandler: @escaping (_ albumDownloadUrl: URL?) -> ()) {
         
         let pathKey = ":id"
         let path = Constants.API.addPhotoToAlbumPath.replacingOccurrences(of: pathKey, with: remoteAlbumId, options: .literal, range: nil)
@@ -112,7 +118,11 @@ class BackendAPI {
             return
         }
         
-        Alamofire.request(endpoint, method: .get)
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(credentials.accessToken)"
+        ]
+        
+        Alamofire.request(endpoint, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers)
             .responseJSON { response in
                 guard response.result.isSuccess else {
                     completionHandler(nil)

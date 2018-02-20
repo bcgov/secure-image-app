@@ -32,6 +32,13 @@ struct Constants {
         static let RealmEncryptionKey = "RealmEncryptionKey"
     }
     
+    struct SSO {
+        static let baseUrl = URL(string: "https://dev-sso.pathfinder.gov.bc.ca")!
+        static let redirectUri = "bcgov://android"
+        static let clientId = "secure-image"
+        static let realmName = "mobile"
+    }
+    
     struct Album {
         // When converted to cammelcase these must match the related `Album`
         // model properties.
@@ -42,7 +49,7 @@ struct Constants {
     }
     
     struct API {
-        static let serverURL = URL(string: "http://10.10.10.66:8000/v1/")
+        static let serverURL = URL(string: "http://api-devex-mpf-secure-dev.pathfinder.gov.bc.ca/v1/")
         static let createAlbumPath = "album/"
         static let addPhotoToAlbumPath = "album/:id"
         static let getAlbumDownloadUrlPath = "album/:id"
