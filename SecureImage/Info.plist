@@ -26,6 +26,8 @@
 	<string>This is needed to allow photographs to be taken</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This is needed to add location to photographs</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>This is used to secure the app and its contents</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
