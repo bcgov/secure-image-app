@@ -28,7 +28,7 @@ import handlebars from 'handlebars';
 import config from '../config';
 
 export const loadTemplate = fileName => new Promise((resolve, reject) => {
-  const fpath = path.join(__dirname, '../../', config.get('templates:path'), `${fileName}.html`);
+  const fpath = path.join(__dirname, '../../', config.get('templates:path'), fileName);
 
   fs.access(fpath, fs.constants.R_OK, (accessErr) => {
     if (accessErr) {

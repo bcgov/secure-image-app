@@ -19,7 +19,6 @@
 		"clientId": "secure-image-api",
 		"callback": "/v1/auth/callback",
 		"authUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/auth",
-		"tokenUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/token",
-		"clientSecret": ""
+		"tokenUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/token"
   }
 }
