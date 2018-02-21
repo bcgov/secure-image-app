@@ -27,3 +27,7 @@ export const ENVIRONMENTS = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',
 };
+
+export const TEMPLATES = {
+  DOWNLOAD: 'download.html',
+};

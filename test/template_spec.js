@@ -15,28 +15,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Created by Jason Leach on 2018-01-10.
+// Created by Jason Leach on 2018-02-15.
 //
 
 /* eslint-env es6 */
 
 'use strict';
 
-import cors from 'cors';
-import config from '../config';
-import album from './routes/album';
-import ehlo from './routes/ehlo';
-import auth from './routes/auth';
+import jest from 'jest';
+import sinon from 'sinon';
 
-const corsOptions = {
-  origin: config.get('appUrl'),
-  credentials: true,
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+describe('archive functions', function() {
 
-module.exports = (app) => {
-  app.use(cors(corsOptions));
-  app.use('/ehlo', ehlo); // probes
-  app.use('/v1/auth', auth);
-  app.use('/v1/album', album);
-};
+    beforeEach(() => {
+      // nothig to do
+    });
+  
+    afterEach(() => {
+      // nothig to do
+    });
+  
+    test.skip('a template can be loaded', async () => {
+
+    });
+
+    test.skip('a template is compiled and corectly populated', async () => {
+
+    });
+});

@@ -34,6 +34,7 @@ import {
   started,
 } from './libs/logger';
 import config from './config';
+import authmw from './libs/authmware';
 
 const env = config.get('environment');
 
@@ -49,6 +50,7 @@ const options = {
   type: 'image/*',
 };
 const docpath = path.join(__dirname, '../', 'public/doc/api');
+const pubpath = path.join(__dirname, '../', 'public');
 
 fs.access(docpath, fs.constants.R_OK, (err) => {
   if (err) {
@@ -59,6 +61,15 @@ fs.access(docpath, fs.constants.R_OK, (err) => {
   app.use('/doc', express.static(docpath));
 });
 
+fs.access(pubpath, fs.constants.R_OK, (err) => {
+  if (err) {
+    logger.warn('Satic assets location does not exist');
+    return;
+  }
+
+  app.use('/', express.static(pubpath));
+});
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -67,6 +78,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.raw(options));
 app.use(flash());
 // app.use('/download', express.static('download'));
+
+// Authentication middleware
+app.use(authmw(app));
 
 // Server API routes
 require('./router')(app);

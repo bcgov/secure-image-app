@@ -49,7 +49,10 @@ nconf.overrides({
     secretKey: process.env.MINIO_SECRET_KEY,
   },
   sso: {
-    certsEndpoint: process.env.SSO_CERTS_ENDPOINT,
+    clientSecret: process.env.SSO_CLIENT_SECRET,
+  },
+  session: {
+    key: process.env.SESSION_KEY,
   },
 });
 
@@ -61,7 +64,7 @@ nconf.argv()
 // if nothing else is set, use defaults. This will be set if
 // they do not exist in overrides or the config file.
 nconf.defaults({
-  appUrl: process.env.APP_URL || `http://${process.env.HOST}:${process.env.PORT}`,
+  appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT}`,
 });
 
 export default nconf;
