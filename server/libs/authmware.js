@@ -31,6 +31,11 @@ import {
 import session from 'express-session';
 import config from '../config';
 
+// This is the callback port. It needs to be 80 when running
+// on OpenShift.
+// TODO:(JL) How do we automate this?
+const port = 80;
+
 const authmware = (app) => {
   const sessionOptions = {
     secret: config.get('session:key'),
@@ -64,7 +69,7 @@ const authmware = (app) => {
       tokenURL: config.get('sso:tokenUrl'),
       clientID: config.get('sso:clientId'),
       clientSecret: config.get('sso:clientSecret'),
-      callbackURL: url.resolve(`${config.get('appUrl')}:${config.get('port')}`, config.get('sso:callback')),
+      callbackURL: url.resolve(`${config.get('appUrl')}:${port}`, config.get('sso:callback')),
     },
     (accessToken, refreshToken, profile, done) => done(null, {}),
   ));
