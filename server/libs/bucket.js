@@ -24,6 +24,9 @@
 
 import * as minio from 'minio';
 import config from '../config';
+import {
+  logger,
+} from './logger';
 
 const client = new minio.Client({
   endPoint: config.get('minio:endPoint'),
@@ -31,6 +34,38 @@ const client = new minio.Client({
   secure: config.get('minio:secure'),
   accessKey: config.get('minio:accessKey'),
   secretKey: config.get('minio:secretKey'),
+  region: config.get('minio:region'),
+});
+
+export const makeBucket = bucket => new Promise((resolve, reject) => {
+  client.makeBucket(bucket, config.get('minio:region'), (err) => {
+    if (err) {
+      reject(err);
+      return;
+    }
+
+    resolve();
+  });
+});
+
+export const bucketExists = bucket => new Promise((resolve, reject) => {
+  // The API for `bucketExists` does not seem to match the documentaiton. In
+  // returns an error with code 'NoSuchBucket' if a bucket does *not* exists;
+  // the docs say no error should be retunred and success should equal false.
+  client.bucketExists(bucket, (err) => {
+    if (err && err.code === 'NoSuchBucket') {
+      resolve(false);
+      return;
+    }
+
+    // Any other error is a legit error.
+    if (err && err.code !== 'NoSuchBucket') {
+      reject(err);
+      return;
+    }
+
+    resolve(true);
+  });
 });
 
 /**
@@ -137,3 +172,17 @@ export const removeObject = (bucket, name) => new Promise((resolve, reject) => {
     resolve();
   });
 });
+
+// HELPERS
+
+export const createBucketIfRequired = async (bucket) => {
+  try {
+    const exists = await bucketExists(bucket);
+    if (!exists) {
+      await makeBucket(bucket);
+    }
+  } catch (err) {
+    logger.error(`Unable to create bucket: ${bucket}, error = ${err}`);
+    throw new Error(`Unable to create bucket: ${bucket}`);
+  }
+};

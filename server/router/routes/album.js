@@ -39,6 +39,8 @@ import {
 import {
   putObject,
   getObject,
+  createBucketIfRequired,
+  bucketExists,
 } from '../../libs/bucket';
 import {
   writeToTemporaryFile,
@@ -51,6 +53,12 @@ import {
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
 const router = new Router();
+
+try {
+  createBucketIfRequired(bucket);
+} catch (err) {
+  logger.error(`Problem creating bucket ${bucket}`);
+}
 
 /* eslint-disable */
 /**
@@ -119,6 +127,10 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
 
   if (!req.file) {
     return res.status(400).json({ message: 'Unabe to process attached form.' });
+  }
+
+  if (!bucketExists(bucket)) {
+    return res.status(500).json({ message: 'Unable to store attached file.' });
   }
 
   /* This is the document format from multer:
