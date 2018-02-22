@@ -6,7 +6,6 @@
 	},
 	"minio": {
 		"bucket": "secure-image-dv",
-		"endPoint": "127.0.0.1",
 		"port": 9000,
 		"secure": false,
 		"expiry": 604800,
