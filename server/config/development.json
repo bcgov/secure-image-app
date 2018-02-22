@@ -9,7 +9,8 @@
 		"endPoint": "127.0.0.1",
 		"port": 9000,
 		"secure": false,
-		"expiry": 604800
+		"expiry": 604800,
+		"region": "us-east-1"
 	},
 	"session": {
 		"maxAge": 604800000,

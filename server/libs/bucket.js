@@ -38,7 +38,7 @@ const client = new minio.Client({
 });
 
 export const makeBucket = bucket => new Promise((resolve, reject) => {
-  client.makeBucket(bucket, config.get('minio:region'), (err) => {
+  client.makeBucket(bucket, (err) => {
     if (err) {
       reject(err);
       return;
