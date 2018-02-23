@@ -61,7 +61,7 @@
     "dev": "cross-env NODE_ENV=development nodemon server --exec babel-node --inspect",
     "build": "cross-env NODE_ENV=production gulp",
     "build:doc": "./node_modules/.bin/apidoc -i server/ -o doc/api",
-    "test": "cross-env NODE_ENV=test jest test/*_spec.js",
+    "test": "cross-env NODE_ENV=test jest test/",
     "test:watch": "cross-env NODE_ENV=test jest test/*_spec.js --watch",
     "test:security": "nsp check",
     "test:lint": "eslint --env node --ext .js server"
