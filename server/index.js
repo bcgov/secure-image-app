@@ -49,8 +49,17 @@ const options = {
   limit: '3000kb',
   type: 'image/*',
 };
-
+const docpath = path.join(__dirname, '../', 'public/doc/api');
 const pubpath = path.join(__dirname, '../', 'public');
+
+fs.access(docpath, fs.constants.R_OK, (err) => {
+  if (err) {
+    logger.warn('API documentation does not exist');
+    return;
+  }
+
+  app.use('/doc', express.static(docpath));
+});
 
 fs.access(pubpath, fs.constants.R_OK, (err) => {
   if (err) {
