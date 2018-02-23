@@ -75,10 +75,10 @@ const authmware = (app) => {
     (accessToken, refreshToken, profile, done) => done(null, {}),
   );
 
-  oAuth2Strategy.authorizationParams = (options) => {
-    console.log(options);
+  // eslint-disable-next-line arrow-body-style
+  oAuth2Strategy.authorizationParams = () => {
     // eslint-disable-next-line camelcase
-    return { kc_idp_hint: 'IDIR' };
+    return { kc_idp_hint: 'idir' };
   };
 
   passport.use(oAuth2Strategy);
