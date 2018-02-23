@@ -1,27 +1,32 @@
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="shortcut icon" href="secureimagefavicon.png" type="/x-icon">
-    <title> Secure Image App </title>
-  </head>
-  <body>
-    <div class="mainsection">
-      <img id="bluelock" src="bluelock.png" alt="Bluelock">
-      <div id="text">
-        <h1> Athentication Failed </h1>
-        <p> This app may contain sensitive information so we require that you use your IDIR authentication to gain access. </p>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="img/style.css">
+  <link rel="shortcut icon" href="secureimagefavicon.png" type="/x-icon">
+  <title> Secure Image App </title>
+</head>
+
+<body>
+  <div class="mainsection">
+    <img id="bluelock" src="img/bluelock.png" alt="Bluelock">
+    <div id="text">
+      <h1> Athentication Failed </h1>
+      <p> This app may contain sensitive information so we require that you use your IDIR authentication to gain access. </p>
+      <form method="get" action="/v1/auth/login">
         <button type="button"> Try Again </button>
+      </form>
 
-      </div>
-      <div id="bcgovlogo">
-        <img id="bcgovlogoimg" src="bcgovlogo.svg" alt="BC Government Logo">
-      </div>
     </div>
+    <div id="bcgovlogo">
+      <img id="bcgovlogoimg" src="img/bcgovlogo.svg" alt="BC Government Logo">
+    </div>
+  </div>
 
-    <footer>
+  <footer>
+    <p id="bio">Secure Image App allows users to securely take photos with their mobile phone. Photos stay sandboxed within the Secure Image App rather than ending up on the phone's camera roll; this makes them unaccessible by third party apps. The user can then
+      securly send the album to fellow government employees.</p>
+    <p id="copyright"> &copy; Copyright © 2018, Province of British Columbia. </p>
+  </footer>
+</body>
 
-        <p id="bio"> Secure Image App allows users to securely take photos with their mobile phone. Photos stay sandboxed within the Secure Image App rather than ending up on the phone's camera roll/photos app, making them unaccessible by third party apps. </p>
-        <p id="copyright"> &copy; Copyright 2018 BC Government </p>
-      </footer>
-  </body>
 </html>

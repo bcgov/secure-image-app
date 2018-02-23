@@ -52,7 +52,6 @@
       width: 8%;
     }
 
-
     button {
       padding: 3%;
       width: 50%;
@@ -68,9 +67,17 @@
     }
 
     #copyright, #bio {
-      text-align: center;
       width: 45%;
       padding-left: 30%;
+    }
+
+    #bio {
+      text-align: left;
+    }
+
+    #copyright {
+      padding-top: 1em;
+      text-align: center;
     }
 
     button:hover {
