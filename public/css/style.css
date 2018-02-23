@@ -7,6 +7,11 @@
       background: #003366;
     }
 
+    a:link {
+      text-decoration: none;
+      color: #003366;
+    }
+
     p {
       color: white;
       font-family: "MyriadWebPro";
@@ -52,9 +57,9 @@
       width: 8%;
     }
 
-    button {
+    #download {
       padding: 3%;
-      width: 50%;
+      width: 9em;
       font-weight: bold;
       font-size: 16pt;
       background-color: #FCBA19;
@@ -64,7 +69,13 @@
       -webkit-transition-duration: 0.4s; /* Safari */
       transition-duration: 0.4s;
       cursor: pointer;
+      text-align: center;
     }
+
+    #download:hover {
+      background-color: #FAC953; /* Green */
+      color: #003366;
+  }
 
     #copyright, #bio {
       width: 45%;
@@ -80,18 +91,13 @@
       text-align: center;
     }
 
-    button:hover {
-        background-color: #FAC953; /* Green */
-        color: #003366;
-    }
-
 /* Styling for Smaller screens */
     @media only screen  and (max-width: 950px) {
         p, h1 {
             text-align: center;
         }
 
-        button {
+        #download {
           margin-left: 10%;
           width: 300px;
         }
