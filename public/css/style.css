@@ -1,6 +1,6 @@
     @font-face {
         font-family: "MyriadWebPro";
-        src: url(MyriadWebPro.ttf) format("truetype");
+        src: url("/font/MyriadWebPro.ttf") format("truetype");
     }
 /* Styling for body */
     body {
@@ -42,8 +42,8 @@
     #bcgovlogo {
       width: 100%;
       height: 300px;
-padding-left: 20%;
-float: left;
+      padding-left: 20%;
+      float: left;
     }
 
     #bcgovlogoimg {
@@ -98,8 +98,8 @@ float: left;
         #bcgovlogo {
           width: 100%;
           height: 200px;
-      padding-left: 0%;
-      float: left;
+          padding-left: 0%;
+          float: left;
         }
 
         #bcgovlogoimg {
