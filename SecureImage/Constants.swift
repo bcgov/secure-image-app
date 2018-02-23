@@ -37,6 +37,7 @@ struct Constants {
         static let redirectUri = "bcgov://android"
         static let clientId = "secure-image"
         static let realmName = "mobile"
+        static let idpHint = "idir"
     }
     
     struct Album {

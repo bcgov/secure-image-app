@@ -56,7 +56,8 @@ class AlbumDetailsViewController: UIViewController {
     }()
     private let authServices: AuthServices = {
         return AuthServices(baseUrl: Constants.SSO.baseUrl, redirectUri: Constants.SSO.redirectUri,
-                            clientId: Constants.SSO.clientId, realm: Constants.SSO.realmName)
+                            clientId: Constants.SSO.clientId, realm: Constants.SSO.realmName,
+                            idpHint: Constants.SSO.idpHint)
     }()
     internal var album: Album!
     
