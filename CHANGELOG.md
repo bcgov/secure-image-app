@@ -4,6 +4,10 @@
 
 ## Build 7
 
+- Fix type-o's
+
+## Build 6
+
 * NOTE: Please delete any previous builds before installing.
 
 - Remove album metadata (notes) from email
