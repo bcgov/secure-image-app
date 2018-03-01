@@ -284,7 +284,10 @@ router.post('/:albumId/note', isAuthenticated, asyncMiddleware(async (req, res) 
   try {
     const notes = `name: ${albumName || ''}\ncomment: ${comment || ''}`;
     const buff = Buffer.from(notes, 'utf8');
-    await putObject(bucket, path.join(albumId, NOTES_FILE_NAME), buff);
+    const name = path.join(albumId, NOTES_FILE_NAME);
+    const etag = await putObject(bucket, name, buff);
+
+    logger.info(`Adding field notes to album with name ${name}, etag ${etag}`);
   } catch (error) {
     logger.error(`Unable add notes to album, error ${error}`);
     return res.status(500).json({
