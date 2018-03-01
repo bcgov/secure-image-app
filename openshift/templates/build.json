@@ -158,14 +158,14 @@
       "displayName": "Source Image Name",
       "description": "The name of the source image.",
       "required": true,
-      "value": "nodejs-6-rhel7"
+      "value": "nodejs"
     },
     {
       "name": "SOURCE_IMAGE_TAG",
       "displayName": "Source Image Tag",
       "description": "The tag of the source image.",
       "required": true,
-      "value": "latest"
+      "value": "6"
     },
     {
       "name": "CPU_LIMIT",
