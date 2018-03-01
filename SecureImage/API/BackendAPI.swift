@@ -145,6 +145,33 @@ class BackendAPI {
                 
                 completionHandler(nil)
         }
+    }
+    
+    class func addFieldNotes(credentials: Credentials, parameters: [String:String], toRemoteAlbum albumId: String, completionHandler: @escaping (_ error: Error?) -> ()) {
+
+        let pathKey = ":id"
+        let path = Constants.API.addFieldNotesToAlbumPath.replacingOccurrences(of: pathKey, with: albumId, options: .literal, range: nil)
         
+        guard let endpoint = URL(string: path, relativeTo: Constants.API.serverURL!) else {
+            return
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(credentials.accessToken)",
+        ]
+
+        Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: URLEncoding.httpBody, headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: Any], let status = json["success"] as? Bool, status == false {
+                        print("The request failed.")
+                        print("Error: \(String(describing: json["error"] as? String ?? "No message provided"))")
+                    }
+                    completionHandler(nil)
+                case .failure(let error):
+                    completionHandler(error)
+                }
+        }
     }
 }

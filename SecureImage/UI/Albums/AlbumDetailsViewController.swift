@@ -209,6 +209,7 @@ class AlbumDetailsViewController: UIViewController {
             self.presentingViewController?.providesPresentationContextTransitionStyle = true
             self.presentingViewController?.definesPresentationContext = true
             self.present(self.progressOverlay, animated: true, completion: nil)
+            let albumId = self.album.id;
             
             DispatchQueue.main.async {
                 self.progressOverlay.updateProgress(to: 0.0)
@@ -228,7 +229,7 @@ class AlbumDetailsViewController: UIViewController {
                 }
                 
                 do {
-                    if let myAlbum = realm.objects(Album.self).filter("id == %@", self.album.id).first {
+                    if let myAlbum = realm.objects(Album.self).filter("id == %@", albumId).first {
                         try realm.write {
                             myAlbum.remoteAlbumId = remoteAlbumId
                         }
@@ -243,6 +244,25 @@ class AlbumDetailsViewController: UIViewController {
                 
                 let queue = OperationQueue()
                 queue.maxConcurrentOperationCount = 1
+                
+                queue.addAsyncOperation { done in
+                    var notes = [String:String]()
+                    for field in Constants.Album.Fields {
+                        if let realm = try? Realm(), let myAlbum = realm.objects(Album.self).filter("id == %@", albumId).first,
+                            let key = field.name.toCammelCase(), let value = myAlbum.value(forKey: key) as? String {
+                            notes[key] = value
+                        }
+                    }
+                    
+                    BackendAPI.addFieldNotes(credentials: credentials, parameters: notes, toRemoteAlbum: remoteAlbumId) { (error: Error?) in
+                        
+                        if let _ = error {
+                            print("ERROR: Unable to add notes to album")
+                        }
+                        
+                        done()
+                    }
+                }
                 
                 for item in self.album.documents.enumerated() {
                     let offset = item.offset
@@ -313,25 +333,16 @@ class AlbumDetailsViewController: UIViewController {
             
             let composeVC = MFMailComposeViewController()
             composeVC.mailComposeDelegate = self
-            
-            var fields = ""
-            for field in Constants.Album.Fields {
-                if let key = field.name.toCammelCase(), let value = self.album.value(forKey: key) as? String {
-                    fields = fields + "\n\(field.name): \(value)"
-                }
-            }
-            
+
             let body = """
-            Here is an album I exported from SecureImage App:
-            
-            \(fields)
+            Here is an album exported from SecureImage App.
             
             You can downlaod the images from this album at the following URL:
             \(url)
             """
             // Configure the fields of the interface.
             // composeVC.setToRecipients(["address@example.com"])
-            composeVC.setSubject("Album from SecureImage App")
+            composeVC.setSubject("Album from SecureImage App - Created \(self.album.createdAt)")
             composeVC.setMessageBody(body, isHTML: false)
             
             // Present the view controller modally.

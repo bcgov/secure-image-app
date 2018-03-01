@@ -44,7 +44,7 @@ struct Constants {
         // When converted to cammelcase these must match the related `Album`
         // model properties.
         static let Fields = [(name: "Album Name", placeHolderText: "Jane Doe"),
-                             (name: "Comments", placeHolderText: "Your text here")]
+                             (name: "Comment", placeHolderText: "Your text here")]
     }
     
     struct API {
@@ -52,6 +52,7 @@ struct Constants {
         static let createAlbumPath = "album/"
         static let addPhotoToAlbumPath = "album/:id"
         static let getAlbumDownloadUrlPath = "album/:id"
+        static let addFieldNotesToAlbumPath = "album/:id/note"
     }
 }
 
