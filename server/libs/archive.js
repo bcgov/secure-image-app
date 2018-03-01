@@ -26,9 +26,7 @@ import path from 'path';
 import fs from 'fs';
 import archiver from 'archiver';
 import config from '../config';
-import {
-  logger,
-} from './logger';
+import { logger } from './logger';
 import {
   listBucket,
   getObject,
@@ -99,8 +97,15 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
     // eslint-disable-next-line no-await-in-loop
     const buffer = await getObject(bucketName, obj.name);
 
+    let name;
+    if (obj.name.indexOf('.txt') !== -1) {
+      name = path.basename(obj.name);
+    } else {
+      name = `${archiveFileBaseName}${index}.jpg`;
+    }
+
     archive.append(buffer, {
-      name: `${archiveFileBaseName}${index}.jpg`,
+      name,
     });
     index += 1;
 

@@ -29,9 +29,7 @@ import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
 import config from '../../config';
-import {
-  logger,
-} from '../../libs/logger';
+import { logger } from '../../libs/logger';
 import {
   isValid,
   asyncMiddleware,
@@ -46,9 +44,8 @@ import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
 } from '../../libs/archive';
-import {
-  isAuthenticated,
-} from '../../libs/auth';
+import { NOTES_FILE_NAME } from '../../constants';
+import { isAuthenticated } from '../../libs/auth';
 
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
@@ -248,6 +245,54 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   logger.info(`Packaged album for download with URL ${downloadUrl}`);
 
   return res.status(200).json({ url: downloadUrl });
+}));
+
+/* eslint-disable */
+/**
+ * @api {POST} /album/:albumId/note Add field notes to an album
+ * @apiVersion  0.0.1
+ * @apiName     AddFieldNotes
+ * @apiGroup    Album
+ *
+ * @apiParam {String} albumName   The name of the album
+ * @apiParam {String} fieldNotes  The field notes
+ *
+ * @apiSuccess (201)              Sucesfully created
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example
+ *  curl -v -d "albumName=123" -X POST http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd/note
+ *
+ * @apiSuccessExample Success-Response
+ *    HTTP/1.1 201 OK
+ *
+ * @apiErrorExample {json} Error-Response
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
+router.post('/:albumId/note', isAuthenticated, asyncMiddleware(async (req, res) => {
+  const { albumName, fieldNotes } = req.body;
+  const { albumId } = req.params;
+
+  if (!albumName && !fieldNotes) {
+    return res.status(400).json({ message: 'Both albumName and fieldNotes can not be empty.' });
+  }
+
+  try {
+    const notes = `name: ${albumName || ''}\ncomment: ${fieldNotes || ''}`;
+    const buff = Buffer.from(notes, 'utf8');
+    await putObject(bucket, path.join(albumId, NOTES_FILE_NAME), buff);
+  } catch (error) {
+    logger.error(`Unable add notes to album, error ${error}`);
+    return res.status(500).json({
+      message: 'Unable to add notes to album.',
+    });
+  }
+
+  return res.status(201).end();
 }));
 
 /* eslint-disable */
