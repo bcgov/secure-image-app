@@ -274,15 +274,15 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
  */
  /* eslint-enable */
 router.post('/:albumId/note', isAuthenticated, asyncMiddleware(async (req, res) => {
-  const { albumName, fieldNotes } = req.body;
+  const { albumName, comment } = req.body;
   const { albumId } = req.params;
 
-  if (!albumName && !fieldNotes) {
+  if (!albumName && !comment) {
     return res.status(400).json({ message: 'Both albumName and fieldNotes can not be empty.' });
   }
 
   try {
-    const notes = `name: ${albumName || ''}\ncomment: ${fieldNotes || ''}`;
+    const notes = `name: ${albumName || ''}\ncomment: ${comment || ''}`;
     const buff = Buffer.from(notes, 'utf8');
     await putObject(bucket, path.join(albumId, NOTES_FILE_NAME), buff);
   } catch (error) {
