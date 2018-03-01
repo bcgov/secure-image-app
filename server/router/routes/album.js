@@ -100,7 +100,7 @@ router.post('/', isAuthenticated, asyncMiddleware(async (req, res) => {
  * @apiParam {String} albumId         The ID of the album that the image will be added to
  * @apiParam {String} file            The `Body` of the request must contain a multi-part mime encoded file object
  * 
- * @apiSuccess (200) {String} id      The image (object) unique ID
+ * @apiSuccess (200) {String} id      The image MD5
  *
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
@@ -158,7 +158,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
 
     logger.info(`Adding image to album with name ${req.file.filename}, etag ${etag}`);
 
-    return res.status(200).json({ id: req.file.filename });
+    return res.status(200).json({ id: etag });
   } catch (error) {
     logger.error(`Unable to put object, error ${error}`);
     return res.status(500).json({
@@ -257,7 +257,7 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
  * @apiParam {String} albumName   The name of the album
  * @apiParam {String} fieldNotes  The field notes
  *
- * @apiSuccess (201)              Sucesfully created
+ * @apiSuccess (200) {String} id      The field notes MD5
  *
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
