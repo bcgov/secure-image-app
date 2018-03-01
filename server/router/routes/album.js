@@ -278,8 +278,6 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
   const { albumId } = req.params;
 
   if (!albumName && !comment) {
-    console.log('body=', req.body);
-    console.log('param=', req.params);
     return res.status(400).json({ message: 'All fields can not be empty.' });
   }
 
@@ -290,14 +288,13 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
     const etag = await putObject(bucket, name, buff);
 
     logger.info(`Adding field notes to album with name ${name}, etag ${etag}`);
+    return res.status(200).json({ id: etag });
   } catch (error) {
     logger.error(`Unable add notes to album, error ${error}`);
     return res.status(500).json({
       message: 'Unable to add notes to album.',
     });
   }
-
-  return res.status(201).end();
 }));
 
 /* eslint-disable */
