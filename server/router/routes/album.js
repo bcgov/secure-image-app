@@ -273,12 +273,14 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
  *
  */
  /* eslint-enable */
-router.post('/:albumId/note', isAuthenticated, asyncMiddleware(async (req, res) => {
+router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
   const { albumName, comment } = req.body;
   const { albumId } = req.params;
 
   if (!albumName && !comment) {
-    return res.status(400).json({ message: 'Both albumName and fieldNotes can not be empty.' });
+    console.log('body=', req.body);
+    console.log('param=', req.params);
+    return res.status(400).json({ message: 'All fields can not be empty.' });
   }
 
   try {
