@@ -31,3 +31,5 @@ export const ENVIRONMENTS = {
 export const TEMPLATES = {
   DOWNLOAD: 'download.html',
 };
+
+export const NOTES_FILE_NAME = 'notes.txt';
