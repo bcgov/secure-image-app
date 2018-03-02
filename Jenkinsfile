@@ -7,10 +7,12 @@ def IMAGESTREAM_NAME = APP_NAME
 def TAG_NAMES = ['dev', 'test', 'prod']
 def CMD_PREFIX = 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin'
 def NODE_URI = 'https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz'
+def PIRATE_ICO = 'http://icons.iconarchive.com/icons/aha-soft/torrent/64/pirate-icon.png'
+def JENNKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
-def notifySlack(text, channel, url, attachments) {
+def notifySlack(text, channel, url, attachments, icon) {
     def slackURL = url
-    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+    def jenkinsIcon = icon
     def payload = JsonOutput.toJson([text: text,
         channel: channel,
         username: "Jenkins",
@@ -19,6 +21,7 @@ def notifySlack(text, channel, url, attachments) {
     ])
     sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
+
 node {
   stage('Checkout') {
     echo "Checking out source"
@@ -43,7 +46,13 @@ node {
   stage('Test') {
     echo "Testing: ${BUILD_ID}"
     // Run a security check on our packages
-    // sh "${CMD_PREFIX} npm run test:security"
+    try {
+      sh "${CMD_PREFIX} npm run test:security"
+    } catch (error) {
+      echo "NSP ERROR\n ${error}"
+      notifySlack("NSP Security Warning #${BUILD_ID}\n${error}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
+    }
+
     // Run our unit tests et al.
     sh "${CMD_PREFIX} npm test"
   }
@@ -62,7 +71,7 @@ node {
 
     openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
 
-    notifySlack("Build Completed #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
+    notifySlack("Build Completed #${BUILD_ID}\nGo to OpenShift to promote this image.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], JENNKINS_ICO)
   }
 }
 
