@@ -48,14 +48,27 @@ node {
     echo "Testing: ${BUILD_ID}"
     // Run a security check on our packages
     try {
-      FOO = sh "${CMD_PREFIX} npm run test:security"
+      sh "${CMD_PREFIX} ./node_modules/.bin/nsp check > nsp-report.txt"
     } catch (error) {
-      echo "NSP ERROR\n ${error}"
-      notifySlack("NSP Security Warning\n${FOO}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
+      def output = readFile('nsp-report.txt').trim()
+      // def attachment = [:]
+      // attachment.fallback = 'See build log for more details'
+      // attachment.title = 'Node Security Project Warning'
+      // attachment.color = '#CD0000'
+      // attachment.text = 'Their are security warnings related to your packages.'
+      // attachment.title_link = '${env.BUILD_URL}'
+      echo "${output}"
+
+      notifySlack("NSP Security Warning\nYour build has security warnings.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
     }
 
-    // Run our unit tests et al.
-    sh "${CMD_PREFIX} npm test"
+    try {
+      // Run our unit tests et al.
+      sh "${CMD_PREFIX} npm test"
+    } catch (error) {
+      notifySlack("Build Failed #${BUILD_ID}\nUnit tests did not pass.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], JENKINS_ICO)
+      sh "exit 1001"
+    }
   }
 
   stage('Build') {
