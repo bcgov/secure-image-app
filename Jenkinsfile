@@ -8,7 +8,8 @@ def TAG_NAMES = ['dev', 'test', 'prod']
 def CMD_PREFIX = 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin'
 def NODE_URI = 'https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz'
 def PIRATE_ICO = 'http://icons.iconarchive.com/icons/aha-soft/torrent/64/pirate-icon.png'
-def JENNKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+def JENKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+def OPENSHIFT_ICO = 'https://commons.wikimedia.org/wiki/File:OpenShift-LogoType.svg'
 
 def notifySlack(text, channel, url, attachments, icon) {
     def slackURL = url
@@ -71,7 +72,7 @@ node {
 
     openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
 
-    notifySlack("Build Completed #${BUILD_ID}\nGo to OpenShift to promote this image.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], JENNKINS_ICO)
+    notifySlack("Build Completed #${BUILD_ID}\nGo to OpenShift to promote this image.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], JENKINS_ICO)
   }
 }
 
@@ -83,6 +84,7 @@ stage('Test Promotion') {
   node {
     stage('Promotion') {
       openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+      notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
     }
   }
 }
