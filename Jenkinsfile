@@ -1,10 +1,24 @@
+
+import groovy.json.JsonOutput
+
 def APP_NAME = 'secure-image-api'
 def BUILD_CONFIG = APP_NAME
 def IMAGESTREAM_NAME = APP_NAME
-def TAG_NAMES = ['dev', 'test']
+def TAG_NAMES = ['dev', 'test', 'prod']
 def CMD_PREFIX = 'PATH=$PATH:$PWD/node-v8.9.4-linux-x64/bin'
 def NODE_URI = 'https://nodejs.org/dist/v8.9.4/node-v8.9.4-linux-x64.tar.xz'
 
+def notifySlack(text, channel, url, attachments) {
+    def slackURL = url
+    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+    def payload = JsonOutput.toJson([text: text,
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: attachments
+    ])
+    sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+}
 node {
   stage('Checkout') {
     echo "Checking out source"
@@ -45,5 +59,21 @@ node {
       script: """oc get istag ${IMAGESTREAM_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
       returnStdout: true).trim()
     echo ">> IMAGE_HASH: ${IMAGE_HASH}"
+
+    openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+
+    notifySlack("Build Completed #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
+  }
+}
+
+stage('Test Promotion') {
+  timeout(time: 1, unit: 'DAYS') {
+    input message: "Deploy to test?", submitter: 'jleach-admin'
+  }
+
+  node {
+    stage('Promotion') {
+      openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+    }
   }
 }
