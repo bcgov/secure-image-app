@@ -47,10 +47,10 @@ node {
     echo "Testing: ${BUILD_ID}"
     // Run a security check on our packages
     try {
-      sh "${CMD_PREFIX} npm run test:security"
+      FOO = sh "${CMD_PREFIX} npm run test:security"
     } catch (error) {
       echo "NSP ERROR\n ${error}"
-      notifySlack("NSP Security Warning #${BUILD_ID}\n${error}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
+      notifySlack("NSP Security Warning\n${FOO}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
     }
 
     // Run our unit tests et al.
