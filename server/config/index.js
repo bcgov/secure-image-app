@@ -52,7 +52,7 @@ nconf.overrides({
     clientSecret: process.env.SSO_CLIENT_SECRET,
   },
   session: {
-    key: process.env.SESSION_KEY,
+    key: process.env.SESSION_SECRET,
   },
 });
 
