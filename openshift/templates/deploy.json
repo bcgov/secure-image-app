@@ -14,6 +14,9 @@
       "apiVersion": "v1",
       "metadata": {
         "name": "${NAME}",
+        "labels": {
+          "app": "${NAME}"
+        },
         "annotations": {
           "description": "Exposes and load balances the application pods"
         }
@@ -33,7 +36,10 @@
       "kind": "Route",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${ROUTE_NAME}"
+        "name": "${ROUTE_NAME}",
+        "labels": {
+          "app": "${NAME}"
+        }
       },
       "spec": {
         "port": {
@@ -44,6 +50,34 @@
           "name": "${NAME}",
           "weight": 100
         }
+      }
+    },
+    {
+      "kind": "Secret",
+      "type": "Opaque",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "sso",
+        "labels": {
+          "app": "${NAME}"
+        }
+      },
+      "stringData": {
+        "ssoClientSecret": "${SSO_CLIENT_SECRET}"
+      }
+    },
+    {
+      "kind": "Secret",
+      "type": "Opaque",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "labels": {
+          "app": "${NAME}"
+        }
+      },
+      "stringData": {
+        "apiSessionSecret": "${API_SESSION_SECRET}"
       }
     },
     {
@@ -113,15 +147,15 @@
                 }
               },
               "env": [{
-                  "name": "MINIO_ENDPOINT",
-                  "value": "${MINIO_ENDPOINT}"
+                  "name": "MINIO_SERVICE",
+                  "value": "${MINIO_SERVICE}"
                 },
                 {
                   "name": "MINIO_ACCESS_KEY",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "key": "password",
-                      "name": "minio-access-key"
+                      "name": "${NAME}",
+                      "key": "minioAccessKey"
                     }
                   }
                 },
@@ -129,11 +163,31 @@
                   "name": "MINIO_SECRET_KEY",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "key": "password",
-                      "name": "minio-secret-key"
+                      "name": "${NAME}",
+                      "key": "minioSecretKey"
                     }
                   }
                 },
+
+                {
+                  "name": "API_SESSION_SECRET",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "name": "${NAME}",
+                      "key": "ssoClientSecret"
+                    }
+                  }
+                },
+                {
+                  "name": "SSO_CLIENT_SECRET",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "name": "${NAME}",
+                      "key": "ssoClientSecret"
+                    }
+                  }
+                },
+
                 {
                   "name": "PORT",
                   "value": "${PORT}"
@@ -163,59 +217,73 @@
       "name": "NAME",
       "displayName": "Name",
       "description": "The name assigned to all of the objects defined in this template.  You should keep this as default unless your know what your doing.",
-      "required": true,
-      "value": "secure-image-api"
+      "value": "secure-image-api",
+      "required": true
     },
     {
       "name": "IMAGE_TAG",
       "displayName": "Output Image Tag",
       "description": "The tag given to the built image.",
-      "required": true,
-      "value": "latest"
+      "value": "latest",
+      "required": true
     },
     {
       "name": "IMAGE_NAMESPACE",
       "displayName": "Image Namespace",
-      "required": true,
       "description": "The namespace of the OpenShift project containing the imagestream for the application.",
-      "value": "devex-mpf-secure-tools"
+      "value": "devex-mpf-secure-tools",
+      "required": true
     },
     {
       "name": "MEMORY_LIMIT",
       "displayName": "Memory Limit",
-      "required": true,
       "description": "Maximum amount of memory the container can use.",
-      "value": "512Mi"
+      "value": "512Mi",
+      "required": true
     },
     {
       "name": "ROUTE_NAME",
       "displayName": "Application Route",
       "description": "The name of the default route use to access this service.",
-      "value": "api"
+      "value": "api",
+      "required": true
     },
     {
-      "name": "MINIO_ENDPOINT",
-      "displayName": "Minio Endpoint",
+      "name": "MINIO_SERVICE",
+      "displayName": "Minio Service",
       "description": "The endpoint for the minio storage service.",
-      "value": ""
+      "required": true
     },
     {
       "name": "PORT",
       "displayName": "Server Port",
       "description": "The perferd port for the server to listen on.",
-      "value": "8080"
+      "value": "8080",
+      "required": true
     },
     {
       "name": "NODE_ENV",
       "displayName": "Node Environment",
       "description": "The node environment. Typically: develop, test, stage, or production",
-      "value": ""
+      "required": true
     },
     {
       "name": "APP_URL",
       "displayName": "Application URL",
       "description": "The fully qualified external URL to access this service.",
       "value": ""
+    },
+    {
+      "name": "API_SESSION_SECRET",
+      "displayName": "Express session secret",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "SSO_CLIENT_SECRET",
+      "displayName": "Express session secret",
+      "required": true
     }
   ]
 }

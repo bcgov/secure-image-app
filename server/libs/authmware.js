@@ -25,16 +25,9 @@
 import url from 'url';
 import express from 'express';
 import passport from 'passport';
-import {
-  Strategy as OAuth2Strategy,
-} from 'passport-oauth2';
+import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import session from 'express-session';
 import config from '../config';
-
-// This is the callback port. It needs to be 80 when running
-// on OpenShift.
-// TODO:(JL) How do we automate this?
-const port = 80;
 
 const authmware = (app) => {
   const sessionOptions = {
@@ -70,7 +63,7 @@ const authmware = (app) => {
       tokenURL: config.get('sso:tokenUrl'),
       clientID: config.get('sso:clientId'),
       clientSecret: config.get('sso:clientSecret'),
-      callbackURL: url.resolve(`${config.get('appUrl')}:${port}`, config.get('sso:callback')),
+      callbackURL: url.resolve(`${config.get('appUrl')}`, config.get('sso:callback')),
     },
     (accessToken, refreshToken, profile, done) => done(null, {}),
   );
