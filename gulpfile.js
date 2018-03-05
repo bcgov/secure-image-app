@@ -45,6 +45,9 @@ gulp.task('copy-node-config', ['clean'], () => gulp.src(['apidoc.json', 'package
 gulp.task('copy-templates', ['clean'], () => gulp.src('templates/**')
   .pipe(gulp.dest('build/templates')));
 
+gulp.task('copy-public', ['clean'], () => gulp.src('public/**')
+  .pipe(gulp.dest('build/public')));
+
 gulp.task('apidoc', ['clean', 'transpile', 'copy-node-config'], done => apidoc({
   src: 'build/',
   dest: 'build/public/doc/api',
@@ -54,5 +57,5 @@ gulp.task('apidoc', ['clean', 'transpile', 'copy-node-config'], done => apidoc({
 }, done));
 
 gulp.task('default', ['clean', 'transpile', 'copy-config',
-  'copy-node-config', 'copy-templates', 'apidoc',
+  'copy-node-config', 'copy-templates', 'copy-public', 'apidoc',
 ]);

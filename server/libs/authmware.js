@@ -63,7 +63,8 @@ const authmware = (app) => {
 
   // We don't use the credentials for anything, just the isAuthenticated() in
   // the session object to confifm authentication.
-  passport.use(new OAuth2Strategy(
+
+  const oAuth2Strategy = new OAuth2Strategy(
     {
       authorizationURL: config.get('sso:authUrl'),
       tokenURL: config.get('sso:tokenUrl'),
@@ -72,7 +73,15 @@ const authmware = (app) => {
       callbackURL: url.resolve(`${config.get('appUrl')}:${port}`, config.get('sso:callback')),
     },
     (accessToken, refreshToken, profile, done) => done(null, {}),
-  ));
+  );
+
+  // eslint-disable-next-line arrow-body-style
+  oAuth2Strategy.authorizationParams = () => {
+    // eslint-disable-next-line camelcase
+    return { kc_idp_hint: 'idir' };
+  };
+
+  passport.use(oAuth2Strategy);
 };
 
 module.exports = () => {

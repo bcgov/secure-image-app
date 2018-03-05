@@ -53,13 +53,13 @@ export const bucketExists = bucket => new Promise((resolve, reject) => {
   // returns an error with code 'NoSuchBucket' if a bucket does *not* exists;
   // the docs say no error should be retunred and success should equal false.
   client.bucketExists(bucket, (err) => {
-    if (err && err.code === 'NoSuchBucket') {
+    if (err && (err.code === 'NoSuchBucket' || err.code === 'NotFound')) {
       resolve(false);
       return;
     }
 
     // Any other error is a legit error.
-    if (err && err.code !== 'NoSuchBucket') {
+    if (err && (err.code !== 'NoSuchBucket' && err.code !== 'NotFound')) {
       reject(err);
       return;
     }

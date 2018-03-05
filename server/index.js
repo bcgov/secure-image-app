@@ -63,7 +63,7 @@ fs.access(docpath, fs.constants.R_OK, (err) => {
 
 fs.access(pubpath, fs.constants.R_OK, (err) => {
   if (err) {
-    logger.warn('Satic assets location does not exist');
+    logger.warn('Static assets location does not exist');
     return;
   }
 
@@ -75,6 +75,9 @@ app.use(bodyParser.urlencoded({
   extended: true,
 }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
 app.use(bodyParser.raw(options));
 app.use(flash());
 // app.use('/download', express.static('download'));

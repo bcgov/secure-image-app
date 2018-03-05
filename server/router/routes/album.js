@@ -29,9 +29,7 @@ import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
 import config from '../../config';
-import {
-  logger,
-} from '../../libs/logger';
+import { logger } from '../../libs/logger';
 import {
   isValid,
   asyncMiddleware,
@@ -46,9 +44,8 @@ import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
 } from '../../libs/archive';
-import {
-  isAuthenticated,
-} from '../../libs/auth';
+import { NOTES_FILE_NAME } from '../../constants';
+import { isAuthenticated } from '../../libs/auth';
 
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
@@ -103,7 +100,7 @@ router.post('/', isAuthenticated, asyncMiddleware(async (req, res) => {
  * @apiParam {String} albumId         The ID of the album that the image will be added to
  * @apiParam {String} file            The `Body` of the request must contain a multi-part mime encoded file object
  * 
- * @apiSuccess (200) {String} id      The image (object) unique ID
+ * @apiSuccess (200) {String} id      The image MD5
  *
  * @apiError   (401) Unauthorized     Authenticaiton required.
  * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
@@ -161,7 +158,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
 
     logger.info(`Adding image to album with name ${req.file.filename}, etag ${etag}`);
 
-    return res.status(200).json({ id: req.file.filename });
+    return res.status(200).json({ id: etag });
   } catch (error) {
     logger.error(`Unable to put object, error ${error}`);
     return res.status(500).json({
@@ -248,6 +245,56 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   logger.info(`Packaged album for download with URL ${downloadUrl}`);
 
   return res.status(200).json({ url: downloadUrl });
+}));
+
+/* eslint-disable */
+/**
+ * @api {POST} /album/:albumId/note Add field notes to an album
+ * @apiVersion  0.0.1
+ * @apiName     AddFieldNotes
+ * @apiGroup    Album
+ *
+ * @apiParam {String} albumName   The name of the album
+ * @apiParam {String} fieldNotes  The field notes
+ *
+ * @apiSuccess (200) {String} id      The field notes MD5
+ *
+ * @apiError   (401) Unauthorized     Authenticaiton required.
+ * @apiError   (500) InternalError    The server encountered an internal error. Please retry the request.
+ *
+ * @apiExample {curl} Example
+ *  curl -v -d "albumName=123" -X POST http://localhost:8000/v1/album/d7995710-f665-11e7-8298-1b10696245bd/note
+ *
+ * @apiSuccessExample Success-Response
+ *    HTTP/1.1 201 OK
+ *
+ * @apiErrorExample {json} Error-Response
+ *    HTTP/1.1 401 Unauthorized
+ *
+ */
+ /* eslint-enable */
+router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
+  const { albumName, comment } = req.body;
+  const { albumId } = req.params;
+
+  if (!albumName && !comment) {
+    return res.status(400).json({ message: 'All fields can not be empty.' });
+  }
+
+  try {
+    const notes = `name: ${albumName || ''}\ncomment: ${comment || ''}`;
+    const buff = Buffer.from(notes, 'utf8');
+    const name = path.join(albumId, NOTES_FILE_NAME);
+    const etag = await putObject(bucket, name, buff);
+
+    logger.info(`Adding field notes to album with name ${name}, etag ${etag}`);
+    return res.status(200).json({ id: etag });
+  } catch (error) {
+    logger.error(`Unable add notes to album, error ${error}`);
+    return res.status(500).json({
+      message: 'Unable to add notes to album.',
+    });
+  }
 }));
 
 /* eslint-disable */
