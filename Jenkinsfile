@@ -31,33 +31,33 @@ def JENKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo
 def OPENSHIFT_ICO = 'https://commons.wikimedia.org/wiki/File:OpenShift-LogoType.svg'
 
 def notifySlack(text, channel, url, attachments, icon) {
-  def slackURL = url
-  def jenkinsIcon = icon
-  def payload = JsonOutput.toJson([text: text,
-    channel: channel,
-    username: "Jenkins",
-    icon_url: jenkinsIcon,
-    attachments: attachments
-  ])
-  sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    def slackURL = url
+    def jenkinsIcon = icon
+    def payload = JsonOutput.toJson([text: text,
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: attachments
+    ])
+    sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
-stage('Not Master') {
-  when {
-    not {
-      branch 'master'
-    }
-  }
-
+stage('Checkout') {
+   when {
+       not {
+           branch 'master'
+       }
+   }
+      
   node {
     stage('Checkout') {
       echo "Checking out source"
       checkout scm
     }
-
+    
     stage('Install') {
       echo "Setup: ${BUILD_ID}"
-
+      
       // The version of node in the `node` that comes with OpenShift is too old
       // so I use a generic Linux and install my own node from LTS.
       sh "curl ${NODE_URI} | tar -Jx"
@@ -69,7 +69,7 @@ stage('Not Master') {
       sh "${CMD_PREFIX} npm -v"
       sh "${CMD_PREFIX} node -v"
     }
-
+    
     stage('Test') {
       echo "Testing: ${BUILD_ID}"
       // Run a security check on our packages
@@ -104,10 +104,8 @@ stage('Not Master') {
 
       // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
       // Tag the images for deployment based on the image's hash
-      IMAGE_HASH = sh(
-        script: ""
-        "oc get istag ${IMAGESTREAM_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'"
-        "",
+      IMAGE_HASH = sh (
+        script: """oc get istag ${IMAGESTREAM_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
         returnStdout: true).trim()
       echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
