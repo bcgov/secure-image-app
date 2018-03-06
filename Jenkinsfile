@@ -43,11 +43,15 @@ def notifySlack(text, channel, url, attachments, icon) {
 }
 
 stage('Checkout') {
-   when {
-       not {
-           branch 'master'
-       }
-   }
+    steps {
+        script { 
+            if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != 'staging') {
+                echo 'This is not master or staging'
+            } else {
+                echo 'things and stuff'
+            }
+        }
+    }
       
   node {
     stage('Checkout') {
