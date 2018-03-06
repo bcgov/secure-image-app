@@ -109,7 +109,7 @@ node {
   }
 }
 
-stage('Test Promotion') {
+stage('Approval') {
   timeout(time: 1, unit: 'DAYS') {
     input message: "Deploy to test?", submitter: 'jleach-admin'
   }
