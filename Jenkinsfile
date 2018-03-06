@@ -79,7 +79,7 @@ node {
         attachment.title_link = '${env.BUILD_URL}'
         echo "${output}"
 
-        notifySlack("NSP Security Warning\nYour build has security warnings.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], PIRATE_ICO)
+        notifySlack("NSP Security Warning\nYour build has security warnings.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], PIRATE_ICO)
       }
 
       try {
