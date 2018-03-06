@@ -47,6 +47,9 @@ node {
   stage('Checkout') {
     echo "Checking out source"
     checkout scm
+    step('bork') {
+      echo "BORK!"
+    }
   }
   
   stage('Install') {
