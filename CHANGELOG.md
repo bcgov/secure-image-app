@@ -5,6 +5,8 @@
 ## Build 7
 
 - Fix type-o's
+- Update endpoing to use SSL
+- Switch to test environment
 
 ## Build 6
 
