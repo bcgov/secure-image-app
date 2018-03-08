@@ -255,7 +255,7 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
  * @apiGroup    Album
  *
  * @apiParam {String} albumName   The name of the album
- * @apiParam {String} fieldNotes  The field notes
+ * @apiParam {String} comment     The field notes
  *
  * @apiSuccess (200) {String} id      The field notes MD5
  *

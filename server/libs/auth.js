@@ -26,9 +26,7 @@ import request from 'request';
 import jwt from 'jsonwebtoken';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
 import config from '../config';
-import {
-  logger,
-} from './logger';
+import { logger } from './logger';
 
 const sendError = (res, statusCode, message) => {
   logger.info(`Rejecting authenticaiton, message = ${message}`);
