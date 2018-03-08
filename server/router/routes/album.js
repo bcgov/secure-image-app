@@ -282,7 +282,7 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
   }
 
   try {
-    const notes = `name: ${albumName || ''}\ncomment: ${comment || ''}`;
+    const notes = `Album Name: ${albumName || ''}\r\nComment: ${comment || ''}`;
     const buff = Buffer.from(notes, 'utf8');
     const name = path.join(albumId, NOTES_FILE_NAME);
     const etag = await putObject(bucket, name, buff);
