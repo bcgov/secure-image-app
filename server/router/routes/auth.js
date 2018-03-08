@@ -74,6 +74,7 @@ router.get('/callback', passport.authenticate('oauth2', {
   const baseUrl = config.get('appUrl');
   try {
     const buffer = await loadTemplate(TEMPLATES.DOWNLOAD);
+    console.log('u=', url.resolve(baseUrl, redirectTo));
     const html = await compile(buffer, {
       download_url: url.resolve(baseUrl, redirectTo),
     });
