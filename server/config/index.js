@@ -50,10 +50,9 @@ nconf.overrides({
   },
   sso: {
     clientSecret: process.env.SSO_CLIENT_SECRET,
-    certsEndpoint: process.env.SSO_CERTS_ENDPOINT,
   },
   session: {
-    key: process.env.SESSION_KEY,
+    key: process.env.SESSION_SECRET,
   },
 });
 

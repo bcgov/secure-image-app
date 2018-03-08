@@ -36,7 +36,7 @@ const sendError = (res, statusCode, message) => {
 };
 
 const verifyToken = clientAccessToken => new Promise((resolve, reject) => {
-  request.get(config.get('sso:certsEndpoint'), {
+  request.get(config.get('sso:certsUrl'), {
 
   }, (err, res, certsBody) => {
     if (err) {
