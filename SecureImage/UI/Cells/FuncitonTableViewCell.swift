@@ -32,6 +32,7 @@ class FuncitonTableViewCell: UITableViewCell {
     internal var onUploadAlbumTouched: UploadAlbumCallback?
     internal var onViewAllImagesTouched: ViewAllCallback?
 
+    
     override func awakeFromNib() {
 
         super.awakeFromNib()
@@ -48,6 +49,18 @@ class FuncitonTableViewCell: UITableViewCell {
         uploadButton.backgroundColor = Theme.governmentDarkBlue
         uploadButton.setTitleColor(UIColor.white, for: .normal)
         uploadButton.layer.cornerRadius = uploadButton.bounds.size.height / 2
+    }
+    
+    internal func disableUploadButton() {
+
+        uploadButton.isUserInteractionEnabled = false
+        uploadButton.alpha = 0.5
+    }
+    
+    internal func enableUploadButton() {
+        
+        uploadButton.isUserInteractionEnabled = false
+        uploadButton.alpha = 1.0
     }
     
     @IBAction dynamic private func uploadAlbumTouched(sender: UIButton) {

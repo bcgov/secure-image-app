@@ -170,6 +170,12 @@ class AlbumDetailsViewController: UIViewController {
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
             
+            if (album.documents.count == 0) {
+                cell.disableUploadButton()
+            } else {
+                cell.enableUploadButton()
+            }
+            
             cell.onViewAllImagesTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showAllImagesSegueID, sender: nil)
             }
