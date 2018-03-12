@@ -170,6 +170,12 @@ class AlbumDetailsViewController: UIViewController {
         case AlbumDetailsViewController.functionsCellReuseID:
             let cell = cell as! FuncitonTableViewCell
             
+            if (album.documents.count == 0) {
+                cell.disableUploadButton()
+            } else {
+                cell.enableUploadButton()
+            }
+            
             cell.onViewAllImagesTouched = {
                 self.performSegue(withIdentifier: AlbumDetailsViewController.showAllImagesSegueID, sender: nil)
             }
@@ -336,14 +342,15 @@ class AlbumDetailsViewController: UIViewController {
 
             let body = """
             Here is an album exported from SecureImage App.
-            
+            <br /><br />
             You can downlaod the images from this album at the following URL:
-            \(url)
+            <br />
+            <a href=\"\(url)\">Download Album</a>
             """
             // Configure the fields of the interface.
             // composeVC.setToRecipients(["address@example.com"])
             composeVC.setSubject("Album from SecureImage App - Created \(self.album.createdAt)")
-            composeVC.setMessageBody(body, isHTML: false)
+            composeVC.setMessageBody(body, isHTML: true)
             
             // Present the view controller modally.
             self.present(composeVC, animated: true, completion: nil)

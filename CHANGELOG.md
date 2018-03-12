@@ -2,6 +2,14 @@
 
 ## SecureImage 1.0
 
+## Build 8
+
+- Disable upload button if no images are in the album
+- Display app icon in AirWatch
+- Replace album download URL with link
+- Change fields in text file to capital case
+- Fix typo in on-boarding screen
+
 ## Build 7
 
 - Fix type-o's
