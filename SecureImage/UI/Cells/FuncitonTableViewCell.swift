@@ -59,7 +59,7 @@ class FuncitonTableViewCell: UITableViewCell {
     
     internal func enableUploadButton() {
         
-        uploadButton.isUserInteractionEnabled = false
+        uploadButton.isUserInteractionEnabled = true
         uploadButton.alpha = 1.0
     }
     
