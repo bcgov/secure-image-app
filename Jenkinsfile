@@ -44,7 +44,7 @@ def notifySlack(text, channel, url, attachments, icon) {
 podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
-    image: '172.50.0.2:5000/openshift/jenkins-slave-node6:latest',
+    image: '172.50.0.2:5000/devex-mpf-secure/jenkins-slave-node6:latest',
     resourceRequestCpu: '500m',
     resourceLimitCpu: '1000m',
     resourceRequestMemory: '1Gi',
@@ -58,7 +58,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     //   ]
   )
 ]) {
-   node('range-api-node-build') {
+   node('secureimg-api-node-build') {
     stage('Checkout') {
       echo "Checking out source"
       checkout scm
@@ -165,7 +165,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     node ('master') {
       stage('Promotion') {
         openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-        notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#range-api", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+        notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
       }
     }  
   }
