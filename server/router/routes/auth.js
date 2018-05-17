@@ -22,25 +22,14 @@
 
 'use strict';
 
-import {
-  Router,
-} from 'express';
-import url from 'url';
+import { Router } from 'express';
 import passport from 'passport';
-import {
-  asyncMiddleware,
-} from '../../libs/utils';
-import {
-  compile,
-  loadTemplate,
-} from '../../libs/template';
+import url from 'url';
 import config from '../../config';
-import {
-  TEMPLATES,
-} from '../../constants';
-import {
-  logger,
-} from '../../libs/logger';
+import { TEMPLATES } from '../../constants';
+import { logger } from '../../libs/logger';
+import { compile, loadTemplate } from '../../libs/template';
+import { asyncMiddleware } from '../../libs/utils';
 
 const router = new Router();
 
