@@ -52,7 +52,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     workingDir: '/tmp',
     command: '',
     args: '${computer.jnlpmac} ${computer.name}',
-    alwaysPullImage: true
+    alwaysPullImage: false
     // envVars: [
     //     secretEnvVar(key: 'SLACK_TOKEN', secretName: 'slack', secretKey: 'token')
     //   ]
