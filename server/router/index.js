@@ -25,8 +25,8 @@
 import cors from 'cors';
 import config from '../config';
 import album from './routes/album';
-import ehlo from './routes/ehlo';
 import auth from './routes/auth';
+import ehlo from './routes/ehlo';
 
 const corsOptions = {
   origin: config.get('appUrl'),

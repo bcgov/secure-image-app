@@ -23,8 +23,8 @@
 'use strict';
 
 import fs from 'fs';
-import path from 'path';
 import handlebars from 'handlebars';
+import path from 'path';
 import config from '../config';
 
 export const loadTemplate = fileName => new Promise((resolve, reject) => {

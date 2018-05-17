@@ -22,8 +22,8 @@
 
 'use strict';
 
-import request from 'request';
 import jwt from 'jsonwebtoken';
+import request from 'request';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
 import config from '../config';
 import { logger } from './logger';

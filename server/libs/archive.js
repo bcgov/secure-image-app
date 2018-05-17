@@ -22,16 +22,12 @@
 
 'use strict';
 
-import path from 'path';
-import fs from 'fs';
 import archiver from 'archiver';
+import fs from 'fs';
+import path from 'path';
 import config from '../config';
+import { getObject, listBucket, removeObject } from './bucket';
 import { logger } from './logger';
-import {
-  listBucket,
-  getObject,
-  removeObject,
-} from './bucket';
 
 const archiveFileBaseName = config.get('archiveFileBaseName');
 const tempFilePath = '/tmp';

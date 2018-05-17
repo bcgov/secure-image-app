@@ -22,11 +22,11 @@
 
 'use strict';
 
-import url from 'url';
 import express from 'express';
+import session from 'express-session';
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
-import session from 'express-session';
+import url from 'url';
 import config from '../config';
 
 const authmware = (app) => {

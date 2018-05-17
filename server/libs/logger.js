@@ -23,9 +23,9 @@
 
 'use strict';
 
-import winston from 'winston';
 import chalk from 'chalk';
 import ip from 'ip';
+import winston from 'winston';
 
 const divider = chalk.gray('\n-----------------------------------');
 const options = {};
