@@ -44,7 +44,7 @@ def notifySlack(text, channel, url, attachments, icon) {
 podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
-    image: '172.50.0.2:5000/devex-mpf-secure/jenkins-slave-node6:latest',
+    image: '172.50.0.2:5000/devex-mpf-secure-tools/jenkins-slave-node6:latest',
     resourceRequestCpu: '500m',
     resourceLimitCpu: '1000m',
     resourceRequestMemory: '1Gi',
