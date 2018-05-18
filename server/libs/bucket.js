@@ -35,6 +35,27 @@ const client = new minio.Client({
   region: config.get('minio:region'),
 });
 
+/**
+ * Get the status of an object
+ *
+ * @param {String} bucket The name of the bucket
+ * @param {String} name The name of the object to retrieve
+ */
+export const statObject = (bucket, name) => new Promise((resolve, reject) => {
+  client.statObject(bucket, name, (err, stat) => {
+    if (err) {
+      return reject(err);
+    }
+
+    return resolve(stat);
+  });
+});
+
+/**
+ * Crete a new bucket
+ *
+ * @param {String} bucket The name of the bucket
+ */
 export const makeBucket = bucket => new Promise((resolve, reject) => {
   client.makeBucket(bucket, config.get('minio:region'), (err) => {
     if (err) {
@@ -46,6 +67,11 @@ export const makeBucket = bucket => new Promise((resolve, reject) => {
   });
 });
 
+/**
+ * Check if a bucket exists
+ *
+ * @param {String} bucket The name of the bucket
+ */
 export const bucketExists = bucket => new Promise((resolve, reject) => {
   // The API for `bucketExists` does not seem to match the documentaiton. In
   // returns an error with code 'NoSuchBucket' if a bucket does *not* exists;
@@ -182,5 +208,39 @@ export const createBucketIfRequired = async (bucket) => {
   } catch (err) {
     logger.error(`Unable to create bucket: ${bucket}, error = ${err}`);
     throw new Error(`Unable to create bucket: ${bucket}`);
+  }
+};
+
+export const expiredTopLevelObjects = async (bucket, prefix = '', days = 90) => {
+  try {
+    const topLevelObjects = await listBucket(bucket, prefix);
+    const promises = topLevelObjects.map(async (e) => {
+      // container objects have a prefix property
+      if (typeof (e.prefix) !== 'undefined') {
+        return [await statObject(bucket, e.prefix), { prefix: e.prefix }];
+      }
+
+      return null;
+    });
+
+    const results = (await Promise.all(promises))
+      .map((i) => {
+        const [a, b] = i;
+        return { ...a, ...b };
+      });
+
+    const now = new Date();
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const old = results.filter((i) => {
+      const then = new Date(i.lastModified);
+      const deltaAsMs = Math.abs(now.getTime() - then.getTime());
+      const deltaAsDays = Math.round(deltaAsMs / oneDayInMs);
+      return deltaAsDays >= days;
+    });
+
+    return old;
+  } catch (error) {
+    // console.log(error.message);
+    throw error;
   }
 };
