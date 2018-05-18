@@ -18,8 +18,6 @@
 // Created by Jason Leach on 2018-01-10.
 //
 
-/* eslint-env es6 */
-
 'use strict';
 
 const gulp = require('gulp');
@@ -32,23 +30,33 @@ gulp.task('clean', () => gulp.src('build', { read: false })
     force: true,
   })));
 
-gulp.task('transpile', ['clean'], () => gulp.src('server/**/*.js')
-  .pipe(babel())
-  .pipe(gulp.dest('build/server')));
+gulp.task('transpile-src', ['clean'], () =>
+  gulp.src('server/**/*.js')
+    .pipe(babel())
+    .pipe(gulp.dest('build/server')));
 
-gulp.task('copy-config', ['clean'], () => gulp.src('server/config/*.json')
-  .pipe(gulp.dest('build/server/config')));
+gulp.task('transpile-scripts', ['clean'], () =>
+  gulp.src('scripts/**/*.js')
+    .pipe(babel())
+    .pipe(gulp.dest('build/scripts')));
 
-gulp.task('copy-node-config', ['clean'], () => gulp.src(['apidoc.json', 'package.json', 'package-lock.json'])
-  .pipe(gulp.dest('build')));
+gulp.task('copy-config', ['clean'], () =>
+  gulp.src('server/config/*.json')
+    .pipe(gulp.dest('build/server/config')));
 
-gulp.task('copy-templates', ['clean'], () => gulp.src('templates/**')
-  .pipe(gulp.dest('build/templates')));
+gulp.task('copy-node-config', ['clean'], () =>
+  gulp.src(['apidoc.json', 'package.json', 'package-lock.json'])
+    .pipe(gulp.dest('build')));
 
-gulp.task('copy-public', ['clean'], () => gulp.src('public/**')
-  .pipe(gulp.dest('build/public')));
+gulp.task('copy-templates', ['clean'], () =>
+  gulp.src('templates/**')
+    .pipe(gulp.dest('build/templates')));
 
-gulp.task('apidoc', ['clean', 'transpile', 'copy-node-config'], done => apidoc({
+gulp.task('copy-public', ['clean'], () =>
+  gulp.src('public/**')
+    .pipe(gulp.dest('build/public')));
+
+gulp.task('apidoc', ['clean', 'transpile-src', 'copy-node-config'], done => apidoc({
   src: 'build/',
   dest: 'build/public/doc/api',
   encoding: 'utf8',
@@ -56,6 +64,7 @@ gulp.task('apidoc', ['clean', 'transpile', 'copy-node-config'], done => apidoc({
   includeFilters: ['server/.*\\.js$'],
 }, done));
 
-gulp.task('default', ['clean', 'transpile', 'copy-config',
-  'copy-node-config', 'copy-templates', 'copy-public', 'apidoc',
+gulp.task('default', ['clean', 'transpile-src', 'transpile-scripts',
+  'copy-config', 'copy-node-config', 'copy-templates', 'copy-public',
+  'apidoc',
 ]);

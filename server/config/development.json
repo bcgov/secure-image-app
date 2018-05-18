@@ -4,6 +4,7 @@
 	"templates": {
 		"path": "templates"
 	},
+	"albumExpirationInDays": 90,
 	"minio": {
 		"bucket": "secure-image-dv",
 		"port": 9000,
