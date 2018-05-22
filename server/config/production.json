@@ -1,0 +1,26 @@
+{
+	"temporaryUploadPath": "uploads",
+	"archiveFileBaseName": "IMG_",
+	"templates": {
+		"path": "templates"
+	},
+	"albumExpirationInDays": 90,
+	"minio": {
+		"bucket": "secure-image-pr",
+		"port": 9000,
+		"secure": false,
+		"expiry": 604800,
+		"region": "us-east-1"
+	},
+	"session": {
+		"maxAge": 604800000,
+		"expires": 604800000
+  },
+  "sso": {
+		"clientId": "secure-image-api",
+		"callback": "/v1/auth/callback",
+		"authUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/auth",
+		"tokenUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/token",
+		"certsUrl": "https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/certs"
+  }
+}
