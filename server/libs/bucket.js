@@ -199,6 +199,16 @@ export const removeObject = (bucket, name) => new Promise((resolve, reject) => {
 
 // HELPERS
 
+export const isExpired = async (object, days) => {
+  const now = new Date();
+  const oneDayInMs = 24 * 60 * 60 * 1000;
+  const then = new Date(object.lastModified);
+  const deltaAsMs = Math.abs(now.getTime() - then.getTime());
+  const deltaAsDays = Math.round(deltaAsMs / oneDayInMs);
+
+  return deltaAsDays >= days;
+};
+
 export const createBucketIfRequired = async (bucket) => {
   try {
     const exists = await bucketExists(bucket);
@@ -227,18 +237,10 @@ export const expiredTopLevelObjects = async (bucket, prefix = '', days = 90) => 
       .map((i) => {
         const [a, b] = i;
         return { ...a, ...b };
-      });
+      })
+      .filter(i => isExpired(i, days));
 
-    const now = new Date();
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const old = results.filter((i) => {
-      const then = new Date(i.lastModified);
-      const deltaAsMs = Math.abs(now.getTime() - then.getTime());
-      const deltaAsDays = Math.round(deltaAsMs / oneDayInMs);
-      return deltaAsDays >= days;
-    });
-
-    return old;
+    return results;
   } catch (error) {
     // console.log(error.message);
     throw error;
