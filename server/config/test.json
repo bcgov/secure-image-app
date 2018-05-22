@@ -6,7 +6,7 @@
 	},
 	"albumExpirationInDays": 90,
 	"minio": {
-		"bucket": "secure-image",
+		"bucket": "secure-image-st",
 		"port": 9000,
 		"secure": false,
 		"expiry": 604800,
