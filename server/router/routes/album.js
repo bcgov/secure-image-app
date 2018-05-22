@@ -23,6 +23,7 @@
 'use strict';
 
 import { Router } from 'express';
+import util from 'util';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
@@ -39,6 +40,8 @@ import {
   getObject,
   createBucketIfRequired,
   bucketExists,
+  statObject,
+  isExpired,
 } from '../../libs/bucket';
 import {
   writeToTemporaryFile,
@@ -229,7 +232,8 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   const etag = await putObject(bucket, fileName, stream);
 
   // Cleanup the temorary archive file.
-  fs.unlink(file);
+  const unlinkAsync = util.promisify(fs.unlink);
+  await unlinkAsync(file);
 
   // If we don't have an etag the file was not written to the backing
   // store.
@@ -325,17 +329,36 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
  /* eslint-enable */
 router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(async (req, res) => {
   const { albumId, fileName } = req.params;
-  const buffer = await getObject(bucket, path.join(albumId, fileName));
+  const albumExpirationInDays = config.get('albumExpirationInDays');
 
-  if (!buffer) {
-    return res.status(500).json({ message: 'Unable to fetch album archive.' });
+  try {
+    const stat = await statObject(bucket, `${albumId}/`);
+
+    if (isExpired(stat, albumExpirationInDays)) {
+      const baseUrl = config.get('appUrl');
+      const redirectTo = '/expired.html';
+      const redirectUrl = url.resolve(baseUrl, redirectTo);
+
+      res.redirect(301, redirectUrl); // 301 Moved Permanently
+    }
+
+    const buffer = await getObject(bucket, path.join(albumId, fileName));
+
+    if (!buffer) {
+      res.status(500).json({
+        message: 'Unable to fetch album archive.',
+      });
+    }
+
+    res.contentType('application/octet-stream');
+
+    logger.info(`Download album ZIP archive from bucket ${bucket}, path ${path.join(albumId, fileName)}`);
+
+    res.end(buffer, 'binary');
+  } catch (error) {
+    const message = 'Unable to retrieve album';
+    logger.error(`${message}, err = ${error.message}`);
   }
-
-  res.contentType('application/octet-stream');
-
-  logger.info(`Download album ZIP archive from bucket ${bucket}, path ${path.join(albumId, fileName)}`);
-
-  return res.end(buffer, 'binary');
 }));
 
 module.exports = router;
