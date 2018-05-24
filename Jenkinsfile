@@ -21,6 +21,7 @@
 import groovy.json.JsonOutput
 
 def APP_NAME = 'secure-image-api'
+def BUILD_CONFIG_BASE_NAME = 'api'
 def BUILD_CONFIG = APP_NAME
 def IMAGESTREAM_NAME = APP_NAME
 def TAG_NAMES = ['dev', 'test', 'prod']
@@ -139,7 +140,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     stage('Build') {
       echo "Build: ${BUILD_ID}"
       // run the oc build to package the artifacts into a docker image
-      openshiftBuild bldCfg: APP_NAME, showBuildLogs: 'true', verbose: 'true'
+      openshiftBuild bldCfg: "BUILD_CONFIG_BASE_NAME-GIT_BRANCH_NAME", showBuildLogs: 'true', verbose: 'true'
 
       // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
       // Tag the images for deployment based on the image's hash
