@@ -63,17 +63,18 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       echo "Checking out source"
       checkout scm
 
-      echo "${env.BRANCH_NAME}"
-      echo "$env.BRANCH_NAME"
-      echo "${BRANCH_NAME}"
-
       GIT_COMMIT_SHORT_HASH = sh (
         script: """git describe --always""",
         returnStdout: true).trim()
       GIT_COMMIT_AUTHOR = sh (
         script: """git show -s --pretty=%an""",
         returnStdout: true).trim()
-
+      GIT_BRANCH_NAME = sh (
+        script: """git branch -a -v --no-abbrev --contains ${GIT_COMMIT_SHORT_HASH} | \
+        grep 'remotes' | \
+        awk -F ' ' '{print \$1}' | \
+        awk -F '/' '{print \$3}'""",
+        returnStdout: true).trim()
       SLACK_TOKEN = sh (
         script: """oc get secret/slack -o template --template="{{.data.token}}" | base64 --decode""",
         returnStdout: true).trim()
@@ -147,7 +148,14 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         returnStdout: true).trim()
       echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
-      openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+      // try {
+      if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
+        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+        echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
+      } else {
+        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+        echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
+      }
 
       try {
         def attachment = [:]
@@ -162,15 +170,17 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       }
     }
   }
-  stage('Approval') {
-    timeout(time: 1, unit: 'DAYS') {
-      input message: "Deploy to test?", submitter: 'jleach-admin'
-    }
-    node ('master') {
-      stage('Promotion') {
-        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-        notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+  if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
+    stage('Approval') {
+      timeout(time: 1, unit: 'DAYS') {
+        input message: "Deploy to test?", submitter: 'jleach-admin'
       }
-    }  
+      node ('master') {
+        stage('Promotion') {
+          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+        }
+      }  
+    }
   }
 }
