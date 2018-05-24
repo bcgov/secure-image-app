@@ -137,28 +137,28 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     }
 
     stage('Build') {
-      echo "Build: ${BUILD_ID}"
-      // run the oc build to package the artifacts into a docker image
-      def BUILD_CONFIG = "${BUILD_CONFIG_BASE_NAME}-${GIT_BRANCH_NAME}"
-      openshiftBuild bldCfg: BUILD_CONFIG, showBuildLogs: 'true', verbose: 'true'
+       try {
+        echo "Build: ${BUILD_ID}"
 
-      // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
-      // Tag the images for deployment based on the image's hash
-      IMAGE_HASH = sh (
-        script: """oc get istag ${IMAGESTREAM_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
-        returnStdout: true).trim()
-      echo ">> IMAGE_HASH: ${IMAGE_HASH}"
+        // run the oc build to package the artifacts into a docker image
+        def BUILD_CONFIG = "${BUILD_CONFIG_BASE_NAME}-${GIT_BRANCH_NAME}"
+        openshiftBuild bldCfg: BUILD_CONFIG, showBuildLogs: 'true', verbose: 'true'
 
-      // try {
-      if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
-        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-        echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
-      } else {
-        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-        echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
-      }
+        // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
+        // Tag the images for deployment based on the image's hash
+        IMAGE_HASH = sh (
+          script: """oc get istag ${IMAGESTREAM_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
+          returnStdout: true).trim()
+        echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
-      try {
+        if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
+          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
+        } else {
+          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
+        }
+
         def attachment = [:]
         attachment.title = "API Build ${BUILD_ID} OK! :heart: :tada:"
         attachment.fallback = 'See build log for more details'
@@ -167,7 +167,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
 
         notifySlack("${APP_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
       } catch (error) {
-        echo "Unable send update to slack, error = ${error}"
+        echo "Unable complete build, error = ${error}"
       }
     }
   }
