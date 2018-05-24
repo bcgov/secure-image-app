@@ -1,21 +1,85 @@
 
-## Example Readme
+## About
 
-This readme serves as an example readme for a government open source project. A brief description of your project would go here.
+This is the API component to the Secure Image application suite. Secure Image is designed to provide a simple yet secure way for people to take sensitive photographs (or image related documentation) and store it outside of the device's camera roll. It also provides a convenient way to extract the images by providing a secure URL to download an album.
 
-## Features
+Additional component can be fond in these repos:
+
+[iOS Application](https://github.com/bcgov/secure-image-ios)
+
+[Android Application](https://github.com/bcgov/secure-image-android)
 
 ## Usage
 
-## Requirements
+As part of the build process API documentation is automatically built via `apidoc` and packaged with the output image. Once deployed the documentation can be viewed at the following URL; update the protocol and host according to your own deployment.
 
-## Installation
+`https://api-devex-mpf-secure-test.pathfinder.gov.bc.ca/docs/`
 
-## Project Status
+## Deployment
 
-## Goals/Roadmap
+Use the OpenShift `deploy.json` template in this repo with the following (sample) command.
+
+```console
+ oc process -f openshift/templates/deploy.json \
+ -p NODE_ENV="development" \
+ -p SSO_CLIENT_SECRET="abc123" \
+ -p MINIO_VOLUME_CAPACITY=3Gi \
+ -p ENV_NAMESPACE="devex-mpf-secure-test" \
+ -p IMAGE_TAG="test" \
+| oc create -f -
+```
+
+| Parameter          | Optional      | Description   |
+| ------------------ | ------------- | ------------- |
+| NODE_ENV           | NO            | The node environment name |
+| SSO_CLIENT_SECRET  | NO            | Client secret provieded by SSO |
+| ENV_NAMESPACE      | NO            | The environment namespace your deploying to |
+| IMAGE_TAG          | NO            | The image tag you wish to deploy |
+
+* See the `deploy.json` template for other *optional* parameters.
+
+## Local Installation for Development
+
+There are two steps to running this project locally for development:
+
+1. Minio
+
+Run a local minio docker image (find them [here](https://hub.docker.com/r/minio/minio/)). The sample command below is using a docker volume named `minio_data` to store data; see the Docker documentation on how to do this if you're interested. When minio starts it will print the `MINIO_ACCESS_KEY` and `MINIO_SECRET_KEY` needed for step two.
+
+```console
+docker run -p 9000:9000 --name minio -v minio_data:/data minio/minio server /data
+```
+
+2. API
+
+Create a file called `.env` in the root project folder and populate it with the following environment variables; update them as needed.
+
+```console
+NODE_ENV=development
+MINIO_ACCESS_KEY="XXXXXXXX"
+MINIO_SECRET_KEY="YYYYYYYYYYYYYYYY"
+MINIO_ENDPOINT="localhost"
+SSO_CLIENT_SECRET="00000000-aaaa-aaaa-aaaa-000000000000"
+SESSION_SECRET="abc123"
+APP_URL="http://localhost:8000"
+```
+
+Run the node application with the following command:
+
+```console
+npm run dev
+```
+
+## Project Status / Goals / Roadmap
+
+This project is completed. 
+
+Progress to date, known issues, or new features will be documented on our publicly available Trello board [here](https://trello.com/b/UYJpEzrT/secure-image-app).
 
 ## Getting Help or Reporting an Issue
+
+Send a note to bcdevexchange@gov.bc.ca and you'll get routed to the right person to help you out.
+
 
 ## How to Contribute
 
