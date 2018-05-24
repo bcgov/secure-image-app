@@ -32,7 +32,7 @@ Use the OpenShift `deploy.json` template in this repo with the following (sample
 | Parameter          | Optional      | Description   |
 | ------------------ | ------------- | ------------- |
 | NODE_ENV           | NO            | The node environment name |
-| SSO_CLIENT_SECRET  | NO            | Client secret provieded by SSO |
+| SSO_CLIENT_SECRET  | NO            | Client secret provided by SSO |
 | ENV_NAMESPACE      | NO            | The environment namespace your deploying to |
 | IMAGE_TAG          | NO            | The image tag you wish to deploy |
 
