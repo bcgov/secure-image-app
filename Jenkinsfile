@@ -140,7 +140,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
     stage('Build') {
       echo "Build: ${BUILD_ID}"
       // run the oc build to package the artifacts into a docker image
-      openshiftBuild bldCfg: BUILD_CONFIG_BASE_NAME-GIT_BRANCH_NAME, showBuildLogs: 'true', verbose: 'true'
+      openshiftBuild bldCfg: ${BUILD_CONFIG_BASE_NAME}-${GIT_BRANCH_NAME}, showBuildLogs: 'true', verbose: 'true'
 
 
       // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
