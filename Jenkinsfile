@@ -63,6 +63,10 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       echo "Checking out source"
       checkout scm
 
+      echo "${env.BRANCH_NAME}"
+      echo "$env.BRANCH_NAME"
+      echo "${BRANCH_NAME}"
+
       GIT_COMMIT_SHORT_HASH = sh (
         script: """git describe --always""",
         returnStdout: true).trim()
