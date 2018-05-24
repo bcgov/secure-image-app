@@ -71,7 +71,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com:bcgov/secure-image-api.git"
   },
-  "author": "Jason C. Leach <jaosn.leach@fullboar.ca>",
+  "author": "Jason C. Leach <jason.leach@fullboar.ca>",
   "license": "Apache-2.0",
   "homepage": "https://github.com:bcgov/secure-image-api#readme",
   "apidoc": {
