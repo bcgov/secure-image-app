@@ -13,7 +13,7 @@
       "kind": "Service",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${API_DEPLOYMENT_NAME}",
         "labels": {
           "app": "${NAME}"
         },
@@ -28,7 +28,31 @@
           "targetPort": 8080
         }],
         "selector": {
-          "name": "${NAME}"
+          "deploymentconfig": "${API_DEPLOYMENT_NAME}"
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MINIO_DEPLOYMENT_NAME}",
+        "labels": {
+          "app": "${MINIO_DEPLOYMENT_NAME}"
+        },
+        "annotations": {
+          "description": "Exposes the minio server"
+        }
+      },
+      "spec": {
+        "ports": [{
+          "name": "9000-tcp",
+          "port": 9000,
+          "protocol": "TCP",
+          "targetPort": 9000
+        }],
+        "selector": {
+          "deploymentconfig": "${MINIO_DEPLOYMENT_NAME}"
         }
       }
     },
@@ -47,8 +71,11 @@
         },
         "to": {
           "kind": "Service",
-          "name": "${NAME}",
+          "name": "${API_SERVICE_NAME}",
           "weight": 100
+        },
+        "tls": {
+          "termination": "edge"
         }
       }
     },
@@ -57,13 +84,13 @@
       "type": "Opaque",
       "apiVersion": "v1",
       "metadata": {
-        "name": "sso",
+        "name": "${SSO_SECRET_NAME}",
         "labels": {
           "app": "${NAME}"
         }
       },
       "stringData": {
-        "ssoClientSecret": "${SSO_CLIENT_SECRET}"
+        "secret": "${SSO_CLIENT_SECRET}"
       }
     },
     {
@@ -71,20 +98,161 @@
       "type": "Opaque",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${API_SECRET_NAME}",
         "labels": {
           "app": "${NAME}"
         }
       },
       "stringData": {
-        "apiSessionSecret": "${API_SESSION_SECRET}"
+        "sessionSecret": "${API_SESSION_SECRET}"
+      }
+    },
+    {
+      "kind": "Secret",
+      "type": "Opaque",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MINIO_SECRET_NAME}",
+        "labels": {
+          "app": "${NAME}"
+        }
+      },
+      "stringData": {
+        "accessKey": "${MINIO_ACCESS_KEY}",
+        "secretKey": "${MINIO_SECRET_KEY}"
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${MINIO_VOLUME_NAME}"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${MINIO_VOLUME_CAPACITY}"
+          }
+        }
       }
     },
     {
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${MINIO_DEPLOYMENT_NAME}",
+        "annotations": {
+          "description": "Defines how to deploy the minio server"
+        }
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "app": "minio",
+          "deploymentconfig": "${MINIO_DEPLOYMENT_NAME}"
+        },
+        "strategy": {
+          "activeDeadlineSeconds": 21600,
+          "recreateParams": {
+            "timeoutSeconds": 600
+          },
+          "resources": {},
+          "type": "Recreate"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "minio",
+              "deploymentconfig": "${MINIO_DEPLOYMENT_NAME}"
+            }
+          },
+          "spec": {
+            "containers": [{
+              "env": [{
+                  "name": "MINIO_ACCESS_KEY",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "accessKey",
+                      "name": "${MINIO_SECRET_NAME}"
+                    }
+                  }
+                },
+                {
+                  "name": "MINIO_SECRET_KEY",
+                  "valueFrom": {
+                    "secretKeyRef": {
+                      "key": "secretKey",
+                      "name": "${MINIO_SECRET_NAME}"
+                    }
+                  }
+                },
+                {
+                  "name": "MINIO_CONFIG_DIR",
+                  "value": "/tmp"
+                },
+                {
+                  "name": "MINIO_DATA_DIR",
+                  "value": "/data"
+                }
+              ],
+              "image": "172.50.0.2:5000/openshift/minio:latest",
+              "imagePullPolicy": "Always",
+              "name": "${MINIO_DEPLOYMENT_NAME}",
+              "ports": [{
+                "containerPort": 9000,
+                "protocol": "TCP"
+              }],
+              "resources": {},
+              "terminationMessagePath": "/dev/termination-log",
+              "terminationMessagePolicy": "File",
+              "volumeMounts": [{
+                "mountPath": "/data",
+                "name": "minio-vol"
+              }]
+            }],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [{
+              "name": "minio-vol",
+              "persistentVolumeClaim": {
+                "claimName": "${MINIO_VOLUME_NAME}"
+              }
+            }]
+          }
+        },
+        "test": false,
+        "triggers": [{
+            "type": "ConfigChange"
+          },
+          {
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "minio"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "minio:latest",
+                "namespace": "openshift"
+              }
+            },
+            "type": "ImageChange"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${API_DEPLOYMENT_NAME}",
         "annotations": {
           "description": "Defines how to deploy the application server"
         }
@@ -98,7 +266,7 @@
             "imageChangeParams": {
               "automatic": true,
               "containerNames": [
-                "${NAME}"
+                "${API_DEPLOYMENT_NAME}"
               ],
               "from": {
                 "kind": "ImageStreamTag",
@@ -113,18 +281,18 @@
         ],
         "replicas": 1,
         "selector": {
-          "name": "${NAME}"
+          "name": "${API_DEPLOYMENT_NAME}"
         },
         "template": {
           "metadata": {
-            "name": "${NAME}",
+            "name": "${API_DEPLOYMENT_NAME}",
             "labels": {
-              "name": "${NAME}"
+              "name": "${API_DEPLOYMENT_NAME}"
             }
           },
           "spec": {
             "containers": [{
-              "name": "${NAME}",
+              "name": "${API_DEPLOYMENT_NAME}",
               "image": " ",
               "ports": [{
                 "containerPort": 8080,
@@ -147,15 +315,15 @@
                 }
               },
               "env": [{
-                  "name": "MINIO_SERVICE",
-                  "value": "${MINIO_SERVICE}"
+                  "name": "MINIO_ENDPOINT",
+                  "value": "${MINIO_DEPLOYMENT_NAME}.${ENV_NAMESPACE}.svc"
                 },
                 {
                   "name": "MINIO_ACCESS_KEY",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "name": "${NAME}",
-                      "key": "minioAccessKey"
+                      "name": "${MINIO_SECRET_NAME}",
+                      "key": "accessKey"
                     }
                   }
                 },
@@ -163,8 +331,8 @@
                   "name": "MINIO_SECRET_KEY",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "name": "${NAME}",
-                      "key": "minioSecretKey"
+                      "name": "${MINIO_SECRET_NAME}",
+                      "key": "secretKey"
                     }
                   }
                 },
@@ -173,8 +341,8 @@
                   "name": "API_SESSION_SECRET",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "name": "${NAME}",
-                      "key": "ssoClientSecret"
+                      "name": "${API_SECRET_NAME}",
+                      "key": "sessionSecret"
                     }
                   }
                 },
@@ -182,8 +350,8 @@
                   "name": "SSO_CLIENT_SECRET",
                   "valueFrom": {
                     "secretKeyRef": {
-                      "name": "${NAME}",
-                      "key": "ssoClientSecret"
+                      "name": "${SSO_SECRET_NAME}",
+                      "key": "secret"
                     }
                   }
                 },
@@ -199,7 +367,7 @@
 
                 {
                   "name": "APP_URL",
-                  "value": "${APP_URL}"
+                  "value": "https://${API_DEPLOYMENT_NAME}-${ENV_NAMESPACE}.pathfinder.gov.bc.ca"
                 }
               ],
               "resources": {
@@ -221,10 +389,44 @@
       "required": true
     },
     {
+      "name": "ENV_NAMESPACE",
+      "displayName": "Image Namespace",
+      "required": true,
+      "description": "The namespace of the OpenShift project containing the imagestream for the application."
+    },
+    {
+      "name": "API_SERVICE_NAME",
+      "displayName": "Output Image Tag",
+      "description": "The tag given to the built image.",
+      "value": "api",
+      "required": true
+    },
+    {
+      "name": "ROUTE_NAME",
+      "displayName": "Application Route",
+      "description": "The name of the default route use to access this service.",
+      "value": "api",
+      "required": true
+    },
+    {
       "name": "IMAGE_TAG",
       "displayName": "Output Image Tag",
       "description": "The tag given to the built image.",
       "value": "latest",
+      "required": true
+    },
+    {
+      "name": "MINIO_DEPLOYMENT_NAME",
+      "displayName": "Minio deployment name",
+      "description": "The name given to the minio instance deployment.",
+      "value": "minio",
+      "required": true
+    }, 
+    {
+      "name": "API_DEPLOYMENT_NAME",
+      "displayName": "API deployment name",
+      "description": "The name given to the minio instance deployment.",
+      "value": "api",
       "required": true
     },
     {
@@ -242,19 +444,6 @@
       "required": true
     },
     {
-      "name": "ROUTE_NAME",
-      "displayName": "Application Route",
-      "description": "The name of the default route use to access this service.",
-      "value": "api",
-      "required": true
-    },
-    {
-      "name": "MINIO_SERVICE",
-      "displayName": "Minio Service",
-      "description": "The endpoint for the minio storage service.",
-      "required": true
-    },
-    {
       "name": "PORT",
       "displayName": "Server Port",
       "description": "The perferd port for the server to listen on.",
@@ -268,12 +457,6 @@
       "required": true
     },
     {
-      "name": "APP_URL",
-      "displayName": "Application URL",
-      "description": "The fully qualified external URL to access this service.",
-      "value": ""
-    },
-    {
       "name": "API_SESSION_SECRET",
       "displayName": "Express session secret",
       "generate": "expression",
@@ -281,8 +464,55 @@
       "required": true
     },
     {
+      "name": "SSO_SECRET_NAME",
+      "displayName": "SSO secret name",
+      "generate": "expression",
+      "required": true,
+      "value": "sso"
+    },
+    {
       "name": "SSO_CLIENT_SECRET",
       "displayName": "Express session secret",
+      "required": true
+    },
+    {
+      "name": "MINIO_SECRET_NAME",
+      "displayName": "Minio secret name",
+      "generate": "expression",
+      "required": true,
+      "value": "minio"
+    },
+    {
+      "name": "MINIO_ACCESS_KEY",
+      "displayName": "Minio access key",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{8}",
+      "required": true
+    },
+    {
+      "name": "MINIO_SECRET_KEY",
+      "displayName": "Minio secret key",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{16}",
+      "required": true
+    },
+    {
+      "name": "API_SECRET_NAME",
+      "displayName": "Minio secret name",
+      "generate": "expression",
+      "required": true,
+      "value": "api"
+    },
+    {
+      "name": "MINIO_VOLUME_NAME",
+      "displayName": "Name of the minio storage PV",
+      "required": true,
+      "value": "minio-data"
+    },
+    {
+      "name": "MINIO_VOLUME_CAPACITY",
+      "displayName": "Size of minio storage PV in Gi",
+      "from": "[0-9]{3}Gi",
       "required": true
     }
   ]
