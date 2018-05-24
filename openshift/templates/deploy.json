@@ -71,7 +71,7 @@
         },
         "to": {
           "kind": "Service",
-          "name": "${API_SERVICE_NAME}",
+          "name": "${API_DEPLOYMENT_NAME}",
           "weight": 100
         },
         "tls": {
@@ -395,33 +395,12 @@
       "description": "The namespace of the OpenShift project containing the imagestream for the application."
     },
     {
-      "name": "API_SERVICE_NAME",
-      "displayName": "Output Image Tag",
-      "description": "The tag given to the built image.",
-      "value": "api",
-      "required": true
-    },
-    {
       "name": "ROUTE_NAME",
       "displayName": "Application Route",
       "description": "The name of the default route use to access this service.",
       "value": "api",
       "required": true
     },
-    {
-      "name": "IMAGE_TAG",
-      "displayName": "Output Image Tag",
-      "description": "The tag given to the built image.",
-      "value": "latest",
-      "required": true
-    },
-    {
-      "name": "MINIO_DEPLOYMENT_NAME",
-      "displayName": "Minio deployment name",
-      "description": "The name given to the minio instance deployment.",
-      "value": "minio",
-      "required": true
-    }, 
     {
       "name": "API_DEPLOYMENT_NAME",
       "displayName": "API deployment name",
@@ -434,6 +413,12 @@
       "displayName": "Image Namespace",
       "description": "The namespace of the OpenShift project containing the imagestream for the application.",
       "value": "devex-mpf-secure-tools",
+      "required": true
+    },
+    {
+      "name": "IMAGE_TAG",
+      "displayName": "API Image Tag",
+      "description": "The tag given to the built image.",
       "required": true
     },
     {
@@ -475,6 +460,13 @@
       "displayName": "Express session secret",
       "required": true
     },
+    {
+      "name": "MINIO_DEPLOYMENT_NAME",
+      "displayName": "Minio deployment name",
+      "description": "The name given to the minio instance deployment.",
+      "value": "minio",
+      "required": true
+    }, 
     {
       "name": "MINIO_SECRET_NAME",
       "displayName": "Minio secret name",
