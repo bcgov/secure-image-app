@@ -15,6 +15,22 @@ As part of the build process API documentation is automatically built via `apido
 
 `https://api-devex-mpf-secure-test.pathfinder.gov.bc.ca/docs/`
 
+## Build
+
+Use the OpenShift `build.json` template in this repo with the following (sample) command.
+
+```console
+oc process -f openshift/templates/build.json \
+-p GIT_REF=develop | \
+oc create -f -
+```
+
+| Parameter          | Optional      | Description   |
+| ------------------ | ------------- | ------------- |
+| GIT_REF            | NO            | The branch to build from |
+
+* See the `build.json` template for other *optional* parameters.
+
 ## Deployment
 
 Use the OpenShift `deploy.json` template in this repo with the following (sample) command.
@@ -25,8 +41,8 @@ Use the OpenShift `deploy.json` template in this repo with the following (sample
  -p SSO_CLIENT_SECRET="abc123" \
  -p MINIO_VOLUME_CAPACITY=3Gi \
  -p ENV_NAMESPACE="devex-mpf-secure-test" \
- -p IMAGE_TAG="test" \
-| oc create -f -
+ -p IMAGE_TAG="test" | \
+oc create -f -
 ```
 
 | Parameter          | Optional      | Description   |
