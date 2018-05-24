@@ -78,6 +78,10 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       SLACK_TOKEN = sh (
         script: """oc get secret/slack -o template --template="{{.data.token}}" | base64 --decode""",
         returnStdout: true).trim()
+
+      sh "printenv"
+      sh "exit 1001"
+
     }
     
     stage('Install') {
@@ -168,6 +172,16 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         notifySlack("${APP_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
       } catch (error) {
         echo "Unable complete build, error = ${error}"
+
+        def attachment = [:]
+        attachment.fallback = 'See build log for more details'
+        attachment.title = "API Build ${BUILD_ID} FAILED! :face_with_head_bandage: :hankey:"
+        attachment.color = '#CD0000' // Red
+        attachment.text = "There are issues OpenShift buildgit branch -a -v --no-abbrev --contains c2eeaf0.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
+        // attachment.title_link = "${env.BUILD_URL}"
+
+        notifySlack("${APP_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+        sh "exit 1001"
       }
     }
   }
