@@ -21,15 +21,18 @@ Use the OpenShift `build.json` template in this repo with the following (sample)
 
 ```console
 oc process -f openshift/templates/build.json \
--p GIT_REF=develop | \
+-p GIT_REF=develop \
+-p SLACK_SECRET='helloworld' | \
 oc create -f -
 ```
 
 | Parameter          | Optional      | Description   |
 | ------------------ | ------------- | ------------- |
 | GIT_REF            | NO            | The branch to build from |
+| SLACK_SECRET       | NO            | Slack token to post to channel(s) |
 
 * See the `build.json` template for other *optional* parameters.
+** To build multiple branches you'll use the config file multiple times. This will create errors from the `oc` command output that can safely be ignored. For example: `Error from server (AlreadyExists): secrets "github" already exists`
 
 ## Deployment
 

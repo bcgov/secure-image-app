@@ -27,6 +27,7 @@ def TAG_NAMES = ['dev', 'test', 'prod']
 def PIRATE_ICO = 'http://icons.iconarchive.com/icons/aha-soft/torrent/64/pirate-icon.png'
 def JENKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 def OPENSHIFT_ICO = 'https://commons.wikimedia.org/wiki/File:OpenShift-LogoType.svg'
+def GIT_BRANCH_NAME = ("${env.JOB_BASE_NAME}".contains("master")) ? "master" : "develop"
 
 def notifySlack(text, channel, url, attachments, icon) {
     def slackURL = url
@@ -59,6 +60,11 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
   )
 ]) {
    node('secureimg-api-node-build') {
+
+    SLACK_TOKEN = sh (
+      script: """oc get secret/slack -o template --template="{{.data.token}}" | base64 --decode""",
+      returnStdout: true).trim()
+
     stage('Checkout') {
       echo "Checking out source"
       checkout scm
@@ -75,9 +81,6 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       //   awk -F ' ' '{print \$1}' | \
       //   awk -F '/' '{print \$3}'""",
       //   returnStdout: true).trim()
-      SLACK_TOKEN = sh (
-        script: """oc get secret/slack -o template --template="{{.data.token}}" | base64 --decode""",
-        returnStdout: true).trim()
     }
     
     stage('Install') {
@@ -141,7 +144,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         echo "Build: ${BUILD_ID}"
 
         // run the oc build to package the artifacts into a docker image
-        def BUILD_CONFIG = "${BUILD_CONFIG_BASE_NAME}-${OPENSHIFT_BUILD_REFERENCE}"
+        def BUILD_CONFIG = "${BUILD_CONFIG_BASE_NAME}-${GIT_BRANCH_NAME}-build"
         openshiftBuild bldCfg: BUILD_CONFIG, showBuildLogs: 'true', verbose: 'true'
 
         // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
@@ -151,8 +154,9 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
           returnStdout: true).trim()
         echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
-        if( "master" == OPENSHIFT_BUILD_REFERENCE.toLowerCase() ) {
+        if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *prod*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
           echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
         } else {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
@@ -180,7 +184,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       }
     }
   }
-  if( "master" != OPENSHIFT_BUILD_REFERENCE.toLowerCase() ) {
+  if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
     stage('Approval') {
       timeout(time: 1, unit: 'DAYS') {
         input message: "Deploy to test?", submitter: 'jleach-admin'
@@ -188,7 +192,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       node ('master') {
         stage('Promotion') {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to test.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *test*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
         }
       }  
     }
