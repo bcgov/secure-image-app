@@ -168,6 +168,13 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         attachment.fallback = 'See build log for more details'
         attachment.text = "Another huge sucess for the Secure Image Team.\nA freshly minted build is being deployed and will be available shortly.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
         attachment.color = '#00FF00' // Lime Green
+        if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
+          def action = [:]
+          aciton.type = "button"
+          action.text = "Promote Image?"
+          aciton.url = "https://jenkins-devex-mpf-secure-tools.pathfinder.gov.bc.ca/job/devex-mpf-secure-tools/job/devex-mpf-secure-tools-api-develop-pipeline/${BUILD_ID}/input"
+          attachment.actions = [action]
+        }
 
         notifySlack("${APP_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
       } catch (error) {
