@@ -156,7 +156,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
 
         if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *prod*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+          notifySlack("Promotion Completed\n Build #${BUILD_ID} is promoted to *prod*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
           echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
         } else {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
