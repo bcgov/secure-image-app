@@ -154,15 +154,6 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
           returnStdout: true).trim()
         echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
-        if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
-          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          notifySlack("Promotion Completed\n Build #${BUILD_ID} is promoted to *prod*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
-          echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
-        } else {
-          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
-        }
-
         def attachment = [:]
         def message = "Another huge sucess; A freshly minted build is being deployed and will be available shortly."
         message = message + "\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
@@ -180,6 +171,15 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         attachment.text = message
 
         notifySlack("${APP_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+
+        if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
+          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          notifySlack("Promotion Completed\n Build #${BUILD_ID} is promoted to the *prod* environment.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+          echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
+        } else {
+          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+          echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
+        }
       } catch (error) {
         echo "Unable complete build, error = ${error}"
 
