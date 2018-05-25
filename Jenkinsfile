@@ -81,10 +81,6 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       //   awk -F ' ' '{print \$1}' | \
       //   awk -F '/' '{print \$3}'""",
       //   returnStdout: true).trim()
-
-          sh "printenv"
-          sh "exit 1001"
-
     }
     
     stage('Install') {
