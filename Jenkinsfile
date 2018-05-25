@@ -81,6 +81,10 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
       //   awk -F ' ' '{print \$1}' | \
       //   awk -F '/' '{print \$3}'""",
       //   returnStdout: true).trim()
+
+          sh "printenv"
+          sh "exit 1001"
+
     }
     
     stage('Install') {
@@ -105,7 +109,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         //   attachment.color = '#FFA500' // Orange
         //   attachment.text = "There are security warnings related to your packages.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
 
-        //   notifySlack("${APP_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], PIRATE_ICO)
+        //   notifySlack("${env.JOB_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], PIRATE_ICO)
         // }
 
         try {
@@ -119,7 +123,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
           attachment.text = "There are issues with the code quality.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
           // attachment.title_link = "${env.BUILD_URL}"
 
-          notifySlack("${APP_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+          notifySlack("${env.JOB_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
         }
 
         try {
@@ -133,7 +137,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
           attachment.text = "There are issues with the unit tests.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
           // attachment.title_link = "${env.BUILD_URL}"
 
-          notifySlack("${APP_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+          notifySlack("${env.JOB_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
           sh "exit 1001"
         }
       }
@@ -170,7 +174,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         }
         attachment.text = message
 
-        notifySlack("${APP_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+        notifySlack("${env.JOB_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
 
         if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
           openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
@@ -189,7 +193,7 @@ podTemplate(label: 'secureimg-api-node-build', name: 'secureimg-api-node-build',
         attachment.color = '#CD0000' // Red
         attachment.text = "There are issues with OpenShift build.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
 
-        notifySlack("${APP_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+        notifySlack("${env.JOB_NAME}, Build #${BUILD_ID}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
         sh "exit 1002"
       }
     }
