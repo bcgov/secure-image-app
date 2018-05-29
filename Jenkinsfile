@@ -5,22 +5,23 @@
 // an environment variable.
 def APP_PATH = "demo_apps/WikipediaSample.apk"
 def APP_NAME = "SampleAPP.apk"
-
+def PROJECT_NAME = "SecureImage"
+def PROVISIONING_PROFILE_NAME = "Mobile Pathfinder In House"
 
 node('xcode') {
 
   // Extract any sensative data from secrets
-  ANDROID_DECRYPT_KEY = sh (
-    script: """oc get secret/android-decrypt-key -o template --template="{{.data.decryptKey}}" | base64 --decode""",
-    returnStdout: true).trim()
-  BDD_DEVICE_FARM_USER = sh (
-    script: """oc get secret/bdd-credentials -o template --template="{{.data.username}}" | base64 --decode""",
-    returnStdout: true).trim()
-  BDD_DEVICE_FARM_PASSWD = sh (
-    script: """oc get secret/bdd-credentials -o template --template="{{.data.password}}" | base64 --decode""",
-    returnStdout: true).trim()
+  // ANDROID_DECRYPT_KEY = sh (
+  //   script: """oc get secret/android-decrypt-key -o template --template="{{.data.decryptKey}}" | base64 --decode""",
+  //   returnStdout: true).trim()
+  // BDD_DEVICE_FARM_USER = sh (
+  //   script: """oc get secret/bdd-credentials -o template --template="{{.data.username}}" | base64 --decode""",
+  //   returnStdout: true).trim()
+  // BDD_DEVICE_FARM_PASSWD = sh (
+  //   script: """oc get secret/bdd-credentials -o template --template="{{.data.password}}" | base64 --decode""",
+  //   returnStdout: true).trim()
 
-  def UPLOAD_URL = "curl -u ${BDD_DEVICE_FARM_USER}:${BDD_DEVICE_FARM_PASSWD} -X POST https://api.browserstack.com/app-automate/upload -F file=@${APP_PATH}"
+  // def UPLOAD_URL = "curl -u ${BDD_DEVICE_FARM_USER}:${BDD_DEVICE_FARM_PASSWD} -X POST https://api.browserstack.com/app-automate/upload -F file=@${APP_PATH}"
 
 
   stage('Checkout') {
@@ -37,6 +38,9 @@ node('xcode') {
 
   stage('Setup') {
     echo "Build setup"
+
+    // If Cocoapods is not setup yet, initalize the environment.
+    sh """if [ ! -d "${env.HOME}/.cocoapods" ]; then LANG=en_US.UTF-8 pod setup; fi"""
     // Decrypt the Android keystore properties file.
     // sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}"
     // sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass pass:${ANDROID_DECRYPT_KEY}"
@@ -45,8 +49,25 @@ node('xcode') {
   stage('Build') {
     echo "Build: ${BUILD_ID}"
 
-    xcodebuild -workspace SecureImage.xcworkspace -scheme SecureImage -configuration DEBUG clean build
-    // sh """
+    // The provisining profile must be located in `~/Library/MobileDevice/Provisioning Profiles`
+    // if it does not exist `mkdir -p ~/Library/MobileDevice/Provisioning Profiles` and copy
+    // your profile in place. If you don't have it, grab it from your Apple Developer account.
+    // PROVISIONING_PROFILE_SPECIFIER needs to match the `name` key of the provisioning profile
+    // not the UUID or anything else.
+  
+    sh """
+      export PATH=\$PATH:/usr/local/bin && \
+      LANG=en_US.UTF-8 pod install && \
+      xcodebuild \
+        -workspace ${PROJECT_NAME}.xcworkspace \
+        -scheme ${PROJECT_NAME} \
+        -configuration Debug \
+        CODE_SIGN_STYLE="Manual" \
+        CODE_SIGN_IDENTITY='' \
+        CODE_SIGNING_REQUIRED=NO \
+        PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_NAME}" \
+        clean build
+    """
     //   JAVA_HOME=\$(dirname \$( readlink -f \$(which java) )) && \
     //   JAVA_HOME=\$(realpath "$JAVA_HOME"/../) && \
     //   export JAVA_HOME && \
@@ -107,6 +128,5 @@ node('xcode') {
     //     junit 'geb-mobile-test-spock/build/test-results/**/*.xml'
     //   }
     }
-  }
 }
 
