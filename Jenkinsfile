@@ -1,109 +1,112 @@
-/**
-* IOS Jenkinsfile
-*/
+// See https://github.com/jenkinsci/kubernetes-plugin
 
-//     In RHMAP's case, the following parameters are sent by RHMAP to the Jenkins job.
-//     This means, the Jenkins job has to be a parametrized build with those parameters.
-CODE_SIGN_PROFILE_ID = params?.BUILD_CREDENTIAL_ID?.trim()                 // e.g. "redhat-dist-dp"
-BUILD_CONFIG = params?.BUILD_CONFIG?.trim()                                // e.g. "Debug" or "Release"
-
-//     To hardcode the values uncomment the lines below
-//CODE_SIGN_PROFILE_ID = "redhat-dist-dp"
-//BUILD_CONFIG = "Debug"
-
-// sample values commented below are for https://github.com/feedhenry-templates/blank-ios-swift
-/* ------------- use these to hardcode values in Jenkinsfile ---------------- */
-PROJECT_NAME = "blank-ios-app"
-INFO_PLIST = "blank-ios-app/blank-ios-app-Info.plist"
-VERSION = "1.0.0"
-SHORT_VERSION = "1.0"
-BUNDLE_ID = "com.feedhenry.blank-ios-app"
-OUTPUT_FILE_NAME="${PROJECT_NAME}-${BUILD_CONFIG}.ipa"
-SDK = "iphoneos"
-
-XC_VERSION = ""                       // use something like 8.3 to use a specific XCode version.
-                                      // If this is not set, the default Xcode on the machine will be used
-
-CLEAN = true                          // do a clean build and sign
+// The JVM / Kotlin Daemon will quite often fail in memory constraind environments. Givng the JVM
+// 4g allows for the maxumum reqested / recommended by gradle. This is passed in the pod spec as a
+// an environment variable.
+def APP_PATH = "demo_apps/WikipediaSample.apk"
+def APP_NAME = "SampleAPP.apk"
 
 
-/* ------------- use these to get values from Jenkins parametrized build ---------------- */
-/*
-PROJECT_NAME = params?.PROJECT_NAME?.trim()                         // e.g. "blank-ios-app"
-INFO_PLIST = params?.INFO_PLIST?.trim()                             // e.g. "blank-ios-app/blank-ios-app-Info.plist"
-VERSION = params?.APP_VERSION?.trim()                               // e.g. "0.1-alpha"
-SHORT_VERSION = params?.APP_SHORT_VERSION?.trim()                   // e.g. "0.1"
-BUNDLE_ID = params?.BUNDLE_ID?.trim()                               // e.g. "com.feedhenry.blank-ios-app"
-OUTPUT_FILE_NAME = params?.OUTPUT_FILE_NAME?.trim() ?: "myapp.ipa"  // if not set, myapp.ipa will be used
-SDK = params?.OUTPUT_FILE_NAME?.trim() ?: "iphoneos"                // if not set, "iphoneos" will be used
+node('xcode') {
 
-XC_VERSION = params?.XC_VERSION?.trim() ?: ""                       // use something like 8.3 to use a specific XCode version.
-                                                                    // if not set, the default Xcode on the machine will be used
+  // Extract any sensative data from secrets
+  ANDROID_DECRYPT_KEY = sh (
+    script: """oc get secret/android-decrypt-key -o template --template="{{.data.decryptKey}}" | base64 --decode""",
+    returnStdout: true).trim()
+  BDD_DEVICE_FARM_USER = sh (
+    script: """oc get secret/bdd-credentials -o template --template="{{.data.username}}" | base64 --decode""",
+    returnStdout: true).trim()
+  BDD_DEVICE_FARM_PASSWD = sh (
+    script: """oc get secret/bdd-credentials -o template --template="{{.data.password}}" | base64 --decode""",
+    returnStdout: true).trim()
 
-CLEAN = params?.CLEAN?.trim()?.toBoolean() ?: true                  // default value is true
-*/
-
-/*
-NOTE: RHMAP sends `BUILD_CONFIG` parameter to denote if it is a debug build or a release build.
-      However, from codesign/xcodebuild perspective, the steps required are the same.
-      So, we just ignore that parameter.
-*/
+  def UPLOAD_URL = "curl -u ${BDD_DEVICE_FARM_USER}:${BDD_DEVICE_FARM_PASSWD} -X POST https://api.browserstack.com/app-automate/upload -F file=@${APP_PATH}"
 
 
-// parametrized values
+  stage('Checkout') {
+    echo "Checking out source"
+    checkout scm
 
-FH_CONFIG_CONTENT = params?.FH_CONFIG_CONTENT ?: ""
+    GIT_COMMIT_SHORT_HASH = sh (
+      script: """git describe --always""",
+      returnStdout: true).trim()
+    GIT_COMMIT_AUTHOR = sh (
+      script: """git show -s --pretty=%an""",
+      returnStdout: true).trim()
+  }
 
-// RHMAP specific values. RHMAP currently sends build config type all lower case. we handle it here as case matters for Xcode.
-// also, RHMAP can send "Distribution" config. we use "Release" in that case.
-if(BUILD_CONFIG.toLowerCase() == "debug"){
-    BUILD_CONFIG = "Debug"
+  stage('Setup') {
+    echo "Build setup"
+    // Decrypt the Android keystore properties file.
+    // sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}"
+    // sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass pass:${ANDROID_DECRYPT_KEY}"
+  }
+  
+  stage('Build') {
+    echo "Build: ${BUILD_ID}"
+
+    xcodebuild -workspace SecureImage.xcworkspace -scheme SecureImage -configuration DEBUG clean build
+    // sh """
+    //   JAVA_HOME=\$(dirname \$( readlink -f \$(which java) )) && \
+    //   JAVA_HOME=\$(realpath "$JAVA_HOME"/../) && \
+    //   export JAVA_HOME && \
+    //   export ANDROID_HOME=/opt/android && \
+    //   ./gradlew build -x test -x lint
+    //   """
+
+    // echo "Assemble build"
+    // sh "./gradlew assembleDebug"
+
+    // // Find API for informational purposes.
+    // sh "find . -iname '*.apk'"
+
+    // // Packages are typically located in the following locations.
+    // // ./app/build/outputs/apk/debug/app-debug.apk
+    // // ./app/build/outputs/apk/release/app-release-unsigned.apk
+    // // ./app/release/app-release.apk
+
+    // DEBUG_APK_PATH = sh (
+    //   script: """find . -iname 'app-debug.apk'""",
+    //   returnStdout: true).trim()
+    // echo "Found DEBUG APK in ${DEBUG_APK_PATH}"
+    // RELEASE_APK_PATH = sh (
+    //   script: """find . -iname 'app-release.apk'""",
+    //   returnStdout: true).trim()
+    // echo "Found RELEASE APK in ${RELEASE_APK_PATH}"
+  }
+
+  stage('Test') {
+
+    echo "Test ${BUILD_ID}"
+    // dir('bdd/geb-mobile') {
+    //   echo "Upload the sample app to cloud server"
+    //   // // App hash (bs/md5), could be used to reference in test task. Using the app package name for now.
+    //   // def APP_HASH = sh (
+    //   //   script: "$UPLOAD_URL",
+    //   //   returnStdout: true).trim()
+
+    //   // echo "the has is: ${APP_HASH}"
+
+    //   // // Abort the build if not uploaded successfully:
+    //   // if (APP_HASH.contains("Warning")) {
+    //   //     currentBuild.result = 'ABORTED'
+    //   //     error('Error uploading app to account storage')
+    //   // }
+    //   // echo "Successfully uploaded the app..."
+      
+    //   echo "Start functional testing with mobile-BDDStack, running sample test case"
+    //   try {
+    //     sh './gradlew --debug --stacktrace androidOnBrowserStack'
+    //   } finally { 
+    //     // stash includes: 'geb-mobile-test-spock/build/reports/**/*', name: 'reports'
+
+
+    //     archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/build/reports/**/*'
+    //     archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/build/test-results/**/*'
+    //     archiveArtifacts allowEmptyArchive: true, artifacts: 'geb-mobile-test-spock/screenshots/*'
+    //     junit 'geb-mobile-test-spock/build/test-results/**/*.xml'
+    //   }
+    }
+  }
 }
-else if(BUILD_CONFIG.toLowerCase() == "release" || BUILD_CONFIG.toLowerCase() == "distribution"){
-    BUILD_CONFIG = "Release"
-}
 
-node('ios') {
-    stage('Checkout') {
-        checkout scm
-    }
-
-    stage('Prepare') {
-        writeFile file: "${PROJECT_NAME}/fhconfig.plist", text: FH_CONFIG_CONTENT
-        sh '/usr/local/bin/pod install'
-    }
-
-    stage('Build') {
-        withEnv(["XC_VERSION=${XC_VERSION}"]) {
-            xcodeBuild(
-                    cleanBeforeBuild: CLEAN,
-                    src: './',
-                    schema: "${PROJECT_NAME}",
-                    workspace: "${PROJECT_NAME}",
-                    buildDir: "build",
-                    sdk: "${SDK}",
-                    version: "${VERSION}",
-                    shortVersion: "${SHORT_VERSION}",
-                    bundleId: "${BUNDLE_ID}",
-                    infoPlistPath: "${INFO_PLIST}",
-                    xcodeBuildArgs: 'ENABLE_BITCODE=NO OTHER_CFLAGS="-fstack-protector -fstack-protector-all"',
-                    autoSign: false,
-                    config: "${BUILD_CONFIG}"
-            )
-        }
-    }
-
-    stage('CodeSign') {
-        codeSign(
-                profileId: "${CODE_SIGN_PROFILE_ID}",
-                clean: CLEAN,
-                verify: true,
-                ipaName: "${OUTPUT_FILE_NAME}",
-                appPath: "build/${BUILD_CONFIG}-${SDK}/${PROJECT_NAME}.app"
-        )
-    }
-
-    stage('Archive') {
-        archiveArtifacts "build/${BUILD_CONFIG}-${SDK}/${OUTPUT_FILE_NAME}"
-    }
-}
