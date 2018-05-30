@@ -28,11 +28,8 @@ if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
 
 node('xcode') {
 
-  SLACK_TOKEN = sh (
-    script: """PATH=${PATH}:~/bin oc get projects""",
-    returnStdout: true).trim()
-  echo "${SLACK_TOKEN}"
-
+  sh "printenv"
+  
   // Extract any sensative data from secrets
   // ANDROID_DECRYPT_KEY = sh (
   //   script: """oc get secret/android-decrypt-key -o template --template="{{.data.decryptKey}}" | base64 --decode""",
