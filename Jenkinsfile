@@ -3,10 +3,12 @@
 // The JVM / Kotlin Daemon will quite often fail in memory constraind environments. Givng the JVM
 // 4g allows for the maxumum reqested / recommended by gradle. This is passed in the pod spec as a
 // an environment variable.
-def APP_PATH = "demo_apps/WikipediaSample.apk"
-def APP_NAME = "SampleAPP.apk"
+// def APP_PATH = "demo_apps/WikipediaSample.apk"
+// def APP_NAME = "SampleAPP.apk"
 def PROJECT_NAME = "SecureImage"
+def CONFIGURATION = "Debug"
 def PROVISIONING_PROFILE_NAME = "Mobile Pathfinder In House"
+def BUILD_DIR = "./build"
 
 node('xcode') {
 
@@ -61,11 +63,9 @@ node('xcode') {
       xcodebuild \
         -workspace ${PROJECT_NAME}.xcworkspace \
         -scheme ${PROJECT_NAME} \
-        -configuration Debug \
-        CODE_SIGN_STYLE="Manual" \
-        CODE_SIGN_IDENTITY='' \
-        CODE_SIGNING_REQUIRED=NO \
-        PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_NAME}" \
+        -configuration ${CONFIGURATION} \
+        -xcconfig ${CONFIGURATION.toLowerCase()}-ci.xcconfig \
+        -derivedDataPath ${BUILD_DIR} \
         clean build
     """
     //   JAVA_HOME=\$(dirname \$( readlink -f \$(which java) )) && \
