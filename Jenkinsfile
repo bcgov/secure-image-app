@@ -10,7 +10,10 @@ def SDK = ""
 def PROJECT_NAME = "SecureImage"
 def PROVISIONING_PROFILE_NAME = "Mobile Pathfinder In House"
 def BUILD_DIR = "./build"
+// A timestamp is used to mark the exported archives.
 def TIMESTAMP = (new Date()).format("yyyyMMdd-HHmm", TimeZone.getTimeZone('UTC'))
+// Our piplines contain the name of the branch they build from. Only `master` is a 
+// special case, everything else is treated the same.
 def GIT_BRANCH_NAME = ("${env.JOB_BASE_NAME}".contains("master")) ? "master" : "develop"
 
 // A release will only come from the `master` branch. For all others
