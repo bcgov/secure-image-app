@@ -17,7 +17,7 @@ def TIMESTAMP = (new Date()).format("yyyyMMdd-HHmm", TimeZone.getTimeZone('UTC')
 def GIT_BRANCH_NAME = ("${env.JOB_BASE_NAME}".contains("master")) ? "master" : "develop"
 
 // A release will only come from the `master` branch. For all others
-// a Debug configuration is done.
+// a Debug configuration is used.
 if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
   CONFIGURATION = "Release"
   SDK="iphoneos"
