@@ -1,14 +1,26 @@
-// See https://github.com/jenkinsci/kubernetes-plugin
 
-// The JVM / Kotlin Daemon will quite often fail in memory constraind environments. Givng the JVM
-// 4g allows for the maxumum reqested / recommended by gradle. This is passed in the pod spec as a
-// an environment variable.
-// def APP_PATH = "demo_apps/WikipediaSample.apk"
-// def APP_NAME = "SampleAPP.apk"
+// The provisining profile must be located in `~/Library/MobileDevice/Provisioning Profiles`
+// if it does not exist `mkdir -p ~/Library/MobileDevice/Provisioning Profiles` and copy
+// your profile in place. If you don't have it, grab it from your Apple Developer account.
+// PROVISIONING_PROFILE_SPECIFIER needs to match the `name` key of the provisioning profile
+// not the UUID or anything else.
+
+def CONFIGURATION = ""
+def SDK = ""
 def PROJECT_NAME = "SecureImage"
-def CONFIGURATION = "Debug"
 def PROVISIONING_PROFILE_NAME = "Mobile Pathfinder In House"
 def BUILD_DIR = "./build"
+def TIMESTAMP = (new Date()).format("yyyyMMdd-HHmm", TimeZone.getTimeZone('UTC'))
+
+// A release will only come from the `master` branch. For all others
+// a Debug configuration is done.
+if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
+  CONFIGURATION = "Release"
+  SDK="iphoneos"
+} else {
+  CONFIGURATION = "Debug"
+  SDK="iphonesimulator"
+}
 
 node('xcode') {
 
@@ -41,8 +53,10 @@ node('xcode') {
   stage('Setup') {
     echo "Build setup"
 
-    // If Cocoapods is not setup yet, initalize the environment.
+    // If Cocoapods is not setup yet, initalize the environment. This will clone
+    // the master repo; it will take a while to do your first build.
     sh """if [ ! -d "${env.HOME}/.cocoapods" ]; then LANG=en_US.UTF-8 pod setup; fi"""
+
     // Decrypt the Android keystore properties file.
     // sh "/usr/bin/openssl aes-256-cbc -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}"
     // sh "/usr/bin/openssl aes-256-cbc -d -a -in app/fabric.properties.enc -out app/fabric.properties -pass pass:${ANDROID_DECRYPT_KEY}"
@@ -51,12 +65,11 @@ node('xcode') {
   stage('Build') {
     echo "Build: ${BUILD_ID}"
 
-    // The provisining profile must be located in `~/Library/MobileDevice/Provisioning Profiles`
-    // if it does not exist `mkdir -p ~/Library/MobileDevice/Provisioning Profiles` and copy
-    // your profile in place. If you don't have it, grab it from your Apple Developer account.
-    // PROVISIONING_PROFILE_SPECIFIER needs to match the `name` key of the provisioning profile
-    // not the UUID or anything else.
-  
+    // Do we just want a build, or should we produce an archive?
+    def command = "debug".equalsIgnoreCase(CONFIGURATION) ? 'build' : 'archive'
+
+    // `archivePath` is only used if `archive` is specified; no impact when
+    // build is used.
     sh """
       export PATH=\$PATH:/usr/local/bin && \
       LANG=en_US.UTF-8 pod install && \
@@ -66,25 +79,17 @@ node('xcode') {
         -configuration ${CONFIGURATION} \
         -xcconfig ${CONFIGURATION.toLowerCase()}-ci.xcconfig \
         -derivedDataPath ${BUILD_DIR} \
-        clean build
+        -archivePath "${PROJECT_NAME}-${TIMESTAMP}" \
+        clean ${command}
     """
-    //   JAVA_HOME=\$(dirname \$( readlink -f \$(which java) )) && \
-    //   JAVA_HOME=\$(realpath "$JAVA_HOME"/../) && \
-    //   export JAVA_HOME && \
-    //   export ANDROID_HOME=/opt/android && \
-    //   ./gradlew build -x test -x lint
-    //   """
 
-    // echo "Assemble build"
-    // sh "./gradlew assembleDebug"
+    // A Production release will only come from the master branch. For 'dev' builds
+    // we can safley exit here.
+    if("debug".equalsIgnoreCase(CONFIGURATION)) {
+      sh "exit 0"
+    }
 
-    // // Find API for informational purposes.
-    // sh "find . -iname '*.apk'"
 
-    // // Packages are typically located in the following locations.
-    // // ./app/build/outputs/apk/debug/app-debug.apk
-    // // ./app/build/outputs/apk/release/app-release-unsigned.apk
-    // // ./app/release/app-release.apk
 
     // DEBUG_APK_PATH = sh (
     //   script: """find . -iname 'app-debug.apk'""",
