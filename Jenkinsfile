@@ -11,6 +11,7 @@ def PROJECT_NAME = "SecureImage"
 def PROVISIONING_PROFILE_NAME = "Mobile Pathfinder In House"
 def BUILD_DIR = "./build"
 def TIMESTAMP = (new Date()).format("yyyyMMdd-HHmm", TimeZone.getTimeZone('UTC'))
+def GIT_BRANCH_NAME = ("${env.JOB_BASE_NAME}".contains("master")) ? "master" : "develop"
 
 // A release will only come from the `master` branch. For all others
 // a Debug configuration is done.
