@@ -22,6 +22,16 @@
 
 'use strict';
 
+import {
+  logger,
+  putObject,
+  getObject,
+  createBucketIfRequired,
+  bucketExists,
+  statObject,
+  isExpired,
+  asyncMiddleware,
+} from '@bcgov/common-nodejs';
 import { Router } from 'express';
 import util from 'util';
 import multer from 'multer';
@@ -30,19 +40,7 @@ import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
 import config from '../../config';
-import { logger } from '../../libs/logger';
-import {
-  isValid,
-  asyncMiddleware,
-} from '../../libs/utils';
-import {
-  putObject,
-  getObject,
-  createBucketIfRequired,
-  bucketExists,
-  statObject,
-  isExpired,
-} from '../../libs/bucket';
+import isValid from '../../libs/utils';
 import {
   writeToTemporaryFile,
   archiveImagesInAlbum,

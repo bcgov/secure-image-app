@@ -32,7 +32,7 @@ import flash from 'connect-flash';
 import {
   logger,
   started,
-} from './libs/logger';
+} from '@bcgov/common-nodejs';
 import config from './config';
 import authmw from './libs/authmware';
 

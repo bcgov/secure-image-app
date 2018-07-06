@@ -22,12 +22,11 @@
 
 'use strict';
 
+import { getObject, listBucket, logger, removeObject } from '@bcgov/common-nodejs';
 import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 import config from '../config';
-import { getObject, listBucket, removeObject } from './bucket';
-import { logger } from './logger';
 
 const archiveFileBaseName = config.get('archiveFileBaseName');
 const tempFilePath = '/tmp';

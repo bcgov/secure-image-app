@@ -22,11 +22,11 @@
 
 'use strict';
 
+import { logger } from '@bcgov/common-nodejs';
 import jwt from 'jsonwebtoken';
 import request from 'request';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';
 import config from '../config';
-import { logger } from './logger';
 
 const sendError = (res, statusCode, message) => {
   logger.info(`Rejecting authenticaiton, message = ${message}`);

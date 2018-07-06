@@ -22,17 +22,16 @@
 
 'use strict';
 
+import { logger } from '@bcgov/common-nodejs';
 import { Router } from 'express';
 import passport from 'passport';
 import url from 'url';
 import config from '../../config';
 import { TEMPLATES } from '../../constants';
-import { logger } from '../../libs/logger';
 import { compile, loadTemplate } from '../../libs/template';
 import { asyncMiddleware } from '../../libs/utils';
 
 const router = new Router();
-
 
 /* eslint-disable */
 /**
