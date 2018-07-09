@@ -31,7 +31,7 @@ import {
   statObject,
   isExpired,
   asyncMiddleware,
-} from '@bcgov/common-nodejs';
+} from '@bcgov/nodejs-common-utils';
 import { Router } from 'express';
 import util from 'util';
 import multer from 'multer';

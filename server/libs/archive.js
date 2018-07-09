@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { getObject, listBucket, logger, removeObject } from '@bcgov/common-nodejs';
+import { getObject, listBucket, logger, removeObject } from '@bcgov/nodejs-common-utils';
 import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';

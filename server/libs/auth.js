@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { logger } from '@bcgov/common-nodejs';
+import { logger } from '@bcgov/nodejs-common-utils';
 import jwt from 'jsonwebtoken';
 import request from 'request';
 import pemFromModAndExponent from 'rsa-pem-from-mod-exp';

@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { logger } from '@bcgov/common-nodejs';
+import { logger } from '@bcgov/nodejs-common-utils';
 import { Router } from 'express';
 import passport from 'passport';
 import url from 'url';
