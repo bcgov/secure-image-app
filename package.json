@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@bcgov/nodejs-common-utils": "git+ssh://git@github.com/bcgov/nodejs-common-utils.git#v0.0.1",
+    "@bcgov/nodejs-common-utils": "git+https://git@github.com/bcgov/nodejs-common-utils.git#v0.0.1",
     "archiver": "^2.1.1",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.18.3",
