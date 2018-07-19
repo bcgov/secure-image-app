@@ -22,14 +22,13 @@
 
 'use strict';
 
-import { logger } from '@bcgov/nodejs-common-utils';
+import { asyncMiddleware, logger } from '@bcgov/nodejs-common-utils';
 import { Router } from 'express';
 import passport from 'passport';
 import url from 'url';
 import config from '../../config';
 import { TEMPLATES } from '../../constants';
 import { compile, loadTemplate } from '../../libs/template';
-import { asyncMiddleware } from '../../libs/utils';
 
 const router = new Router();
 
