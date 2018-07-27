@@ -22,11 +22,17 @@
 
 'use strict';
 
-import { getObject, listBucket, logger, removeObject } from '@bcgov/nodejs-common-utils';
+import {
+  getObject,
+  listBucket,
+  logger,
+  removeObject,
+} from '@bcgov/nodejs-common-utils';
 import archiver from 'archiver';
 import fs from 'fs';
 import path from 'path';
 import config from '../config';
+import shared from './shared';
 
 const archiveFileBaseName = config.get('archiveFileBaseName');
 const tempFilePath = '/tmp';
@@ -71,8 +77,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
       level: 6,
     }, // Sets the compression level.
   });
-  const objects = await listBucket(bucketName, `${prefix}/`);
-
+  const objects = await listBucket(shared.minio, bucketName, `${prefix}/`);
   /* Expected object format
   { name: 'IMG_0112.jpg',
     lastModified: 2018-01-15T22:00:15.462Z,
@@ -90,7 +95,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
     // Fetch objects synchronously in case we have lots of objects that will
     // consume too much memory.
     // eslint-disable-next-line no-await-in-loop
-    const buffer = await getObject(bucketName, obj.name);
+    const buffer = await getObject(shared.minio, bucketName, obj.name);
 
     let name;
     if (obj.name.indexOf('.txt') !== -1) {
@@ -105,7 +110,7 @@ export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) =
     index += 1;
 
     if (cleanup) {
-      objectsToRemove.push(removeObject(bucketName, obj.name));
+      objectsToRemove.push(removeObject(shared.minio, bucketName, obj.name));
     }
   }
 

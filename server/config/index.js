@@ -22,9 +22,9 @@
 
 'use strict';
 
-import path from 'path';
-import nconf from 'nconf';
 import dotenv from 'dotenv';
+import nconf from 'nconf';
+import path from 'path';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -44,7 +44,7 @@ nconf.overrides({
   host: process.env.HOST || '127.0.0.1',
   port: process.env.PORT || 8000,
   minio: {
-    endPoint: process.env.MINIO_ENDPOINT,
+    host: process.env.MINIO_ENDPOINT,
     accessKey: process.env.MINIO_ACCESS_KEY,
     secretKey: process.env.MINIO_SECRET_KEY,
   },

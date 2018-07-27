@@ -22,27 +22,18 @@
 
 'use strict';
 
-import path from 'path';
-
-import fs from 'fs';
-import express from 'express';
-import cookieParser from 'cookie-parser';
+import { logger } from '@bcgov/nodejs-common-utils';
 import bodyParser from 'body-parser';
 import flash from 'connect-flash';
-import {
-  logger,
-  started,
-} from '@bcgov/nodejs-common-utils';
-import config from './config';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
 import authmw from './libs/authmware';
-
-const env = config.get('environment');
 
 // Middlewares
 
 // Config
-const isDev = env !== 'production';
-const port = config.get('port');
 const app = express();
 const options = {
   inflate: true,
@@ -96,16 +87,6 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   const message = err.message ? err.message : 'Internal Server Error';
 
   res.status(code).json({ error: message, success: false });
-});
-
-app.listen(port, '0.0.0.0', (err) => {
-  if (err) {
-    return logger.error(`There was a problem starting the server, ${err.message}`);
-  }
-  if (isDev) {
-    return started(port);
-  }
-  return logger.info(`Production server running on port: ${port}`);
 });
 
 module.exports = app;

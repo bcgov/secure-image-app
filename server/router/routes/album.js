@@ -26,12 +26,11 @@ import {
   logger,
   putObject,
   getObject,
-  createBucketIfRequired,
-  bucketExists,
   statObject,
   isExpired,
   asyncMiddleware,
 } from '@bcgov/nodejs-common-utils';
+import shared from '../../libs/shared';
 import { Router } from 'express';
 import util from 'util';
 import multer from 'multer';
@@ -51,12 +50,6 @@ import { isAuthenticated } from '../../libs/auth';
 const bucket = config.get('minio:bucket');
 const upload = multer({ dest: config.get('temporaryUploadPath') });
 const router = new Router();
-
-try {
-  createBucketIfRequired(bucket);
-} catch (err) {
-  logger.error(`Problem creating bucket ${bucket}`);
-}
 
 /* eslint-disable */
 /**
@@ -127,10 +120,6 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
     return res.status(400).json({ message: 'Unabe to process attached form.' });
   }
 
-  if (!bucketExists(bucket)) {
-    return res.status(500).json({ message: 'Unable to store attached file.' });
-  }
-
   /* This is the document format from multer:
     { fieldname: 'file',
     originalname: 'IMG_0112.jpg',
@@ -150,7 +139,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
   }
 
   try {
-    const etag = await putObject(bucket, path.join(albumId, filename), stream);
+    const etag = await putObject(shared.minio, bucket, path.join(albumId, filename), stream);
     if (etag) {
       fs.unlinkSync(req.file.path, (err) => {
         logger.error(`Unable to unlink temprary file, error = ${err}`);
@@ -227,7 +216,7 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   }
 
   const fileName = `${albumId}/${archiveName || path.basename(file)}.zip`;
-  const etag = await putObject(bucket, fileName, stream);
+  const etag = await putObject(shared.minio, bucket, fileName, stream);
 
   // Cleanup the temorary archive file.
   const unlinkAsync = util.promisify(fs.unlink);
@@ -287,7 +276,7 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
     const notes = `Album Name: ${albumName || ''}\r\nComment: ${comment || ''}`;
     const buff = Buffer.from(notes, 'utf8');
     const name = path.join(albumId, NOTES_FILE_NAME);
-    const etag = await putObject(bucket, name, buff);
+    const etag = await putObject(shared.minio, bucket, name, buff);
 
     logger.info(`Adding field notes to album with name ${name}, etag ${etag}`);
     return res.status(200).json({ id: etag });
@@ -330,7 +319,7 @@ router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(asyn
   const albumExpirationInDays = config.get('albumExpirationInDays');
 
   try {
-    const stat = await statObject(bucket, `${albumId}/`);
+    const stat = await statObject(shared.minio, bucket, `${albumId}/`);
 
     if (isExpired(stat, albumExpirationInDays)) {
       const baseUrl = config.get('appUrl');
@@ -340,7 +329,7 @@ router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(asyn
       res.redirect(301, redirectUrl); // 301 Moved Permanently
     }
 
-    const buffer = await getObject(bucket, path.join(albumId, fileName));
+    const buffer = await getObject(shared.minio, bucket, path.join(albumId, fileName));
 
     if (!buffer) {
       res.status(500).json({
