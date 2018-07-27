@@ -46,7 +46,6 @@ const verifyToken = clientAccessToken => new Promise(async (resolve, reject) => 
 
 // eslint-disable-next-line import/prefer-default-export
 export const isAuthenticated = async (req, res, next) => {
-  return next();
   // The download URL requires that the user authenticates via their
   // browser which will add an 'isAuthenticated' method for testing.
   if (/^.*\/album\/[0-9A-Za-z-]*\/download\/.*$/.test(req.originalUrl)) {
