@@ -29,6 +29,7 @@ import {
   statObject,
   isExpired,
   asyncMiddleware,
+  errorWithCode,
 } from '@bcgov/nodejs-common-utils';
 import shared from '../../libs/shared';
 import { Router } from 'express';
@@ -117,7 +118,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
   const { albumId } = req.params;
 
   if (!req.file) {
-    return res.status(400).json({ message: 'Unabe to process attached form.' });
+    throw errorWithCode('Unabe to process attached form.', 400);
   }
 
   /* This is the document format from multer:
@@ -135,7 +136,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
   const stream = fs.createReadStream(req.file.path);
 
   if (!stream) {
-    return res.status(500).json({ message: 'Unable read attached file.' });
+    throw errorWithCode('Unable read attached file', 500);
   }
 
   try {
@@ -148,12 +149,14 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
 
     logger.info(`Adding image to album with name ${req.file.filename}, etag ${etag}`);
 
-    return res.status(200).json({ id: etag });
+    res.status(200).json({ id: etag });
   } catch (error) {
+    if (error.code) {
+      throw error;
+    }
+
     logger.error(`Unable to put object, error ${error}`);
-    return res.status(500).json({
-      message: 'Unable to store attached file.',
-    });
+    throw errorWithCode('Unable to store attached file', 500);
   }
 }));
 
@@ -196,46 +199,60 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
  /* eslint-enable */
 router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
   const archiveName = req.query.name;
-  const { albumId } = req.params;
+  const {
+    albumId,
+  } = req.params;
 
-  if (archiveName && !isValid(archiveName)) {
-    return res.status(400).json({ message: 'The optional archive name must contain letters or numbers.' });
+  try {
+    if (archiveName && !isValid(archiveName)) {
+      throw errorWithCode('The optional archive name must contain letters or numbers', 400);
+    }
+
+    const archive = await archiveImagesInAlbum(bucket, albumId);
+
+    if (!archive) {
+      throw errorWithCode('Unable to archive album', 500);
+    }
+
+    const file = await writeToTemporaryFile(archive);
+    const stream = fs.createReadStream(file);
+
+    if (!file || !stream) {
+      throw errorWithCode('Internal Error', 500);
+    }
+
+    const fileName = `${albumId}/${archiveName || path.basename(file)}.zip`;
+    const etag = await putObject(shared.minio, bucket, fileName, stream);
+
+    // Cleanup the temorary archive file.
+    const unlinkAsync = util.promisify(fs.unlink);
+    await unlinkAsync(file);
+
+    // If we don't have an etag the file was not written to the backing
+    // store.
+    if (!etag) {
+      throw errorWithCode('Unable to store image', 500);
+    }
+
+    // Construct the download URI.
+    const archiveFileName = `${path.basename(fileName)}`;
+    const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
+    const downloadUrl = url.resolve(config.get('appUrl'), archiveFilePath);
+
+    logger.info(`Packaged album for download with URL ${downloadUrl}`);
+
+    res.status(200).json({
+      url: downloadUrl,
+    });
+  } catch (error) {
+    if (error.code) {
+      throw error;
+    }
+
+    const message = 'Unable to fetch album';
+    logger.error(`${message}, error ${error}`);
+    throw errorWithCode(message, 500);
   }
-
-  const archive = await archiveImagesInAlbum(bucket, albumId);
-
-  if (!archive) {
-    return res.status(500).json({ message: 'Unable to archive album.' });
-  }
-
-  const file = await writeToTemporaryFile(archive);
-  const stream = fs.createReadStream(file);
-
-  if (!file || !stream) {
-    return res.status(500).json({ message: 'Internal Error.' });
-  }
-
-  const fileName = `${albumId}/${archiveName || path.basename(file)}.zip`;
-  const etag = await putObject(shared.minio, bucket, fileName, stream);
-
-  // Cleanup the temorary archive file.
-  const unlinkAsync = util.promisify(fs.unlink);
-  await unlinkAsync(file);
-
-  // If we don't have an etag the file was not written to the backing
-  // store.
-  if (!etag) {
-    return res.status(500).json({ message: 'Unable to store image.' });
-  }
-
-  // Construct the download URI.
-  const archiveFileName = `${path.basename(fileName)}`;
-  const archiveFilePath = url.resolve(`v1/album/${albumId}/download/`, archiveFileName);
-  const downloadUrl = url.resolve(config.get('appUrl'), archiveFilePath);
-
-  logger.info(`Packaged album for download with URL ${downloadUrl}`);
-
-  return res.status(200).json({ url: downloadUrl });
 }));
 
 /* eslint-disable */
@@ -269,7 +286,7 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
   const { albumId } = req.params;
 
   if (!albumName && !comment) {
-    return res.status(400).json({ message: 'All fields can not be empty.' });
+    throw errorWithCode('All fields can not be empty', 400);
   }
 
   try {
@@ -279,12 +296,14 @@ router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
     const etag = await putObject(shared.minio, bucket, name, buff);
 
     logger.info(`Adding field notes to album with name ${name}, etag ${etag}`);
-    return res.status(200).json({ id: etag });
+    res.status(200).json({ id: etag });
   } catch (error) {
+    if (error.code) {
+      throw error;
+    }
+
     logger.error(`Unable add notes to album, error ${error}`);
-    return res.status(500).json({
-      message: 'Unable to add notes to album.',
-    });
+    throw errorWithCode('Unable to add notes to album', 500);
   }
 }));
 
@@ -319,7 +338,7 @@ router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(asyn
   const albumExpirationInDays = config.get('albumExpirationInDays');
 
   try {
-    const stat = await statObject(shared.minio, bucket, `${albumId}/`);
+    const stat = await statObject(shared.minio, bucket, `${albumId}/${fileName}`);
 
     if (isExpired(stat, albumExpirationInDays)) {
       const baseUrl = config.get('appUrl');
@@ -328,13 +347,17 @@ router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(asyn
 
       res.redirect(301, redirectUrl); // 301 Moved Permanently
     }
+  } catch (error) {
+    const message = 'Unable to retrieve album';
+    logger.error(`${message}, err = ${error.message}`);
+    throw errorWithCode(`${message}`, 400);
+  }
 
+  try {
     const buffer = await getObject(shared.minio, bucket, path.join(albumId, fileName));
 
     if (!buffer) {
-      res.status(500).json({
-        message: 'Unable to fetch album archive.',
-      });
+      throw errorWithCode('Unable to fetch album archive', 500);
     }
 
     res.contentType('application/octet-stream');
@@ -343,8 +366,13 @@ router.get('/:albumId/download/:fileName', isAuthenticated, asyncMiddleware(asyn
 
     res.end(buffer, 'binary');
   } catch (error) {
+    if (error.code) {
+      throw error;
+    }
+
     const message = 'Unable to retrieve album';
     logger.error(`${message}, err = ${error.message}`);
+    throw errorWithCode(message, 500);
   }
 }));
 

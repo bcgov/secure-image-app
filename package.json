@@ -54,14 +54,14 @@
     "nsp": "^3.2.1"
   },
   "scripts": {
-    "start": "node build/server",
-    "dev": "cross-env NODE_ENV=development nodemon server/server --exec babel-node --inspect",
+    "start": "node build/src/server",
+    "dev": "cross-env NODE_ENV=development nodemon src/server --exec babel-node --inspect",
     "build": "cross-env NODE_ENV=production gulp",
-    "build:doc": "apidoc -i server/ -o doc/api",
+    "build:doc": "apidoc -i src/ -o doc/api",
     "test": "cross-env NODE_ENV=test jest test/",
     "test:watch": "cross-env NODE_ENV=test jest test/*_spec.js --watch",
     "test:security": "nsp check",
-    "test:lint": "eslint --env node --ext .js server"
+    "test:lint": "eslint --env node --ext .js src/"
   },
   "repository": {
     "type": "git",

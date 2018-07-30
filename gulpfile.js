@@ -31,9 +31,9 @@ gulp.task('clean', () => gulp.src('build', { read: false })
   })));
 
 gulp.task('transpile-src', ['clean'], () =>
-  gulp.src('server/**/*.js')
+  gulp.src('src/**/*.js')
     .pipe(babel())
-    .pipe(gulp.dest('build/server')));
+    .pipe(gulp.dest('build/src')));
 
 gulp.task('transpile-scripts', ['clean'], () =>
   gulp.src('scripts/**/*.js')
@@ -41,8 +41,8 @@ gulp.task('transpile-scripts', ['clean'], () =>
     .pipe(gulp.dest('build/scripts')));
 
 gulp.task('copy-config', ['clean'], () =>
-  gulp.src('server/config/*.json')
-    .pipe(gulp.dest('build/server/config')));
+  gulp.src('src/config/*.json')
+    .pipe(gulp.dest('build/src/config')));
 
 gulp.task('copy-node-config', ['clean'], () =>
   gulp.src(['apidoc.json', 'package.json', 'package-lock.json'])
@@ -61,7 +61,7 @@ gulp.task('apidoc', ['clean', 'transpile-src', 'copy-node-config'], done => apid
   dest: 'build/public/doc/api',
   encoding: 'utf8',
   silent: true,
-  includeFilters: ['server/.*\\.js$'],
+  includeFilters: ['src/.*\\.js$'],
 }, done));
 
 gulp.task('default', ['clean', 'transpile-src', 'transpile-scripts',
