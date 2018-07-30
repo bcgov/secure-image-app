@@ -281,7 +281,7 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
  *
  */
  /* eslint-enable */
-router.post('/:albumId/note', asyncMiddleware(async (req, res) => {
+router.post('/:albumId/note', isAuthenticated, asyncMiddleware(async (req, res) => {
   const { albumName, comment } = req.body;
   const { albumId } = req.params;
 
