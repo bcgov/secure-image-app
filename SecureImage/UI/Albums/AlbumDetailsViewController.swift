@@ -220,7 +220,7 @@ class AlbumDetailsViewController: UIViewController {
             DispatchQueue.main.async {
                 self.progressOverlay.updateProgress(to: 0.0)
             }
-            
+
             guard let credentials = self.authServices.credentials else {
                 return
             }
@@ -418,7 +418,9 @@ class AlbumDetailsViewController: UIViewController {
                     let title = "Authentication"
                     let message = "Authentication didn't work. Please try again."
                     
-                    self.showAlert(with: title, message: message)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.showAlert(with: title, message: message)
+                    }
                     
                     return
                 }
