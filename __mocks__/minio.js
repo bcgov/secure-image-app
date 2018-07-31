@@ -40,12 +40,12 @@ const minio = jest.genMockFromModule('minio');
 //   cb(undefined, 'http://localhost/foo/abc123');
 // }
 
-// function putObject(bucket, name, data, cb) {
-//   cb(undefined, '123456789');
-// }
+function putObject(bucket, name, data, cb) {
+  cb(undefined, '123456789');
+}
 
 // minio.Client.prototype.statObject = statObject;
 // minio.Client.prototype.presignedGetObject = presignedGetObject;
-// minio.Client.prototype.putObject = putObject;
+minio.Client.prototype.putObject = putObject;
 
 module.exports = minio;

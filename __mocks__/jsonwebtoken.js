@@ -21,9 +21,14 @@
 'use strict';
 
 const jwt = jest.genMockFromModule('jsonwebtoken');
+const token = '123bacon123';
 
 function verify(clientAccessToken, pem, options, cb) {
-  cb(undefined, {});
+  if (clientAccessToken === token) {
+    cb(undefined, {});
+  } else {
+    cb(new Error('Bad token :('), undefined);
+  }
 }
 
 jwt.verify = verify;
