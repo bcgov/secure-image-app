@@ -27,26 +27,6 @@ import { Router } from 'express';
 
 const router = new Router();
 
-/* eslint-disable */
-/**
- * @api {GET} /ehlo Check if the server is alive and well
- * @apiVersion 0.0.1
- * @apiName HelloPing
- * @apiGroup ehlo
- * 
- * @apiSuccess (200)  Sucesfull ping
- *
- * @apiExample {curl} Example usage:
- *  curl -X GET http://localhost:8000/v1/ehlo
- *
- * @apiSuccessExample Success-Response:
- *    HTTP/1.1 200 OK
- *
- * @apiErrorExample {json} Error-Response:
- *    HTTP/1.1 500 InternalError
- *
- */
- /* eslint-enable */
 router.get('/', asyncMiddleware(async (req, res) => res.status(200).end()));
 
 module.exports = router;
