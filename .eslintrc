@@ -1,0 +1,15 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+ },
+ "plugins": [
+   "jest"
+ ],
+ "parser": "babel-eslint",
+ "extends": ["airbnb-base", "plugin:jest/recommended"],
+ "rules": {
+   "strict": 0,
+   "linebreak-style": 0
+ }
+}
