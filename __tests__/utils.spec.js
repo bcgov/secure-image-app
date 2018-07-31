@@ -22,8 +22,7 @@
 
 'use strict';
 
-import jest from 'jest';
-import { isValid } from '../server/libs/utils'
+import { isValid } from '../src/libs/utils'
 
 describe('utility helpers', function() {
 

@@ -22,9 +22,6 @@
 
 'use strict';
 
-import jest from 'jest';
-import sinon from 'sinon';
-
 const PassThrough = require('stream').PassThrough;
 
 describe('archive functions', function() {

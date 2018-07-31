@@ -22,9 +22,6 @@
 
 'use strict';
 
-import jest from 'jest';
-import sinon from 'sinon';
-
 describe('archive functions', function() {
     beforeEach(() => {
       // nothig to do
