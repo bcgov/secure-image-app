@@ -118,7 +118,7 @@ router.post('/:albumId', isAuthenticated, upload.single('file'), asyncMiddleware
   const { albumId } = req.params;
 
   if (!req.file) {
-    throw errorWithCode('Unabe to process attached form.', 400);
+    throw errorWithCode('Unable to process attached form.', 400);
   }
 
   /* This is the document format from multer:
