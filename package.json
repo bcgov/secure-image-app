@@ -34,6 +34,7 @@
     "apidoc": "^0.17.6",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.5",
+    "babel-jest": "^23.4.2",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
@@ -49,24 +50,44 @@
     "gulp-apidoc": "^0.2.8",
     "gulp-babel": "^7.0.1",
     "gulp-clean": "^0.4.0",
-    "jest": "^23.4.1",
+    "jest": "^23.4.2",
     "nodemon": "^1.18.3",
-    "nsp": "^3.2.1",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "supertest": "^3.1.0",
+    "swagger-cli": "^2.1.1"
   },
   "scripts": {
     "start": "node build/src/server",
     "dev": "cross-env NODE_ENV=development nodemon src/server --exec babel-node --inspect",
     "build": "cross-env NODE_ENV=production gulp",
     "build:doc": "apidoc -i src/ -o doc/api",
-    "test": "cross-env NODE_ENV=test jest test/",
-    "test:watch": "cross-env NODE_ENV=test jest test/*_spec.js --watch",
-    "test:security": "nsp check",
-    "test:lint": "eslint --env node --ext .js src/"
+    "test": "NODE_ENV=test jest __tests__",
+    "test:schema": "swagger-cli validate doc/api.yaml",
+    "test:watch": "NODE_ENV=test jest __tests__ --watch",
+    "test:lint": "eslint --env node --ext .js src"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "globals": {
+      "NODE_ENV": "test"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src/frontend",
+      "src/shared"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:bcgov/secure-image-api.git"
+    "url": "http://github.com/bcgov/secure-image-api.git"
   },
   "author": "Jason C. Leach <jason.leach@fullboar.ca>",
   "license": "Apache-2.0",
