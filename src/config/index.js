@@ -27,6 +27,7 @@ import nconf from 'nconf';
 import path from 'path';
 
 const env = process.env.NODE_ENV || 'development';
+const defaultPort = 8000;
 
 if (env === 'development') {
   dotenv.config();
@@ -52,7 +53,7 @@ nconf.overrides({
     clientSecret: process.env.SSO_CLIENT_SECRET,
   },
   session: {
-    key: process.env.SESSION_SECRET,
+    key: process.env.SESSION_SECRET || Math.random().toString(36).substring(7),
   },
 });
 
@@ -64,7 +65,7 @@ nconf.argv()
 // if nothing else is set, use defaults. This will be set if
 // they do not exist in overrides or the config file.
 nconf.defaults({
-  appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT}`,
+  apiUrl: process.env.API_URL || `http://localhost:${process.env.PORT || defaultPort}`,
 });
 
 export default nconf;
