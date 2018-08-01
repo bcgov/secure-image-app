@@ -246,7 +246,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
 
   stage('Test Approval') {
     timeout(time: 1, unit: 'DAYS') {
-      input message: "Deploy to test?", submitter: 'jleach-admin'
+      input message: "Promote this image to test?", submitter: 'jleach-admin'
     }
     node ('master') {
       stage('Promotion') {
@@ -272,7 +272,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
 
       stage('Prod Approval') {
         timeout(time: 1, unit: 'DAYS') {
-          input message: "Deploy to prod?", submitter: 'jleach-admin'
+          input message: "Promote this image to prod?", submitter: 'jleach-admin'
         }
         node ('master') {
           stage('Promotion') {
