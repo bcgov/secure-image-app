@@ -40,7 +40,7 @@ import path from 'path';
 import url from 'url';
 import uuid from 'uuid/v1'; // timestamp based
 import config from '../../config';
-import isValid from '../../libs/utils';
+import { isValid } from '../../libs/utils';
 import {
   writeToTemporaryFile,
   archiveImagesInAlbum,
@@ -203,13 +203,12 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
     albumId,
   } = req.params;
 
+  if (archiveName && !isValid(archiveName)) {
+    throw errorWithCode('The optional archive name must contain letters or numbers', 400);
+  }
+
   try {
-    if (archiveName && !isValid(archiveName)) {
-      throw errorWithCode('The optional archive name must contain letters or numbers', 400);
-    }
-
     const archive = await archiveImagesInAlbum(bucket, albumId);
-
     if (!archive) {
       throw errorWithCode('Unable to archive album', 500);
     }
@@ -224,7 +223,9 @@ router.get('/:albumId', isAuthenticated, asyncMiddleware(async (req, res) => {
     const fileName = `${albumId}/${archiveName || path.basename(file)}.zip`;
     const etag = await putObject(shared.minio, bucket, fileName, stream);
 
-    // Cleanup the temorary archive file.
+    // TODO:(jl) Below here needs mocking and then integrations tests.
+
+    // Cleanup the temporary archive file.
     const unlinkAsync = util.promisify(fs.unlink);
     await unlinkAsync(file);
 

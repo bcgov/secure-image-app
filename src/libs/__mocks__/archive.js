@@ -20,12 +20,10 @@
 
 'use strict';
 
-const minio = jest.genMockFromModule('minio');
-
-function putObject(bucket, name, data, cb) {
-  cb(undefined, '123456789');
+export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) => {
+  return Promise.resolve(Buffer.from('7468697320697320612074c3a97374', 'hex'));
 }
 
-minio.Client.prototype.putObject = putObject;
-
-module.exports = minio;
+export const writeToTemporaryFile = archive => new Promise((resolve, reject) => {
+  return resolve('archive.zip');
+});
