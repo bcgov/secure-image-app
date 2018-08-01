@@ -27,7 +27,6 @@ def TAG_NAMES = ['dev', 'test', 'prod']
 def PIRATE_ICO = 'http://icons.iconarchive.com/icons/aha-soft/torrent/64/pirate-icon.png'
 def JENKINS_ICO = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 def OPENSHIFT_ICO = 'https://commons.wikimedia.org/wiki/File:OpenShift-LogoType.svg'
-def GIT_BRANCH_NAME = ("${env.JOB_BASE_NAME}".contains("master")) ? "master" : "develop"
 def SLACK_CHANNEL = '#secure-immage-app'
 
 def notifySlack(text, channel, url, attachments, icon) {
@@ -198,7 +197,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
     }
 
     stage('Build') {
-       try {
+      try {
         echo "Build: ${BUILD_ID}"
 
         // run the oc build to package the artifacts into a docker image
@@ -212,32 +211,24 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
           returnStdout: true).trim()
         echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
+        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+        echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
+
         def attachment = [:]
         def message = "Another huge sucess; A freshly minted build is being deployed and will be available shortly."
         message = message + "\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
+        message = message + "\nThis image can be promoted to the *test* environment"
         attachment.title = "API Build ${BUILD_ID} OK! :heart: :tada:"
         attachment.fallback = 'See build log for more details'
         attachment.color = '#00FF00' // Lime Green
-        if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
-          def action = [:]
-          message = message + "\nThis image can be promoted to the *test* environment"
-          action.type = "button"
-          action.text = "Promote Image? :rocket:"
-          action.url = "https://jenkins-devex-mpf-secure-tools.pathfinder.gov.bc.ca/job/devex-mpf-secure-tools/job/devex-mpf-secure-tools-api-develop-pipeline/${BUILD_ID}/input"
-          attachment.actions = [action]
-        }
+        def action = [:]
+        action.type = "button"
+        action.text = "Promote Image? :rocket:"
+        action.url = "https://jenkins-devex-mpf-secure-tools.pathfinder.gov.bc.ca/job/devex-mpf-secure-tools/job/devex-mpf-secure-tools-api-develop-pipeline/${BUILD_ID}/input"
+        attachment.actions = [action]
         attachment.text = message
 
         notifySlack("${env.JOB_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
-
-        if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
-          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          notifySlack("Promotion Completed\n Build #${BUILD_ID} is promoted to the *prod* environment.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
-          echo "Applying tag ${TAG_NAMES[2]} to image ${IMAGE_HASH}"
-        } else {
-          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[0], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          echo "Applying tag ${TAG_NAMES[0]} to image ${IMAGE_HASH}"
-        }
       } catch (error) {
         echo "Unable complete build, error = ${error}"
 
@@ -252,17 +243,31 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
       }
     }
   }
-  if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
-    stage('Approval') {
-      timeout(time: 1, unit: 'DAYS') {
-        input message: "Deploy to test?", submitter: 'jleach-admin'
+
+  stage('Approval') {
+    timeout(time: 1, unit: 'DAYS') {
+      input message: "Deploy to test?", submitter: 'jleach-admin'
+    }
+    node ('master') {
+      stage('Promotion') {
+        openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+        notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *test*.", "${SLACK_CHANNEL}", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
       }
-      node ('master') {
-        stage('Promotion') {
-          openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
-          notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *test*.", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+
+
+      stage('Approval') {
+        timeout(time: 1, unit: 'DAYS') {
+          input message: "Deploy to test?", submitter: 'jleach-admin'
         }
-      }  
+        node ('master') {
+          stage('Promotion') {
+            openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[2], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
+            notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *prod*.", "${SLACK_CHANNEL}", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+          }
+        }  
+      }
+
+
     }
   }
 }
