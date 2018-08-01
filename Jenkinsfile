@@ -82,6 +82,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
         awk -F ' ' '{print \$1}' | \
         awk -F '/' '{print \$3}'""",
         returnStdout: true).trim()
+      echo "BRANCH = ${GIT_BRANCH_NAME}"
     }
     
     stage('Setup') {
