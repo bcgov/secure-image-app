@@ -84,7 +84,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
         returnStdout: true).trim()
     }
     
-    stage('Install') {
+    stage('Setup') {
       echo "Setup: ${BUILD_ID}"
       sh "node -v"
       sh "npm -v"
@@ -244,7 +244,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
     }
   }
 
-  stage('Approval') {
+  stage('Test Approval') {
     timeout(time: 1, unit: 'DAYS') {
       input message: "Deploy to test?", submitter: 'jleach-admin'
     }
@@ -252,12 +252,27 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
       stage('Promotion') {
         openshiftTag destStream: IMAGESTREAM_NAME, verbose: 'true', destTag: TAG_NAMES[1], srcStream: IMAGESTREAM_NAME, srcTag: "${IMAGE_HASH}"
         notifySlack("Promotion Completed\n Build #${BUILD_ID} was promoted to *test*.", "${SLACK_CHANNEL}", "https://hooks.slack.com/services/${SLACK_TOKEN}", [], OPENSHIFT_ICO)
+      
+        def attachment = [:]
+        def message = "This image can be promoted to the *prod* environment."
+        message = message + "\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
+        attachment.title = "Production Promotion ${BUILD_ID} OK! :heart: :tada:"
+        attachment.fallback = 'See build log for more details'
+        attachment.color = '#00FF00' // Lime Green
+        def action = [:]
+        action.type = "button"
+        action.text = "Promote Image? :rocket:"
+        action.url = "https://jenkins-devex-mpf-secure-tools.pathfinder.gov.bc.ca/job/devex-mpf-secure-tools/job/devex-mpf-secure-tools-api-develop-pipeline/${BUILD_ID}/input"
+        attachment.actions = [action]
+        attachment.text = message
+
+        notifySlack("${env.JOB_NAME}", "#secure-image-app", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
       }
 
 
-      stage('Approval') {
+      stage('Prod Approval') {
         timeout(time: 1, unit: 'DAYS') {
-          input message: "Deploy to test?", submitter: 'jleach-admin'
+          input message: "Deploy to prod?", submitter: 'jleach-admin'
         }
         node ('master') {
           stage('Promotion') {
