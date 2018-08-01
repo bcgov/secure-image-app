@@ -118,26 +118,26 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
         // Check code quality
         //
 
-        // try {
-        //   echo "Checking code quality with SonarQube"
-        //   SONARQUBE_URL = sh (
-        //       script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
-        //       returnStdout: true
-        //         ).trim()
-        //   echo "SONARQUBE_URL: ${SONARQUBE_URL}"
-        //   dir('sonar-runner') {
-        //     sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=${APP_NAME} -Dsonar.branch=${GIT_BRANCH_NAME} -Dsonar.projectKey=org.sonarqube:${APP_NAME} -Dsonar.sources=.."
-        //   }
-        // } catch (error) {
-        //   def attachment = [:]
-        //   attachment.fallback = 'See build log for more details'
-        //   attachment.title = "API Build ${BUILD_ID} WARNING! :unamused: :zany_face: :facepalm:"
-        //   attachment.color = '#FFA500' // Orange
-        //   attachment.text = "The SonarQube code quality check failed.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
-        //   // attachment.title_link = "${env.BUILD_URL}"
+        try {
+          echo "Checking code quality with SonarQube"
+          SONARQUBE_URL = sh (
+              script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
+              returnStdout: true
+                ).trim()
+          echo "SONARQUBE_URL: ${SONARQUBE_URL}"
+          dir('sonar-runner') {
+            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=${APP_NAME} -Dsonar.branch=${GIT_BRANCH_NAME} -Dsonar.projectKey=org.sonarqube:${APP_NAME} -Dsonar.sources=.."
+          }
+        } catch (error) {
+          def attachment = [:]
+          attachment.fallback = 'See build log for more details'
+          attachment.title = "API Build ${BUILD_ID} WARNING! :unamused: :zany_face: :facepalm:"
+          attachment.color = '#FFA500' // Orange
+          attachment.text = "The SonarQube code quality check failed.\ncommit ${GIT_COMMIT_SHORT_HASH} by ${GIT_COMMIT_AUTHOR}"
+          // attachment.title_link = "${env.BUILD_URL}"
 
-        //   notifySlack("${APP_NAME}, Build #${BUILD_ID}", "${SLACK_CHANNEL}", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
-        // }
+          notifySlack("${APP_NAME}, Build #${BUILD_ID}", "${SLACK_CHANNEL}", "https://hooks.slack.com/services/${SLACK_TOKEN}", [attachment], JENKINS_ICO)
+        }
 
         //
         // Check code quality with a LINTer
