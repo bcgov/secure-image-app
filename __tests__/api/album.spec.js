@@ -26,7 +26,7 @@ import app from "../../src";
 
 jest.mock("../../src/libs/archive");
 
-const sample = path.join(__dirname, "sample.zip");
+const sample = path.join(__dirname, "sample.jpg");
 const archive = path.join(__dirname, "archive.zip");
 
 beforeAll(() => {
