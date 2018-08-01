@@ -41,7 +41,7 @@ const tempFilePath = '/tmp';
  * Write a ZIP `archive` to a temporary file
  *
  * @param {Object} archive An ZIP `archive` object
- * @returns Promose for pending operation
+ * @returns The path to the temporary file, error otherwise
  */
 export const writeToTemporaryFile = archive => new Promise((resolve, reject) => {
   const tempFileName = Math.random().toString(36).slice(2);
@@ -68,7 +68,7 @@ export const writeToTemporaryFile = archive => new Promise((resolve, reject) => 
  * @param {String} bucketName The name of the bucket
  * @param {String} prefix Object prefix to filter bucket contents on
  * @param {boolean} [cleanup=true] If `true` archived objects will be removed when archived
- * @returns A `Promise` representing the pending operation
+ * @returns The binary representation of the archive, error otherwise.
  */
 export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) => {
   const objectsToRemove = [];

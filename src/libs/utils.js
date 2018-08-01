@@ -23,7 +23,7 @@
 'use strict';
 
 /**
- * Check if a string consits of [Aa-Az], [0-9], -, _, and %.
+ * Check if a string consists of [Aa-Az], [0-9], -, _, and %.
  *
  * @param {String} str The string to be tested
  * @returns true if the string is valid, false otherwise
