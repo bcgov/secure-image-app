@@ -196,7 +196,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
       }
     }
 
-    stage('Build') {
+    stage('Image Build') {
       try {
         echo "Build: ${BUILD_ID}"
 
