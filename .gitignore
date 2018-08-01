@@ -33,6 +33,8 @@ npm-debug.log
 !generated-docs/example-doc.pdf
 !logs/.gitkeep
 task-definition.json
+*.jpg
+*.jpeg
 
 # These files contain credentials, do not add them to
 # the repo.
