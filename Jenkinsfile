@@ -197,7 +197,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
 
     }
 
-    if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
+    if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
       stage('Image Build') {
         try {
           echo "Build: ${BUILD_ID}"
@@ -247,7 +247,7 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
     }
   }
 
-  if( "master" != GIT_BRANCH_NAME.toLowerCase() ) {
+  if( "master" == GIT_BRANCH_NAME.toLowerCase() ) {
     stage('Test Approval') {
       timeout(time: 1, unit: 'DAYS') {
         input message: "Promote this image to test?", submitter: 'jleach-admin'
