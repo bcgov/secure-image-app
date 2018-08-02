@@ -71,7 +71,7 @@ router.get('/callback', passport.authenticate('oauth2', {
     const message = `Unable to build download template: ${TEMPLATES.DOWNLOAD}`
     logger.error(`message, error = ${err.message}`);
     
-    throw new errorWithCode(message, 500);
+    throw errorWithCode(message, 500);
   }
 }));
 
