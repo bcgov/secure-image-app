@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { asyncMiddleware, logger } from '@bcgov/nodejs-common-utils';
+import { asyncMiddleware, logger, errorWithCode } from '@bcgov/nodejs-common-utils';
 import { Router } from 'express';
 import passport from 'passport';
 import url from 'url';
@@ -67,9 +67,11 @@ router.get('/callback', passport.authenticate('oauth2', {
     });
 
     res.send(html);
-  } catch (error) {
-    logger.error(`Unable to build download template: ${TEMPLATES.DOWNLOAD}`);
-    res.send(500);
+  } catch (err) {
+    message = `Unable to build download template: ${TEMPLATES.DOWNLOAD}`
+    logger.error(`message, error = ${err.message}`);
+    
+    throw new errorWithCode(message, 500);
   }
 }));
 
