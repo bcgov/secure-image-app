@@ -90,7 +90,7 @@
         }
       },
       "stringData": {
-        "secret": "${SSO_CLIENT_SECRET}"
+        "secret": "${SSO_SECRET_VALUE}"
       }
     },
     {
@@ -316,7 +316,7 @@
               },
               "env": [{
                   "name": "MINIO_ENDPOINT",
-                  "value": "${MINIO_DEPLOYMENT_NAME}.${ENV_NAMESPACE}.svc"
+                  "value": "${MINIO_DEPLOYMENT_NAME}.${NAMESPACE}.svc"
                 },
                 {
                   "name": "MINIO_ACCESS_KEY",
@@ -367,7 +367,7 @@
 
                 {
                   "name": "APP_URL",
-                  "value": "https://${API_DEPLOYMENT_NAME}-${ENV_NAMESPACE}.pathfinder.gov.bc.ca"
+                  "value": "https://${API_DEPLOYMENT_NAME}-${NAMESPACE}.pathfinder.gov.bc.ca"
                 }
               ],
               "resources": {
@@ -389,7 +389,7 @@
       "required": true
     },
     {
-      "name": "ENV_NAMESPACE",
+      "name": "NAMESPACE",
       "displayName": "Image Namespace",
       "required": true,
       "description": "The namespace of the OpenShift project containing the imagestream for the application."
@@ -453,10 +453,10 @@
       "displayName": "SSO secret name",
       "generate": "expression",
       "required": true,
-      "value": "sso"
+      "value": "sso-client"
     },
     {
-      "name": "SSO_CLIENT_SECRET",
+      "name": "SSO_SECRET_VALUE",
       "displayName": "Express session secret",
       "required": true
     },
@@ -493,7 +493,7 @@
       "displayName": "Minio secret name",
       "generate": "expression",
       "required": true,
-      "value": "api"
+      "value": "api-session"
     },
     {
       "name": "MINIO_VOLUME_NAME",
