@@ -46,7 +46,10 @@ gulp.task('copy-node-config', () => gulp.src(['package.json', 'package-lock.json
 gulp.task('copy-public', () => gulp.src('public/**')
   .pipe(gulp.dest('build/public')));
 
+gulp.task('copy-templates', () => gulp.src('templates/**')
+.pipe(gulp.dest('build/templates')));
+
 gulp.task('default', gulp.series('clean', gulp.parallel(
   'transpile-src', 'transpile-scripts', 'copy-config', 'copy-node-config',
-  'copy-public',
+  'copy-public', 'copy-templates'
 )));
