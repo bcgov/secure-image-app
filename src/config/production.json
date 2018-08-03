@@ -19,8 +19,8 @@
   "sso": {
 		"clientId": "secure-image-api",
 		"callback": "/v1/auth/callback",
-		"authUrl": "https://sso-prod.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth",
-		"tokenUrl": "https://sso-prod.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/token",
-		"certsUrl": "https://sso-prod.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/certs"
+		"authUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth",
+		"tokenUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/token",
+		"certsUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/certs"
   }
 }
