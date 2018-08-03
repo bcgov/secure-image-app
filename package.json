@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@bcgov/nodejs-common-utils": "^0.0.9",
+    "@bcgov/nodejs-common-utils": "^0.0.10",
     "archiver": "^2.1.1",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.18.3",
