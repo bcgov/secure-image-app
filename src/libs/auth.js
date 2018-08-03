@@ -32,16 +32,23 @@ const sendError = (res, statusCode, message) => {
 };
 
 const verifyToken = clientAccessToken => new Promise(async (resolve, reject) => {
-  const pem = await getJwtCertificate(config.get('sso:certsUrl'));
+  try {
+    const pem = await getJwtCertificate(config.get('sso:certsUrl'));
 
-  // verify
-  jwt.verify(clientAccessToken, pem, { algorithms: ['RS256'] }, (verifyErr, verifyResult) => {
-    if (verifyErr) {
-      reject(verifyErr);
-      return;
-    }
-    resolve(verifyResult);
-  });
+    // verify
+    jwt.verify(clientAccessToken, pem, { algorithms: ['RS256'] }, (verifyErr, verifyResult) => {
+      if (verifyErr) {
+        throw (verifyErr);
+      }
+
+      resolve(verifyResult);
+    });
+  } catch (err) {
+    const message = 'Unable to verify token';
+    logger.error(`${message}, error = ${err.code}`);
+
+    reject(new Error(message));
+  }
 });
 
 // eslint-disable-next-line import/prefer-default-export
