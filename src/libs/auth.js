@@ -45,7 +45,7 @@ const verifyToken = clientAccessToken => new Promise(async (resolve, reject) => 
     });
   } catch (err) {
     const message = 'Unable to verify token';
-    logger.error(`${message}, error = ${err.code}`);
+    logger.error(`${message}, error = ${err.message}`);
 
     reject(new Error(message));
   }
