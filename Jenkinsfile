@@ -77,12 +77,6 @@ podTemplate(label: "${APP_NAME}-node-build", name: "${APP_NAME}-node-build", ser
       GIT_COMMIT_AUTHOR = sh (
         script: """git show -s --pretty=%an""",
         returnStdout: true).trim()
-      // GIT_BRANCH_NAME = sh (
-      //   script: """git branch -a -v --no-abbrev --contains ${GIT_COMMIT_SHORT_HASH} | \
-      //   grep 'remotes' | \
-      //   awk -F ' ' '{print \$1}' | \
-      //   awk -F '/' '{print \$3}'""",
-      //   returnStdout: true).trim()
     }
     
     stage('Setup') {
