@@ -410,7 +410,6 @@ class AlbumDetailsViewController: UIViewController {
     }
     
     private func authenticateIfRequred() {
-
         if !authServices.isAuthenticated() {
             let vc = authServices.viewController() { (credentials, error) in
                 
@@ -438,8 +437,10 @@ class AlbumDetailsViewController: UIViewController {
                             let title = "Authentication"
                             let message = "Authentication didn't work. Please try again."
                             
-                            self.showAlert(with: title, message: message)
-                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                self.showAlert(with: title, message: message)
+                            }
+
                             return
                         }
                         
@@ -448,6 +449,10 @@ class AlbumDetailsViewController: UIViewController {
                     
                     self.present(vc, animated: true, completion: nil)
                     return
+                }
+                
+                if let error = error as? AuthenticationError, case AuthenticationError.unknownError = error {
+                    self.authServices.logout()
                 }
                 
                 self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
