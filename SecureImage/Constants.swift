@@ -33,10 +33,10 @@ struct Constants {
     }
     
     struct SSO {
-        static let baseUrl = URL(string: "https://dev-sso.pathfinder.gov.bc.ca")!
+        static let baseUrl = URL(string: "https://sso.pathfinder.gov.bc.ca")!
         static let redirectUri = "secure-image://client"
         static let clientId = "secure-image"
-        static let realmName = "mobile"
+        static let realmName = "secimg"
         static let idpHint = "idir"
     }
     
@@ -48,7 +48,7 @@ struct Constants {
     }
     
     struct API {
-        static let serverURL = URL(string: "https://api-devex-mpf-secure-test.pathfinder.gov.bc.ca/v1/")
+        static let serverURL = URL(string: "https://api-devex-mpf-secure-prod.pathfinder.gov.bc.ca/v1/")
         static let createAlbumPath = "album/"
         static let addPhotoToAlbumPath = "album/:id"
         static let getAlbumDownloadUrlPath = "album/:id"
