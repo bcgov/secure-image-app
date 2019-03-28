@@ -41,24 +41,19 @@ class DataServices: NSObject {
         }
         
         var key = Data(count: 64)
-        key.withUnsafeMutableBytes { (keyByteArray: UnsafeMutablePointer<UInt8>) -> Void in
-            let status = SecRandomCopyBytes(kSecRandomDefault, key.count, keyByteArray)
-            if status != errSecSuccess {
-                fatalError("Unable to extract randome bytes for the encryption key")
-            }
-
-            key = Data.init(bytes: keyByteArray, count: key.count)
-            
-            // Securley store they key
+        let status = key.withUnsafeMutableBytes {
+            (mutableBytes: UnsafeMutablePointer<UInt8>) -> Int32 in
+            SecRandomCopyBytes(kSecRandomDefault, 64, mutableBytes)
+        }
+        
+        if status == errSecSuccess && key.count != 0 {
             guard KeychainWrapper.standard.set(key.base64EncodedString(), forKey: Constants.Keychain.RealmEncryptionKey) else {
                 fatalError("Unalbe to store the Realm encryption key")
             }
+        } else {
+            fatalError("Unable to extract randome bytes for the encryption key")
         }
         
-        if key.count == 0 {
-            print("WARNING: The Realm encryption key is empty !!!")
-        }
-
         return key.count == 0 ? nil : key
     }
     
