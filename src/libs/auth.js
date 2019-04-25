@@ -33,10 +33,10 @@ const sendError = (res, statusCode, message) => {
 
 const verifyToken = clientAccessToken => new Promise(async (resolve, reject) => {
   try {
-    const pem = await getJwtCertificate(config.get('sso:certsUrl'));
+    const { certificate, algorithm } = await getJwtCertificate(config.get('sso:certsUrl'));
 
     // verify
-    jwt.verify(clientAccessToken, pem, { algorithms: ['RS256'] }, (verifyErr, verifyResult) => {
+    jwt.verify(clientAccessToken, certificate, { algorithms: [algorithm] }, (verifyErr, verifyResult) => {
       if (verifyErr) {
         throw (verifyErr);
       }
