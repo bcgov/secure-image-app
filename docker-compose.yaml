@@ -47,5 +47,3 @@ services:
     environment:
       <<: *defaults
       PORT: 8080
-    command: >
-      bash -c "npm run dev"
