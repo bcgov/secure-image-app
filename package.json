@@ -66,7 +66,7 @@
   },
   "scripts": {
     "start": "node build/src/server",
-    "dev": "cross-env NODE_ENV=development nodemon src/server --exec babel-node --inspect",
+    "dev": "NODE_ENV=development nodemon --watch src --exec 'babel-node --inspect=0.0.0.0:9229 --nolazy src/server.js'",
     "build": "cross-env NODE_ENV=production gulp",
     "build:doc": "apidoc -i src/ -o doc/api",
     "test": "NODE_ENV=test jest __tests__",

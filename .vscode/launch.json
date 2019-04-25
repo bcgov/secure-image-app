@@ -11,16 +11,20 @@
             "port": 9229,
             "sourceMaps": true,
         },
-        // {
-        //     "request": "attach",
-        //     "name": "Remote",
-        //     "restart": false,
-        //     "protocol": "inspector",
-        //     "port": 9222,
-        //     "address": "localhost",
-        //     "sourceMaps": true,
-        //     "localRoot": "${workspaceRoot}",
-        //     "remoteRoot": "/opt/app-root/src/build",
-        // },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Docker",
+            "protocol": "inspector",
+            "port": 9229,
+            "restart": true,
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "localRoot": "${workspaceFolder}/src/",
+            "remoteRoot": "/opt/app/src",
+            "outFiles": ["${workspaceFolder}/build/**/*.js"],
+            "skipFiles": ["<node_internals>/**/*.js"],
+            "sourceMaps": true
+        }
     ]
 }
