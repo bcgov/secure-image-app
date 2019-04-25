@@ -1,14 +1,15 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "node": "8.9"
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "8.9"
+        }
       }
-    }],
-    "stage-3"
+    ]
   ],
-  "plugins": [
-    "transform-runtime"
-  ],
-  "sourceMaps": "inline"
+  "plugins": ["@babel/plugin-transform-runtime"],
+  "sourceMaps": "inline",
+  "retainLines": true
 }
