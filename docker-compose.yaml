@@ -1,0 +1,51 @@
+version: "3.6"
+x-env: &defaults
+  NODE_ENV:
+  MINIO_ACCESS_KEY:
+  MINIO_SECRET_KEY:
+  MINIO_ENDPOINT: minio
+  SSO_CLIENT_SECRET:
+  SESSION_SECRET:
+  APP_URL:
+services:
+  minio:
+    container_name: secsign-minio
+    image: minio/minio
+    volumes:
+      - type: bind
+        source: ./minio_data
+        target: /data
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 256m
+    ports:
+      - 9000:9000
+    environment:
+      <<: *defaults
+    command: >
+      server /data
+  api:
+    container_name: secsign-api
+    image: secsign/api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./
+        target: /opt/app/
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 256m
+    ports:
+      - 8080:8080
+      - 9229:9229
+    depends_on:
+      - minio
+    environment:
+      <<: *defaults
+      PORT: 8080
+    command: >
+      bash -c "npm run dev"
