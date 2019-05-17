@@ -1,5 +1,12 @@
 # RELEASE NOTES
 
+## SecureImage 1.0.3
+
+### Build 15
+
+- Fix compiler issues
+- Bump build and version
+
 ## SecureImage 1.0.2
 
 ### Build 9
