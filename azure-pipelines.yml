@@ -55,6 +55,7 @@ steps:
     script: |
         ./scripts/az-set-build-no.sh
 - task: CocoaPods@0
+  timeoutInMinutes: 5
   inputs:
     forceRepoUpdate: false
 - task: Xcode@5
