@@ -33,7 +33,7 @@ The default license For code repositories is: Apache 2.0
 
 Here is the boiler-plate you should put into the comments header of every source code file as well as the bottom of your README.md:
 
-    Copyright 2015 Province of British Columbia
+    Copyright 2018 Province of British Columbia
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
