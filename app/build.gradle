@@ -1,0 +1,123 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'realm-android'
+
+apply plugin: 'io.fabric'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "ca.bc.gov.secureimage"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion '26.0.2'
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    buildTypes {
+
+        debug {
+            shrinkResources false
+            minifyEnabled false
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
+            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
+
+            buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
+            buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']
+            buildConfigField "String", "SSO_AUTH_ENDPOINT", keystoreProperties['SSO_AUTH_ENDPOINT']
+            buildConfigField "String", "SSO_REDIRECT_URI", keystoreProperties['SSO_REDIRECT_URI']
+            buildConfigField "String", "SSO_CLIENT_ID", keystoreProperties['SSO_CLIENT_ID']
+        }
+
+        release {
+            shrinkResources true
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
+            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
+
+            buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
+            buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']
+            buildConfigField "String", "SSO_AUTH_ENDPOINT", keystoreProperties['SSO_AUTH_ENDPOINT']
+            buildConfigField "String", "SSO_REDIRECT_URI", keystoreProperties['SSO_REDIRECT_URI']
+            buildConfigField "String", "SSO_CLIENT_ID", keystoreProperties['SSO_CLIENT_ID']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+
+    implementation "com.github.bcgov:mobile-authentication-android:$mobileAuthenticationVersion"
+
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:customtabs:$rootProject.supportLibraryVersion"
+
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJava2Version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.rxKotlinVersion"
+    implementation "com.github.florent37:rxgps:$rootProject.rxGpsVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.retrofitRxAdapterVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
+
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
+    implementation("com.wonderkiln:camerakit:$rootProject.camerakitVersion") {
+        exclude group: 'com.android.support', module: 'support-compat'
+    }
+
+    implementation "com.github.chrisbanes:PhotoView:$rootProject.photoViewVersion"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "junit:junit:$rootProject.ext.junitVersion"
+
+    testImplementation "com.nhaarman:mockito-kotlin:$rootProject.ext.mockitoKotlinVersion"
+
+    androidTestImplementation "com.android.support.test:runner:$rootProject.ext.testRunnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
+
+    implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
+        transitive = true
+    }
+}

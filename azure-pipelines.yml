@@ -1,0 +1,107 @@
+# NOTES
+#
+# In the Azure DevOps Web IDE:
+# 1) Set the following pipeline variables:
+#   - AzureStorageAccountName
+#   - AzureSubscriptionID
+# 2) In the project settings you must create a `service connection` of type `Azure Resource Manager`
+#    call it `SomethingServiceConnection` and reference by name in in the AzureCLI tasks
+#    `connectedServiceNameARM` input.
+#
+# These will be used by the AzureCLI@2 to copy the build artifact(s) to an Azure blob storage for easy
+# downloading or further processing.
+#
+# For build numbering you can use the following options:
+# BUILD_BUILDID     = NN            # Linier build number eg. 87, 88, 89
+# Build.BuildNumber = NN            # Linier daily build number eg. 1, 2, 3
+# Build.BuildId     = YYYYMMDD.NN   # Build identifier eg. 20190515.3, 20190516.1
+#
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+#
+
+trigger:
+- master
+
+# pr:
+#   autoCancel: true
+
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  BuildID: ${BUILD_BUILDID}
+  AZBlobStorageContainerName: 'artifacts'
+
+steps:
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'keystore.properties'
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'fabric.properties'
+- task: CopyFiles@2
+  displayName: Copy keystore.properties file
+  inputs:
+    contents: 'keystore.properties'
+    sourceFolder: '$(Agent.TempDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)'
+- task: CopyFiles@2
+  displayName: Copy fabric.properties file
+  inputs:
+    contents: 'fabric.properties'
+    sourceFolder: '$(Agent.TempDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)/app'
+- task: Gradle@2
+  displayName: Gradle check and assemble debug build
+  # condition: always() #eq(variables['Build.Reason'], 'PullRequest')
+  timeoutInMinutes: 3
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx4608M'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
+    tasks: 'check assembleDebug'
+- task: Gradle@2
+  displayName: Gradle assemble release build
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+  timeoutInMinutes: 3
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx4608M'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    # Available tasks http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Android-tasks
+    tasks: 'assembleRelease'
+- task: AndroidSigning@3
+  displayName: Release sign APK
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+  timeoutInMinutes: 3
+  inputs:
+    apkFiles: '**/*release*.apk'
+    apksign: true
+    apksignerKeystoreFile: 'secureImageAndroid.jks'
+    apksignerKeystorePassword: '$(DecryptKey)'
+    apksignerKeystoreAlias: 'secureImageAndroid'
+    apksignerKeyPassword: '$(DecryptKey)'
+    zipalign: true # Only works with  `assembleRelease` task.
+# /Users/vsts/agent/2.150.3/work/1/s/app/build/outputs/apk/debug/app-debug.apk
+- task: CopyFiles@2
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+  displayName: Copy APK file
+  inputs:
+    contents: 'app-release-unsigned.apk'
+    sourceFolder: '$(Build.SourcesDirectory)/app/build/outputs/apk/release/'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: AzureCLI@1
+  condition: ne(variables['Build.Reason'], 'PullRequest')
+  displayName: Upload APK to Azure storage
+  timeoutInMinutes: 1
+  inputs:
+    connectedServiceNameARM: $(AZServiceConnectionName)
+    azureSubscription: '$(AzureSubscriptionID)'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az storage blob upload --account-name $(AzureStorageAccountName) --container-name "$(AZBlobStorageContainerName)" --name "SecureImage-$(BuildID).apk" --file "$(Build.ArtifactStagingDirectory)/app-release-unsigned.apk"'

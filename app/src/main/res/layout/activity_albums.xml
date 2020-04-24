@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.bc.gov.secureimage.screens.albums.AlbumsActivity">
+
+    <View
+        android:id="@+id/toolbarBackgroundView"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/toolbarTitleTv"
+        android:text="@string/albums"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/albumsRv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="88dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/createAlbumTv"
+        android:text="@string/create_album"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textAllCaps="true"
+        android:fontFamily="@font/open_sans_bold"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:background="@drawable/selector_rect_color_primary_light_rounded_28dp"
+        android:layout_margin="16dp"
+        android:layout_width="200dp"
+        android:layout_height="56dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/onboardingTitleTv"
+        android:text="@string/hello_comma"
+        android:textSize="18sp"
+        android:textColor="@color/darkGray"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_margin="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/onboardingInfoTv"
+        android:text="@string/onboarding_info"
+        android:textSize="14sp"
+        android:textColor="@color/darkGray"
+        android:fontFamily="@font/open_sans_regular"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/onboardingTitleTv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

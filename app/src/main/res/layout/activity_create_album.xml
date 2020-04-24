@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:animateLayoutChanges="true"
+    tools:context="ca.bc.gov.secureimage.screens.createalbum.CreateAlbumActivity">
+
+    <View
+        android:id="@+id/toolbarBackgroundView"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ImageView
+        android:id="@+id/backIv"
+        android:contentDescription="@string/back"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="@color/white"
+        android:padding="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
+    <TextView
+        android:text="@string/album"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/open_sans_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbarBackgroundView"
+        app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
+    <ImageView
+        android:id="@+id/deleteAlbumIv"
+        android:contentDescription="@string/delete_album"
+        android:src="@drawable/ic_delete_forever_black_24dp"
+        android:tint="@color/white"
+        android:padding="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="@+id/toolbarBackgroundView"
+        app:layout_constraintRight_toRightOf="@+id/toolbarBackgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarBackgroundView"/>
+
+    <TextView
+        android:id="@+id/networkTypeTv"
+        android:textColor="@color/white"
+        android:fontFamily="@font/open_sans_regular"
+        android:gravity="center"
+        android:background="@color/colorPrimaryLight"
+        android:padding="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarBackgroundView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+    
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/networkTypeTv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/imagesLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="3:2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/imagesRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <ProgressBar
+                    android:id="@+id/imagesProgressBar"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/addImagesLayout"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <View
+                        android:id="@+id/addImagesBackgroundIv"
+                        android:background="@color/lightGray"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"/>
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/addImagesTopGuideline"
+                        app:layout_constraintGuide_percent="0.33"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/addImagesLeftGuideline"
+                        app:layout_constraintGuide_percent="0.33"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/addImagesRightGuideline"
+                        app:layout_constraintGuide_percent="0.66"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/addImagesBottomGuideline"
+                        app:layout_constraintGuide_percent="0.66"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/addImagesCameraIv"
+                        android:contentDescription="@string/add_image"
+                        android:src="@drawable/ic_photo_camera_black_24dp"
+                        android:tint="@color/darkGray"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toTopOf="@+id/addImagesTopGuideline"
+                        app:layout_constraintLeft_toLeftOf="@+id/addImagesLeftGuideline"
+                        app:layout_constraintRight_toRightOf="@+id/addImagesRightGuideline"
+                        app:layout_constraintBottom_toBottomOf="@+id/addImagesBottomGuideline"/>
+
+                    <TextView
+                        android:text="@string/add_images"
+                        android:textColor="@color/darkGray"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/addImagesCameraIv"
+                        app:layout_constraintLeft_toLeftOf="@+id/addImagesCameraIv"
+                        app:layout_constraintRight_toRightOf="@+id/addImagesCameraIv"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/viewAllImagesTv"/>
+
+            <TextView
+                android:id="@+id/viewAllImagesTv"
+                android:text="@string/view_all_images"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/imagesLayout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <View
+                android:id="@+id/viewAllDividerView"
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@+id/viewAllImagesTv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/albumNameTv"
+                android:textColor="@color/mediumGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="@string/album_name"
+                app:layout_constraintTop_toBottomOf="@+id/viewAllDividerView"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <EditText
+                android:id="@+id/albumNameEt"
+                android:fontFamily="@font/open_sans_regular"
+                android:hint="@string/add_an_album_name"
+                android:inputType="text"
+                android:background="@null"
+                android:paddingTop="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameTv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <View
+                android:id="@+id/albumNameDividerView"
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameEt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/commentsTv"
+                android:text="@string/comments"
+                android:textColor="@color/mediumGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:fontFamily="@font/open_sans_regular"
+                app:layout_constraintTop_toBottomOf="@+id/albumNameDividerView"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <EditText
+                android:id="@+id/commentsEt"
+                android:fontFamily="@font/open_sans_regular"
+                android:hint="@string/note_something_down_for_later"
+                android:inputType="textMultiLine"
+                android:background="@null"
+                android:paddingTop="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/commentsTv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <View
+                android:id="@+id/commentsDividerView"
+                android:background="@color/lightGray"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@+id/commentsEt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/uploadTv"
+                android:text="@string/upload"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                android:fontFamily="@font/open_sans_bold"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:background="@drawable/selector_rect_color_primary_light_rounded_28dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_width="200dp"
+                android:layout_height="56dp"
+                app:layout_constraintTop_toBottomOf="@+id/commentsDividerView"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            
+        </android.support.constraint.ConstraintLayout>
+        
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

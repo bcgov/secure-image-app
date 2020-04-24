@@ -1,0 +1,64 @@
+
+buildscript {
+    ext.kotlin_version = '1.2.21'
+    ext.gradleVersion = '3.0.1'
+    ext.kotlinVersion = '1.2.21'
+    ext.realmVersion = '4.3.4'
+    ext.fabricToolsVersion = '1.21.6'
+
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "io.realm:realm-gradle-plugin:$realmVersion"
+        classpath "io.fabric.tools:gradle:$fabricToolsVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.21"
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+
+
+
+ext {
+    minSdkVersion = 23
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+
+    supportLibraryVersion = '27.0.2'
+    constraintLayoutVersion = '1.0.2'
+    archComponentsVersion = '1.0.0'
+    rxJava2Version = '2.1.7'
+    rxKotlinVersion = '2.2.0'
+    rxAndroidVersion = '2.0.1'
+    rxGpsVersion = '1.0.0'
+    retrofitVersion = '2.3.0'
+    retrofitRxAdapterVersion = '1.0.0'
+    okHttpVersion = '3.9.1'
+    leakCanaryVersion = '1.5.4'
+    glideVersion = '4.4.0'
+    camerakitVersion = '0.13.2'
+    photoViewVersion = '2.0.0'
+    junitVersion = '4.12'
+    mockitoKotlinVersion = '1.5.0'
+    testRunnerVersion = '1.0.1'
+    espressoVersion = '3.0.1'
+    crashlyticsVersion = '2.8.0@aar'
+    mobileAuthenticationVersion = '0.1.4'
+}
