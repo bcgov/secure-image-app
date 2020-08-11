@@ -2,4 +2,6 @@ node_modules
 build
 dist
 scripts
-test
+__tests__
+__mocks__
+src/libs/__mocks__/*
