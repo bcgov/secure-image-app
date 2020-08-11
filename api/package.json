@@ -69,7 +69,8 @@
     "build:doc": "apidoc -i src/ -o doc/api",
     "test": "NODE_ENV=test jest __tests__",
     "test:schema": "swagger-cli validate doc/api.yaml",
-    "test:watch": "NODE_ENV=test jest __tests__ --watch",
+    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test:watch": "NODE_ENV=test jest --watch --notify --notifyMode=change --coverage",
     "test:lint": "eslint --env node --ext .js src"
   },
   "repository": {
