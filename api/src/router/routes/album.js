@@ -38,7 +38,7 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import uuid from 'uuid/v1'; // timestamp based
+import { v1 as uuid } from 'uuid'; // timestamp based
 import config from '../../config';
 import { isValid } from '../../libs/utils';
 import {

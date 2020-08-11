@@ -18,6 +18,8 @@
 // Created by Jason Leach on 2018-05-06.
 //
 
+/* eslint-disable */
+
 'use strict';
 
 export const archiveImagesInAlbum = async (bucketName, prefix, cleanup = true) => {

@@ -19,7 +19,6 @@
 //
 
 import fs from "fs";
-import util from "util";
 import path from "path";
 import { default as request } from "supertest"; // eslint-disable-line
 import app from "../../src";
