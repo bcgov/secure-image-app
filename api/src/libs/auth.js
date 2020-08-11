@@ -31,18 +31,20 @@ const sendError = (res, statusCode, message) => {
   res.status(statusCode).json({ error: message, success: false });
 };
 
-const verifyToken = clientAccessToken => new Promise(async (resolve, reject) => {
+// eslint-disable-next-line no-async-promise-executor
+const verifyToken = (clientAccessToken) => new Promise(async (resolve, reject) => {
   try {
     const { certificate, algorithm } = await getJwtCertificate(config.get('sso:certsUrl'));
 
     // verify
-    jwt.verify(clientAccessToken, certificate, { algorithms: [algorithm] }, (verifyErr, verifyResult) => {
-      if (verifyErr) {
-        throw (verifyErr);
-      }
+    jwt.verify(clientAccessToken, certificate, { algorithms: [algorithm] },
+      (verifyErr, verifyResult) => {
+        if (verifyErr) {
+          throw (verifyErr);
+        }
 
-      resolve(verifyResult);
-    });
+        resolve(verifyResult);
+      });
   } catch (err) {
     const message = 'Unable to verify token';
     logger.error(`${message}, error = ${err.message}`);

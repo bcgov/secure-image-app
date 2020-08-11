@@ -61,16 +61,16 @@ router.get('/callback', passport.authenticate('oauth2', {
   const baseUrl = config.get('appUrl');
   try {
     const buffer = await loadTemplate(TEMPLATES.DOWNLOAD);
-    console.log('u=', url.resolve(baseUrl, redirectTo));
+    // console.log('u=', url.resolve(baseUrl, redirectTo));
     const html = await compile(buffer, {
       download_url: url.resolve(baseUrl, redirectTo),
     });
 
     res.send(html);
   } catch (err) {
-    const message = `Unable to build download template: ${TEMPLATES.DOWNLOAD}`
+    const message = `Unable to build download template: ${TEMPLATES.DOWNLOAD}`;
     logger.error(`message, error = ${err.message}`);
-    
+
     throw errorWithCode(message, 500);
   }
 }));

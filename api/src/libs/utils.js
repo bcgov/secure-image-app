@@ -29,4 +29,4 @@
  * @returns true if the string is valid, false otherwise
  */
 // eslint-disable-next-line import/prefer-default-export
-export const isValid = str => str && /^[0-9A-Za-z\s\-_%]+$/.test(str);
+export const isValid = (str) => str && /^[0-9A-Za-z\s\-_%]+$/.test(str);

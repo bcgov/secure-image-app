@@ -43,7 +43,7 @@ const tempFilePath = '/tmp';
  * @param {Object} archive An ZIP `archive` object
  * @returns The path to the temporary file, error otherwise
  */
-export const writeToTemporaryFile = archive => new Promise((resolve, reject) => {
+export const writeToTemporaryFile = (archive) => new Promise((resolve, reject) => {
   const tempFileName = Math.random().toString(36).slice(2);
   const file = path.join(tempFilePath, tempFileName);
   const output = fs.createWriteStream(file);

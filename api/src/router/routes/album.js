@@ -31,7 +31,6 @@ import {
   asyncMiddleware,
   errorWithCode,
 } from '@bcgov/nodejs-common-utils';
-import shared from '../../libs/shared';
 import { Router } from 'express';
 import util from 'util';
 import multer from 'multer';
@@ -39,6 +38,7 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 import { v1 as uuid } from 'uuid'; // timestamp based
+import shared from '../../libs/shared';
 import config from '../../config';
 import { isValid } from '../../libs/utils';
 import {
