@@ -2,35 +2,28 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   labels:
-    application: ${NAME}
+    app: ${NAME}-api
   name: ${NAME}-build
-  namespace: devex-mpf-secure-tools
+  namespace: devhub-dev
 objects:
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    labels:
-      app: ${NAME}
-    name: github
-  stringData:
-    WebHookSecretKey: ${GITHUB_SECRET}
-  type: Opaque
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: ${IMAGE_STREAM_NAME}
+    name: ${NAME}-api
+    labels:
+      app: ${NAME}-api
 - apiVersion: v1
   kind: BuildConfig
   metadata:
+    name: ${NAME}-api-${GIT_REF}-build
     labels:
-      app: ${NAME}-${GIT_REF}-build
-      name: ${NAME}-${GIT_REF}-build
-    name: ${NAME}-${GIT_REF}-build
+      app: ${NAME}-api
+      name: ${NAME}-api-${GIT_REF}-build
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: ${IMAGE_STREAM_NAME}:${OUTPUT_IMAGE_TAG}
+        name: ${NAME}-api:${OUTPUT_IMAGE_TAG}
     resources:
       limits:
         cpu: ${CPU_LIMIT}
@@ -38,7 +31,7 @@ objects:
       requests:
         cpu: ${CPU_REQUEST}
         memory: ${MEMORY_REQUEST}
-    runPolicy: Parallel
+    runPolicy: Serial
     source:
       contextDir: ${SOURCE_CONTEXT_DIR}
       git:
@@ -57,63 +50,22 @@ objects:
         incremental: false
       type: Source
     triggers:
-    - type: ImageChange
     - type: ConfigChange
-- apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: ${NAME}-${GIT_REF}-pipeline
-      name: ${NAME}-${GIT_REF}-pipeline
-      template: ${NAME}-${GIT_REF}-pipeline
-    name: ${NAME}-${GIT_REF}-pipeline
-  spec:
-    nodeSelector: null
-    output: {}
-    postCommit: {}
-    resources: {}
-    runPolicy: Parallel
-    source:
-      git:
-        ref: ${GIT_REF}
-        uri: ${GIT_REPO_URL}
-      type: Git
-    strategy:
-      jenkinsPipelineStrategy:
-        jenkinsfilePath: Jenkinsfile
-      type: JenkinsPipeline
-    triggers:
-    - github:
-        secretReference:
-          name: github
-      type: GitHub
-  status:
-    lastVersion: 0
 parameters:
-- description: The name assigned to all of the objects defined in this template.  You
-    should keep this as default unless your know what your doing.
-  displayName: Name
-  name: IMAGE_STREAM_NAME
-  required: true
-  value: secure-image-api
-- description: The name assigned to all of the objects defined in this template.  You
-    should keep this as default unless your know what your doing.
+- description: |
+    The name assigned to all of the objects defined in this template.
+    You should keep this as default unless your know what your doing.
   displayName: Name
   name: NAME
   required: true
-  value: api
-- description: The openshift project where builds and target images are stored.
-  displayName: Build Project
-  name: SOURCE_IMAGE_NAMESPACE
-  required: true
-  value: openshift
-- description: The URL to your GIT repo, don't use the this default unless your just
-    experimenting.
+  value: secure-image
+- description: |
+    The URL to your GIT repo, don't use the this default unless
+    your just experimenting.
   displayName: Git Repo URL
   name: GIT_REPO_URL
   required: true
-  value: https://github.com/bcgov/secure-image-api.git
+  value: https://github.com/bcgov/secure-image-app.git
 - description: The git reference or branch.
   displayName: Git Reference
   name: GIT_REF
@@ -123,22 +75,27 @@ parameters:
   displayName: Source Context Directory
   name: SOURCE_CONTEXT_DIR
   required: false
-  value: ""
+  value: "api"
 - description: The tag given to the built image.
   displayName: Output Image Tag
   name: OUTPUT_IMAGE_TAG
   required: true
   value: latest
+- description: The openshift project where builds and target images are stored.
+  displayName: Build Project
+  name: SOURCE_IMAGE_NAMESPACE
+  value: 'openshift'
+  required: true
 - description: The name of the source image.
   displayName: Source Image Name
   name: SOURCE_IMAGE_NAME
+  value: 'nodejs'
   required: true
-  value: nodejs
 - description: The tag of the source image.
   displayName: Source Image Tag
   name: SOURCE_IMAGE_TAG
-  required: true
   value: "10"
+  required: true
 - description: The resources CPU limit (in cores) for this build.
   displayName: Resources CPU Limit
   name: CPU_LIMIT
@@ -159,8 +116,3 @@ parameters:
   name: MEMORY_REQUEST
   required: true
   value: 2Gi
-- displayName: GitHub web hook secret
-  from: '[a-zA-Z0-9]{16}'
-  generate: expression
-  name: GITHUB_SECRET
-  required: true
