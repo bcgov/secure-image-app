@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ${NAME}-api
   name: ${NAME}-build
-  namespace: devhub-dev
+  namespace: devex-mpf-secure-tools
 objects:
 - apiVersion: v1
   kind: ImageStream
