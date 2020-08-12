@@ -63,7 +63,7 @@
     "swagger-cli": "^4.0.4"
   },
   "scripts": {
-    "start": "node build/src/server",
+    "start": "node build/src/server.js",
     "dev": "NODE_ENV=development nodemon --watch src --exec 'babel-node --inspect=0.0.0.0:9229 --nolazy src/server.js'",
     "build": "cross-env NODE_ENV=production gulp",
     "build:doc": "apidoc -i src/ -o doc/api",
