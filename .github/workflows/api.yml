@@ -72,4 +72,4 @@ jobs:
           parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
           cmd: |
             'version'
-            'start-build secure-image-master-build --follow -n devex-mpf-secure-tools'
+            'start-build secure-image-api-master-build --follow -n devex-mpf-secure-tools'
