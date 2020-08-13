@@ -27,7 +27,7 @@ import nconf from 'nconf';
 import path from 'path';
 
 const env = process.env.NODE_ENV || 'development';
-const defaultPort = 8000;
+const fileName = 'config.json';
 
 if (env === 'development') {
   dotenv.config();
@@ -58,14 +58,15 @@ nconf.overrides({
 });
 
 // load other properties from file.
-nconf.argv()
+nconf
+  .argv()
   .env()
-  .file({ file: path.join(__dirname, `${env}.json`) });
+  .file({ file: path.join(__dirname, `${fileName}`) });
 
 // if nothing else is set, use defaults. This will be set if
 // they do not exist in overrides or the config file.
 nconf.defaults({
-  appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || defaultPort}`,
+  appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || 8000}`,
 });
 
 export default nconf;
