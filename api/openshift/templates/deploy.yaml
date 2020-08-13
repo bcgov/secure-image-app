@@ -304,4 +304,4 @@ parameters:
       This parameter sets the nodejs run-time environment variable.
     displayName: Node Environment
     name: NODE_ENV
-    value: produciton
+    value: production
