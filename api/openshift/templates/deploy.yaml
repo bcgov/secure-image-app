@@ -58,7 +58,7 @@ objects:
     annotations:
       description: Exposes the minio server
     labels:
-      app: ${MINIO_DEPLOYMENT_NAME}
+      app: ${API_NAME}
     name: ${MINIO_DEPLOYMENT_NAME}
   spec:
     ports:
@@ -106,6 +106,7 @@ objects:
         creationTimestamp: null
         labels:
           app: minio
+          role: minio
           deploymentconfig: ${MINIO_DEPLOYMENT_NAME}
       spec:
         containers:
@@ -124,7 +125,7 @@ objects:
             value: /tmp
           - name: MINIO_DATA_DIR
             value: /data
-          image: docker-registry.default.svc:5000/openshift/minio:1
+          image: docker-registry.default.svc:5000/openshift/minio:latest
           imagePullPolicy: Always
           name: ${MINIO_DEPLOYMENT_NAME}
           ports:
@@ -191,6 +192,7 @@ objects:
         containers:
           - name: ${API_NAME}
             image: " "
+            imagePullPolicy: Always
             readinessProbe:
               httpGet:
                 path: /api/v1/ehlo
@@ -223,7 +225,7 @@ objects:
                     key: secret
                     name: ${SSO_SECRET_NAME}
               - name: PORT
-                value: ${PORT}
+                value: "8080"
               - name: NODE_ENV
                 value: ${NODE_ENV}
               - name: APP_URL
@@ -298,3 +300,8 @@ parameters:
     displayName: SSO Secret Name
     name: SSO_SECRET_NAME
     value: sso-client
+  - description: |
+      This parameter sets the nodejs run-time environment variable.
+    displayName: Node Environment
+    name: NODE_ENV
+    value: produciton
