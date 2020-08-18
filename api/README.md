@@ -176,7 +176,6 @@ deploymentconfig.apps.openshift.io/secure-image-api configured
 | MINIO_VOLUME_CAPACITY  | NO | The size of the minio volume. For example (1G, 10G, 32G, etc) |
 
 
-
 ## Local Installation for Development
 
 There are two steps to running this project locally for development:
