@@ -101,28 +101,81 @@ oc start-build bc/secure-image-api-master-build --follow
 
 ## Deployment
 
-TODO: Make sure the route name matches the prod route name when it is deployed.
+This component (and sub components) deploy throuh applying an OpenShift template and subsaquently through image tags. The deployment manifest will deploy the API (from the build process) as well as an instance of [minio](https://min.io/).
 
-Use the OpenShift `deploy.json` template in this repo with the following (sample) command.
+There are three steps to deploy the API component:
+1. Create the secrets necessary for access control;
+2. Create a `ConfigMap` where frequently changed application config is stored;
+3. Deploy the application (and sub components).
+
+### Step 1: Secrets
+
+The secrets are separated form the main deployment manifest so that `oc apply` can be used without regenerating the secrets. Run the following command to create the necessary OCP secrets:
 
 ```console
- oc process -f openshift/templates/deploy.json \
- -p NODE_ENV="development" \
- -p SSO_CLIENT_SECRET="abc123" \
- -p MINIO_VOLUME_CAPACITY=3Gi \
- -p ENV_NAMESPACE="devex-mpf-secure-test" \
- -p IMAGE_TAG="test" | \
+oc process -f secret.yaml -p SSO_SHARED_SECRET=<THE_SECRET> | \
 oc create -f -
 ```
 
-| Parameter          | Optional      | Description   |
-| ------------------ | ------------- | ------------- |
-| NODE_ENV           | NO            | The node environment name |
-| SSO_CLIENT_SECRET  | NO            | Client secret provided by SSO |
-| ENV_NAMESPACE      | NO            | The environment namespace your deploying to |
-| IMAGE_TAG          | NO            | The image tag you wish to deploy |
+| Name               | Optional | Value   |
+| :----------------- | :------- | :------------ |
+| SSO_SHARED_SECRET  | NO       | The credentials copied from the SSO realm client (via the Web UI). |
 
-* See the `deploy.json` template for other *optional* parameters.
+### Step 2: The ConfigMap
+
+Next, create a config map with application configuration. Adjust the information in the YAML file as needed for each environment.
+
+```console
+oc process -f config.yaml | \
+oc apply -f -
+```
+
+The following table describes the settings in the config file:
+
+| Name               | Description  |
+| :----------------- | :----------- |
+| temporaryUploadPath| Directory on local storage where uploaded media is temporarily stored.|
+| archiveFileBaseName| A prefix given to archived images in the downloadable file. |
+| templates | The path to the HTML served by the application |
+| albumExpirationInDays | The duration in days that an album can be downloaded |
+| minio | Minio server config. See minio documentation for details.
+| session | HTTP session configuration |
+| sso | SSO server config. |
+
+
+### Step 3: Deployment
+
+There are several deployment parameters embedded in the manifest with defaults that do not need to be specified. Some however, must be supplied at deployment time. They are shown in the command below as well as outlined in [deploy.yaml](./openshift/templates/deploy.yaml) manifest and table below. Use the following command to trigger a deployment; all components will deploy immediately providing the images are available.
+
+
+```console
+oc process -f openshift/templates/deploy.yaml \
+-p SOURCE_IMAGE_NAMESPACE=<NAMESPACE_HERE> \
+-p SOURCE_IMAGE_TAG=<dev | test | prod> \
+-p NAMESPACE=$(oc project --short) \
+-p MINIO_VOLUME_CAPACITY=<SIZE> | \
+oc apply -f -
+```
+
+You'll see all the components get created and the deployment will begin providing a image with the appropriate tag exists:
+
+```console
+route.route.openshift.io/secure-image-api configured
+persistentvolumeclaim/minio-data configured
+service/minio configured
+service/secure-image-api configured
+deploymentconfig.apps.openshift.io/minio configured
+deploymentconfig.apps.openshift.io/secure-image-api configured
+```
+
+| Name               | Optional | Value   |
+| :----------------- | :------- | :------------ |
+| SOURCE_IMAGE_NAMESPACE  | NO | Typically your tools namespace where the image will be pulled from |
+| SOURCE_IMAGE_TAG  | NO | The tag OCP monitor for images changes to trigger a deployment. This typically matches the environment postfix (dev, test, prod) |
+| NAMESPACE  | NO | The namespace currently being deployed to |
+| MINIO_VOLUME_CAPACITY  | NO | The size of the minio volume. For example (1G, 10G, 32G, etc) |
+
+
 
 ## Local Installation for Development
 
