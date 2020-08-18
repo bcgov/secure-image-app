@@ -3,38 +3,105 @@
 
 This is the API component to the Secure Image application suite. Secure Image is designed to provide a simple yet secure way for people to take sensitive photographs (or image related documentation) and store it outside of the device's camera roll. It also provides a convenient way to extract the images by providing a secure URL to download an album.
 
-Additional component can be fond in these repos:
-
-[iOS Application](https://github.com/bcgov/secure-image-ios)
-
-[Android Application](https://github.com/bcgov/secure-image-android)
-
-## Usage
-
-As part of the build process API documentation is automatically built via `apidoc` and packaged with the output image. Once deployed the documentation can be viewed at the following URL; update the protocol and host according to your own deployment.
-
-`https://api-devex-mpf-secure-test.pathfinder.gov.bc.ca/docs/`
-
 ## Build
 
-Use the OpenShift `build.json` template in this repo with the following (sample) command.
+This component builds using GitHub Actions in combination with the OpenShift Container Platform (OCP). The GitHub Actions workflow will build and test the project against various node versions and, once successful, if the changes are on the `master` branch trigger an OCP image build using a service account with highly restricted access.
+
+There are two steps for setting up the CICD pipeline:
+1. Setup a OCP service account with restricted access and add the credentials to GitHub;
+2. Setup the OCP image build.
+
+### Step 1: CICD Service Account
+
+To setup the CICD pipeline GitHub needs to be able to trigger an image build in OCP. We do this by setting up a service account that only has access to trigger and image build.
+
+In the root directory of the repo there is an directory containing common OpenShift templates. Use the following command to create a CICD service account for GitHub.
 
 ```console
-oc process -f openshift/templates/build.json \
--p GIT_REF=develop \
--p SLACK_SECRET='helloworld' | \
-oc create -f -
+oc process -f ../openshift/templates/cicd.yaml \
+-p NAMESPACE=$(oc project --short) | \
+oc apply -f -  
 ```
 
 | Parameter          | Optional      | Description   |
 | ------------------ | ------------- | ------------- |
-| GIT_REF            | NO            | The branch to build from |
-| SLACK_SECRET       | NO            | Slack token to post to channel(s) |
+| NAMESPACE            | NO            | The namespace used for all components of the credentials. 
 
-* See the `build.json` template for other *optional* parameters.
-** To build multiple branches you'll use the config file multiple times. This will create errors from the `oc` command output that can safely be ignored. For example: `Error from server (AlreadyExists): secrets "github" already exists`
+
+You'll see some output from the above command similar to this:
+
+```console
+serviceaccount/github-cicd created
+role.authorization.openshift.io/github-cicd created
+rolebinding.authorization.openshift.io/github-cicd created
+```
+
+You can list your secrets with the following command:
+
+```console
+oc get secrets
+```
+
+Again, you'll see output similar to this:
+
+```console
+NAME                          TYPE                                  DATA   AGE
+github-cicd-dockercfg-gsd7b   kubernetes.io/dockercfg               1      85s
+github-cicd-token-9jnw6       kubernetes.io/service-account-token   4      85s
+github-cicd-token-gr9pf       kubernetes.io/service-account-token   4      85s
+```
+
+Pick either of the secrets beginning with `github-cicd-token` and get the `token` field from it. You can do this via the Web UI or with the following command providing you have `jq` installed:
+
+```
+oc get secret/github-cicd-token-9jnw6 -o json | \
+jq '.data.token' | \
+tr -d "\""
+```
+
+Pro Tip 🤓: If you have a mac, add `| pbcopy` after the above command to copy the token directly to your clipboard. 
+
+Once you have your token go to the Settings of your GitHub repo and create the following [encrypted secrets](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets):
+
+| Name               | Optional | Value   |
+| :----------------- | :------- | :------------ |
+| OPENSHIFTTOKEN     | NO       | The token from from the command above.|
+| OPENSHIFTSERVERURL | NO       | The URL for the OpenShift console (everything up to the port number).|
+
+These secrets are used by the official RedHat GitHub actions to trigger the image build. You can see them in the workflow file [here](../.github/workflows/api.yml) and in the excerpt below:
+
+```yaml
+   steps:
+      - name: S2I Build
+        uses: redhat-developer/openshift-actions@v1.1
+        with:
+          version: "latest"
+          openshift_server_url: ${{ secrets.OpenShiftServerURL}}
+          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
+          cmd: |
+            'version'
+            'start-build secure-image-api-master-build --follow -n devex-mpf-secure-tools'
+```
+
+### Step 2: OCP Image Build
+
+The second and final step is to setup the image build on the OCP platform. The [workflow](../.github/workflows/api.yml) is setup to only run this step when changes impact the `master` branch.
+
+Use the following command to setup the image `BuildConfig` in your tools namespace:
+
+```console
+oc process -f openshift/templates/build.yaml | oc apply -f -
+```
+
+You can trigger this build manually to check that it works as expected:
+
+```console
+oc start-build bc/secure-image-api-master-build --follow
+```
 
 ## Deployment
+
+TODO: Make sure the route name matches the prod route name when it is deployed.
 
 Use the OpenShift `deploy.json` template in this repo with the following (sample) command.
 
