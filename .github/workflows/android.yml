@@ -20,6 +20,5 @@ jobs:
         with:
           java-version: 1.8
 
-      # Step 3: Check the code with Android linter
-      - name: bla
-        run: ./gradlew test
+      - name: Run Unit Tests
+        run: ./gradlew check assembleDebug
