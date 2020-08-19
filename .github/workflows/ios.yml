@@ -27,3 +27,12 @@ jobs:
         run: |
           cd ios
           pod install
+
+      - name: Build app
+        run: |
+          cd ios
+          xcodebuild \
+          -workspace SecureImage.xcworkspace \
+          -scheme SecureImage \
+          -configuration Debug \
+          build
