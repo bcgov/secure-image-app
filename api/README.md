@@ -178,22 +178,43 @@ deploymentconfig.apps.openshift.io/secure-image-api configured
 
 ## Local Development
 
+Local development for this component is made easy by using the included [docker-compose](./docker-compose.yaml) file. This will start a local server that can be used for development on any of the components.
+
+Create a local directory within the `api` sub-folder that the minio container will use to store data. When an album is uploaded it will appear in this directory.
+
 ```console
-cd api && mkdir minio_data
+mkdir minio_data
 ```
+
+Create a `.env` file in the `api` sub-folder with the entries show below. See `src/config/index.js` and `docker-compose.yaml` to understand how they are consumed by the application:
+
+```
+NODE_ENV=development
+
+# Local Docker
+MINIO_ACCESS_KEY="xxxx"
+MINIO_SECRET_KEY="yyyy"
+SSO_CLIENT_SECRET="zzzz"
+SESSION_SECRET="aaa"
+APP_URL=https://f9d9fbb72386.ngrok.io
+```
+
+| Name               | Optional | Value   |
+| :----------------- | :------- | :------------ |
+| MINIO_ACCESS_KEY  | NO | The minio access key (line username) |
+| MINIO_SECRET_KEY  | NO | The minio secret key (like password) |
+| SSO_CLIENT_SECRET  | NO | This comes from the client in the SSO Web UI |
+| SESSION_SECRET  | NO | Used to secure HTTP sessions |
+| APP_URL | NO | The application (API) endpoint |
+
+Pro Tip 🤓: 
+ * Use `openssl rand -hex 6` to generate MINIO_ACCESS_KEY, MINIO_SECRET_KEY, and SESSION_SECRET.
+ * iOS prefers SSL due to AST. You an use `npx ngrok http 8080` to setup a local proxy that will provide an external URL providing both `http` and `https` protocols.
+
+Now, bring up the docker stack / images using `docker-compose`:
 
 ```console
 docker-compose up
 ```
 
-
-```console
-NODE_ENV=development
-MINIO_ACCESS_KEY="XXXXXXXX"
-MINIO_SECRET_KEY="YYYYYYYYYYYYYYYY"
-MINIO_ENDPOINT="localhost"
-SSO_CLIENT_SECRET="00000000-aaaa-aaaa-aaaa-000000000000"
-SESSION_SECRET="abc123"
-APP_URL="http://localhost:8000"
-```
-
+At this point your docker stack will be running. See the ProTip above about using `ngrok` as a proxy. The external URLs provided by this application can be given used for `APP_URL` as well as provided to the iOS and Android applications for local development work.
