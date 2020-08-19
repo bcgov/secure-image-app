@@ -28,4 +28,4 @@ Contributions are welcome. Please ensure they relate to an issue. See our
 
 ## License
 
-See the included [LICENSE](./LICENSE). 
+See the included [LICENSE](./LICENSE) file.
