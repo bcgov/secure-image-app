@@ -3,13 +3,13 @@ x-env: &defaults
   NODE_ENV:
   MINIO_ACCESS_KEY:
   MINIO_SECRET_KEY:
-  MINIO_ENDPOINT: minio
+  MINIO_ENDPOINT: secimg-minio
   SSO_CLIENT_SECRET:
   SESSION_SECRET:
   APP_URL:
 services:
   minio:
-    container_name: secsign-minio
+    container_name: secimg-minio
     image: minio/minio
     volumes:
       - type: bind
@@ -26,19 +26,17 @@ services:
     command: >
       server /data
   api:
-    container_name: secsign-api
-    image: secsign/api
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    container_name: secimg-api
+    image: node:10.16.3
     volumes:
       - type: bind
         source: ./
-        target: /opt/app/
+        target: /opt/app-root/src
       - type: tmpfs
         target: /tmp
         tmpfs:
           size: 256m
+    working_dir: /opt/app-root/src
     ports:
       - 8080:8080
       - 9229:9229
@@ -47,3 +45,5 @@ services:
     environment:
       <<: *defaults
       PORT: 8080
+    command: >
+      npm run dev

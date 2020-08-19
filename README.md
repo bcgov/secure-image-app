@@ -1,57 +1,55 @@
-This repo consolidates thee other repos: secure-image-api, secure-image-ios, and secure-image-android. Those repos are archived and will soon be deleted. This README will be updated shortly.
-
-BUILD
-
-➜  secure-image-app git:(master) ✗ oc process -f openshift/templates/cicd.yaml -p NAMESPACE=$(oc project --short) | oc apply -f -  serviceaccount/github-cicd created
-role.authorization.openshift.io/github-cicd created
-rolebinding.authorization.openshift.io/github-cicd created
-
-open the secret, `github-cicd-dockercfg-xxxxx`
-
-copy the password
-
-create a secret in the repo names `OPENSHIFTTOKEN`
-create a secret in the repo named `OPENSHIFTSERVERURL`
-
-make sure namespace and build name is correct in api.yml
-
-```yaml
-   steps:
-      - name: S2I Build
-        uses: redhat-developer/openshift-actions@v1.1
-        with:
-          version: "latest"
-          openshift_server_url: ${{ secrets.OpenShiftServerURL}}
-          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
-          cmd: |
-            'version'
-            'start-build secure-image-api-master-build --follow -n devex-mpf-secure-tools'
-```
-
-TODO: Make sure the route name matches the prod route name when it is deployed.
 
 
-Deployment
+## Project Status / Goals / Roadmap
 
-oc create secret docker-registry rh-registry \\n--docker-server=registry.redhat.io \\n--docker-username=$RHNAME \\n--docker-password=RHPWD \\n--docker-email=unused
+This project is completed. 
 
-oc secrets add sa/builder secrets/rh-registry  --for=pull
+Progress to date, known issues, or new features will be documented on our publicly available Trello board [here](https://trello.com/b/UYJpEzrT/secure-image-app).
 
-➜  templates git:(master) ✗ oc process -f config.yaml| oc apply -f -
-configmap/secure-image-api-config created
+## Getting Help or Reporting an Issue
 
-
-Apply secrets, they are removed from the deployment manifest so the deploument can be run with `oc apply` for updates. If it were not seperated then the secrets would be regenerated each time `oc apply` is used.
-
-```console
-oc process -f secret.yaml -p SSO_SHARED_SECRET=xxxxx | oc create -f -
-```
+Send a note to bcdevexchange@gov.bc.ca and you'll get routed to the right person to help you out.
 
 
-➜  api git:(master) ✗ oc process -f openshift/templates/deploy.yaml -p SOURCE_IMAGE_NAMESPACE=devex-mpf-secure-tools -p SOURCE_IMAGE_TAG=dev -p NAMESPACE=$(oc project --short) -p MINIO_VOLUME_CAPACITY=1G | oc apply -f -
-route.route.openshift.io/secure-image-api configured
-persistentvolumeclaim/minio-data unchanged
-service/minio unchanged
-service/secure-image-api unchanged
-deploymentconfig.apps.openshift.io/minio unchanged
-deploymentconfig.apps.openshift.io/secure-image-api configured
+## How to Contribute
+
+*If you are including a Code of Conduct, make sure that you have a [CODE_OF_CONDUCT.md](SAMPLE-CODE_OF_CONDUCT.md) file, and include the following text in here in the README:*
+"Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms."
+
+## License
+
+Detailed guidance around licenses is available 
+[here](/BC-Open-Source-Development-Employee-Guide/Licenses.md)
+
+Attach the appropriate LICENSE file directly into your repository before you do anything else!
+
+The default license For code repositories is: Apache 2.0
+
+Here is the boiler-plate you should put into the comments header of every source code file as well as the bottom of your README.md:
+
+    Copyright 2015 Province of British Columbia
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at 
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+   
+For repos that are made up of docs, wikis and non-code stuff it's Creative Commons Attribution 4.0 International, and should look like this at the bottom of your README.md:
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">YOUR REPO NAME HERE</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of Britich Columbia</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
+and the code for the cc 4.0 footer looks like this:
+
+    <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
+    style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span
+    xmlns:dct="http://purl.org/dc/terms/" property="dct:title">YOUR REPO NAME HERE</span> by <span
+    xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of Britich Columbia
+    </span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+    Creative Commons Attribution 4.0 International License</a>.
