@@ -16,8 +16,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-
+      - name: Decrypt keystore properties
+        run: |
+          cd android
+          openssl version
+          openssl aes-256-cbc -md md5 -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}
       - name: Run Unit Tests
         run: |
           cd android
-          ./gradlew check assembleDebug
+          ./gradlew test
