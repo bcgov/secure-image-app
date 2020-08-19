@@ -1,61 +1,47 @@
+# TL;DR
 
-## Example Readme
+This sub-directory contains the iOS app that is one of the three components to the application suite. The following document will illustrate key configuration for iOS development and release.
 
-This readme serves as an example readme for a government open source project. A brief description of your project would go here.
+# Local Development
 
-## Features
+This document assumes the reader is using a macOS device and has downloaded `xcode` from the macOS App store. It also assumes the reader is familiar with iOS development.
 
-## Usage
+This project uses [CocoaPods](https://cocoapods.org/) for package management. Run `pod install` to install the necessary dependencies. In addition to this, make the following config changes for local development or production releases:
 
-## Requirements
+Open the file `Constants.swift` in the xcode IDE and edit the SSO `baseUrl` to match whatever is being used by the API. For local development will probably be `sso-dev` and for production `sso`.
 
-## Installation
+```swift
+struct SSO {
+    static let baseUrl = URL(string: "https://sso-dev.pathfinder.gov.bc.ca")!
+    static let redirectUri = "secure-image://client"
+    static let clientId = "secure-image"
+    static let realmName = "secimg"
+    static let idpHint = "idir"
+}
+```
 
-## Project Status
+In the same file, edit the API `serverURL` to match whatever is being used by the API. The iOS app will use this URL to access the API.
 
-## Goals/Roadmap
+```swift
+struct API {
+    static let serverURL = URL(string: "https://f9d9fbb72386.ngrok.io/v1/")
+    static let createAlbumPath = "album/"
+    static let addPhotoToAlbumPath = "album/:id"
+    static let getAlbumDownloadUrlPath = "album/:id"
+    static let addFieldNotesToAlbumPath = "album/:id/note"
+}
+```
 
-## Getting Help or Reporting an Issue
+At this point you will be able to run the app on an iOS device for development. The iOS application will use the `serverURL` to communicate with the API.
 
-## How to Contribute
+Pro Tip 🤓: 
+* Make sure you set these values correctly prior to a production build and release; don't ship dev config.
+* Mobile applications need to be signed with our corporate certificates prior to release. Search for `signing` at the [DevHub](https://developer.gov.bc.ca/) for more information on the process.
 
-*If you are including a Code of Conduct, make sure that you have a [CODE_OF_CONDUCT.md](SAMPLE-CODE_OF_CONDUCT.md) file, and include the following text in here in the README:*
-"Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms."
+## Azure Pipeline - Experimental
 
-## License
+All iOS development must be done on macOS devices; This was not available through GitHub Actions at the time of this project. However, Microsoft's Azure DevOps did offer build time on macOS devices for free.
 
-Detailed guidance around licenses is available 
-[here](/BC-Open-Source-Development-Employee-Guide/Licenses.md)
+This project has a configuration file for Azure Pipelines (CICD). This is an experimental feature.
 
-Attach the appropriate LICENSE file directly into your repository before you do anything else!
-
-The default license For code repositories is: Apache 2.0
-
-Here is the boiler-plate you should put into the comments header of every source code file as well as the bottom of your README.md:
-
-    Copyright 2018 Province of British Columbia
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at 
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-   
-For repos that are made up of docs, wikis and non-code stuff it's Creative Commons Attribution 4.0 International, and should look like this at the bottom of your README.md:
-
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">YOUR REPO NAME HERE</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of Britich Columbia</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
-
-and the code for the cc 4.0 footer looks like this:
-
-    <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
-    style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span
-    xmlns:dct="http://purl.org/dc/terms/" property="dct:title">YOUR REPO NAME HERE</span> by <span
-    xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of Britich Columbia
-    </span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
-    Creative Commons Attribution 4.0 International License</a>.
+ Teams can setup their own Azure DevOps organization and add this repository to Pipelines. Azure DevOps pipelines will use the included [azure-pipelines.yml](./azure-pipelines.yml). Contact Platform Services for additional support once you have created an organization.

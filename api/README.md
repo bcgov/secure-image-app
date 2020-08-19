@@ -210,6 +210,7 @@ APP_URL=https://f9d9fbb72386.ngrok.io
 Pro Tip 🤓: 
  * Use `openssl rand -hex 6` to generate MINIO_ACCESS_KEY, MINIO_SECRET_KEY, and SESSION_SECRET.
  * iOS prefers SSL due to AST. You an use `npx ngrok http 8080` to setup a local proxy that will provide an external URL providing both `http` and `https` protocols.
+ * Make sure the URL is registered in your SSO realm as a valid callback URL.
 
 Now, bring up the docker stack / images using `docker-compose`:
 
