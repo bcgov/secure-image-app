@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "ios/SecureImage/**/*"
+      - "ios/somefile.txt"
 
 jobs:
   build:
