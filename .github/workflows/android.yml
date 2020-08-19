@@ -20,7 +20,7 @@ jobs:
         run: |
           cd android
           openssl version
-          openssl aes-256-cbc -md md5 -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}
+          openssl aes-256-cbc -md sha512 -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${ANDROID_DECRYPT_KEY}
       - name: Run Unit Tests
         run: |
           cd android
