@@ -21,6 +21,8 @@ DerivedData/
 Build/*
 Build/
 
+android/keystore.properties
+
 # Exclude merge artifacts
 *.orig
 
