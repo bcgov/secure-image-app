@@ -24,4 +24,5 @@ jobs:
       - name: Run Unit Tests
         run: |
           cd android
+          export ANDROID_NDK_HOME=
           ./gradlew test
