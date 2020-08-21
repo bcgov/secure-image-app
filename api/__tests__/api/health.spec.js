@@ -25,7 +25,7 @@ import app from '../../src';
 describe('Test monitoring routes', () => {
   test('The readiness probe should respond with 200', async () => {
     await request(app)
-      .get('/ehlo')
+      .get('/v1/ehlo')
       .expect(200);
   });
 });
