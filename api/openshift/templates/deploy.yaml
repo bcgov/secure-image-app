@@ -195,7 +195,7 @@ objects:
             imagePullPolicy: Always
             readinessProbe:
               httpGet:
-                path: /api/v1/ehlo
+                path: /v1/ehlo
                 port: 8080
               initialDelaySeconds: 10
               timeoutSeconds: 3
