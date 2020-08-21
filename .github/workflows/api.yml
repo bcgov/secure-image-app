@@ -2,7 +2,7 @@ name: Test & Build
 on:
   push:
     paths:
-      - "api/src/**/*.ts"
+      - "api/src/**/*.js"
       - "api/package*.json"
       - "api/templates/*.html"
 defaults:
