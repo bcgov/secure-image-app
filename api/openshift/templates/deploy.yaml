@@ -125,7 +125,7 @@ objects:
             value: /tmp
           - name: MINIO_DATA_DIR
             value: /data
-          image: docker-registry.default.svc:5000/openshift/minio:1
+          image: docker-registry.default.svc:5000/openshift/minio:latest
           imagePullPolicy: Always
           name: ${MINIO_DEPLOYMENT_NAME}
           ports:
