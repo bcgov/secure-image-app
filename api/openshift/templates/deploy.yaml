@@ -229,7 +229,7 @@ objects:
               - name: NODE_ENV
                 value: ${NODE_ENV}
               - name: APP_URL
-                value: https://${API_DEPLOYMENT_NAME}-${NAMESPACE}.pathfinder.gov.bc.ca
+                value: https://${API_NAME}-${NAMESPACE}.pathfinder.gov.bc.ca
             resources:
               limits:
                 cpu: 300m
