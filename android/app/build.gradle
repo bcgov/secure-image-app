@@ -8,8 +8,6 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'realm-android'
 
-apply plugin: 'io.fabric'
-
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -42,7 +40,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
-            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
 
             buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
             buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']
@@ -58,7 +55,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
-            manifestPlaceholders = [FABRIC_API_KEY: keystoreProperties['FABRIC_API_KEY']]
 
             buildConfigField "String", "SSO_BASE_URL", keystoreProperties['SSO_BASE_URL']
             buildConfigField "String", "SSO_REALM_NAME", keystoreProperties['SSO_REALM_NAME']

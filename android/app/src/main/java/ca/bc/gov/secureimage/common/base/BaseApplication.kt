@@ -10,7 +10,6 @@ import com.squareup.leakcanary.LeakCanary
 import ca.bc.gov.secureimage.common.managers.KeyStorageManager
 import ca.bc.gov.secureimage.di.Injection
 import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 
 /**
  *
@@ -34,8 +33,6 @@ class BaseApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        setUpFabric()
-
         val keyStorageManager = Injection.provideKeyStorageManager(
                 Injection.provideKeyStore())
 
@@ -44,10 +41,6 @@ class BaseApplication: Application() {
         setUpLeakCanary()
     }
 
-    // Fabric
-    fun setUpFabric() {
-        Fabric.with(this, Crashlytics())
-    }
 
     // Realm
     fun setUpRealm(keyStorageManager: KeyStorageManager) {

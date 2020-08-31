@@ -45,7 +45,3 @@
 
 # Camera kit
 -dontwarn com.google.android.gms.**
-
-# Fabric
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**
