@@ -51,9 +51,9 @@ objects:
           "sso": {
             "clientId": "secure-image-api",
             "callback": "/v1/auth/callback",
-            "authUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth",
-            "tokenUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/token",
-            "certsUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/certs"
+            "authUrl": "${SSO_BASE_URL}/auth/realms/secimg/protocol/openid-connect/auth",
+            "tokenUrl": "${SSO_BASE_URL}/auth/realms/secimg/protocol/openid-connect/token",
+            "certsUrl": "${SSO_BASE_URL}/auth/realms/secimg/protocol/openid-connect/certs"
           }
         }
 parameters:
@@ -64,3 +64,8 @@ parameters:
     displayName: Name
     name: NAME
     value: secure-image-api
+  - description: |
+      The URL where the application can locate the SSO service.
+    displayName: SSO URL
+    name: SSO_BASE_URL
+    required: true

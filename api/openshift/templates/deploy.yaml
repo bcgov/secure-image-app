@@ -239,7 +239,7 @@ objects:
                 memory: 92Mi
             volumeMounts:
               - name: config-vol
-                mountPath: /opt/app-root/src/build/config/config.json
+                mountPath: /opt/app-root/src/build/src/config/config.json
                 subPath: config.json
         volumes:
           - name: config-vol
