@@ -9,7 +9,6 @@ import ca.bc.gov.secureimage.BuildConfig
 import com.squareup.leakcanary.LeakCanary
 import ca.bc.gov.secureimage.common.managers.KeyStorageManager
 import ca.bc.gov.secureimage.di.Injection
-import com.crashlytics.android.Crashlytics
 
 /**
  *
