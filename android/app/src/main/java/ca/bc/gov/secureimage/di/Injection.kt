@@ -110,8 +110,8 @@ object Injection {
     private var cachedCallAdapterFactory: CallAdapter.Factory? = null
 
     @JvmStatic
-    fun provideCallAdapterFactory(): CallAdapter.Factory = cachedCallAdapterFactory ?:
-            RxJava2CallAdapterFactory.create()
+    fun provideCallAdapterFactory(): CallAdapter.Factory = cachedCallAdapterFactory
+            ?: RxJava2CallAdapterFactory.create()
                     .also { cachedCallAdapterFactory = it }
 
     // Retrofit
@@ -140,10 +140,14 @@ object Injection {
         val authEndpoint = BuildConfig.SSO_AUTH_ENDPOINT
         val redirectUri = BuildConfig.SSO_REDIRECT_URI
         val clientId = BuildConfig.SSO_CLIENT_ID
+        val hint = BuildConfig.SSO_HINT
 
-        val mobileAuthenticationClient =
-                MobileAuthenticationClient(
-                        context, baseUrl, realmName, authEndpoint, redirectUri, clientId)
+        val mobileAuthenticationClient = if (hint != null)
+            MobileAuthenticationClient(
+                    context, baseUrl, realmName, authEndpoint, redirectUri, clientId, hint)
+        else
+            MobileAuthenticationClient(
+                    context, baseUrl, realmName, authEndpoint, redirectUri, clientId)
 
         return mobileAuthenticationClient
     }

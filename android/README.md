@@ -18,6 +18,7 @@ SSO_REALM_NAME = \"mobile\"
 SSO_AUTH_ENDPOINT = \"https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/auth\"
 SSO_REDIRECT_URI = \"bcgov://android\"
 SSO_CLIENT_ID = \"secure-image\"
+SSO_HINT = \"idir\"
 ```
 
 

@@ -44,6 +44,7 @@ android {
             buildConfigField "String", "SSO_AUTH_ENDPOINT", keystoreProperties['SSO_AUTH_ENDPOINT']
             buildConfigField "String", "SSO_REDIRECT_URI", keystoreProperties['SSO_REDIRECT_URI']
             buildConfigField "String", "SSO_CLIENT_ID", keystoreProperties['SSO_CLIENT_ID']
+            buildConfigField "String", "SSO_HINT", keystoreProperties['SSO_HINT']?:"null"
         }
 
         release {
@@ -58,6 +59,7 @@ android {
             buildConfigField "String", "SSO_AUTH_ENDPOINT", keystoreProperties['SSO_AUTH_ENDPOINT']
             buildConfigField "String", "SSO_REDIRECT_URI", keystoreProperties['SSO_REDIRECT_URI']
             buildConfigField "String", "SSO_CLIENT_ID", keystoreProperties['SSO_CLIENT_ID']
+            buildConfigField "String", "SSO_HINT", keystoreProperties['SSO_HINT']?:"null"
         }
     }
 }
