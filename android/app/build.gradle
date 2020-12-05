@@ -36,7 +36,6 @@ android {
         debug {
             shrinkResources false
             minifyEnabled false
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
@@ -51,7 +50,6 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']
