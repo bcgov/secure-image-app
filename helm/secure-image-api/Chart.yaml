@@ -1,0 +1,11 @@
+apiVersion: v1
+name: secure-image-api
+description: secure-image api helm chart
+type: application
+version: 0.1.0
+appVersion: 2.0.0
+sources:
+  - https://github.com/bcgov/secure-image-app/tree/master/api
+maintainers:
+  - name: ll911
+    email: leo.lou@gov.bc.ca

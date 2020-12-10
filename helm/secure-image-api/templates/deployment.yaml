@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "secure-image-api.fullname" . }}
+  labels:
+    {{- include "secure-image-api.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "secure-image-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "secure-image-api.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "secure-image-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - env:
+          - name: MINIO_ENDPOINT
+            value: {{ template "minio.fullname" . }}
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: accesskey
+                name: {{ template "minio.secretName" . }}-minio
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: secretkey
+                name: {{ template "minio.secretName" . }}-minio
+          - name: SESSION_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: sessionSecret
+                name: {{ include "secure-image-api.fullname" . }}
+          - name: SSO_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: ssoClientSecret
+                name: {{ include "secure-image-api.fullname" . }}
+          - name: PORT
+            value: {{ .Values.service.port | quote }}
+          - name: NODE_ENV
+            value: production
+          - name: APP_URL
+            value: https://{{ .Values.sso.apiHost }}/      
+          name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /v1/ehlo
+              port: http
+              scheme: HTTP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /v1/ehlo
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
