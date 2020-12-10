@@ -46,7 +46,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: test-secure-image.apps.silver.devops.gov.bc.ca 
+    - host: api.secure-image.mcf.gov.bc.ca
       paths: ["/"]
   tls: []
   #  - secretName: chart-example-tls
@@ -95,4 +95,3 @@ minio:
 
 sso:
   clientSecret:
-  apiHost: test-secure-image.apps.silver.devops.gov.bc.ca    

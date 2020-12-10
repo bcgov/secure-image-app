@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gateway
+  name: gateway
+spec:
+  ports:      
+  - name: gw-proxy-ssl
+    port: 443
+    protocol: TCP
+    targetPort: 8443      
+  selector:
+    app: gateway
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+      name: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: 'caddy/caddy'
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "caddy stop"]
+          ports:            
+            - containerPort: 8443
+              name: proxy-ssl
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config/caddy
+              name: run
+            - mountPath: /etc/caddy
+              name: conf
+      volumes:
+        - emptyDir: {}
+          name: run
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: caddyfile
+                path: Caddyfile
+            name: gw-config
+          name: conf
+---
+apiVersion: v1
+data:
+  caddyfile: |- 
+    :8443 {
+    reverse_proxy https://api-devex-mpf-secure-prod.pathfinder.gov.bc.ca {
+      header_up Host api-devex-mpf-secure-prod.pathfinder.gov.bc.ca
+    }
+
+kind: ConfigMap
+metadata:
+  name: gw-config
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  annotations:
+  name: secure-image-gateway
+  labels:
+    app: gateway
+spec:
+  host: api.secure-image.mcf.gov.bc.ca
+  to:
+    kind: Service
+    name: gateway
+    weight: 100
+  port:
+    targetPort: 8443
+  tls:
+    termination: edge
+    certificate: 
+    key: 
+  wildcardPolicy: None
