@@ -15,7 +15,11 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.NoSuchElementException
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -566,7 +570,14 @@ class CreateAlbumPresenter(
         var body = ""
         if (albumName.isNotBlank()) body += "Album Name:\n$albumName\n\n"
         if (comments.isNotBlank()) body += "Comments:\n$comments\n\n"
-        if (downloadUrl.isNotBlank()) body += "Download Images Here:\n$downloadUrl"
+
+        if (downloadUrl.isNotBlank()) {
+            body += "Download Images Here:\n$downloadUrl"
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, 7)
+            val expDateStr = SimpleDateFormat("yyyy-MM-dd").format(calendar.time)
+            body += "\n\nThe link expires 7 days from today on $expDateStr."
+        }
 
         val chooserTitle = "Send download link using..."
 

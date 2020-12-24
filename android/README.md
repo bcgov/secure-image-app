@@ -10,13 +10,13 @@ Make the following config changes for local development or production releases:
 
 Open the file `keystore.properties` and edit the values as needed. For example, if you are running the API locally update `DEBUG_SERVER_URL` to point to your local instance as per the API docs there.
 
+Content of `keystore.properties` for production release is
 ```
-FABRIC_API_KEY = 4dc0080275145d547109096fa1840eabb6bd5104
-DEBUG_SERVER_URL = \"http://api-devex-mpf-secure-dev.pathfinder.gov.bc.ca/\"
-SSO_BASE_URL = \"https://dev-sso.pathfinder.gov.bc.ca/\"
-SSO_REALM_NAME = \"mobile\"
-SSO_AUTH_ENDPOINT = \"https://dev-sso.pathfinder.gov.bc.ca/auth/realms/mobile/protocol/openid-connect/auth\"
-SSO_REDIRECT_URI = \"bcgov://android\"
+DEBUG_SERVER_URL = \"https://api.secure-image.mcf.gov.bc.ca/\"
+SSO_BASE_URL = \"https://oidc.gov.bc.ca/\"
+SSO_REALM_NAME = \"secimg\"
+SSO_AUTH_ENDPOINT = \"https://oidc.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth\"
+SSO_REDIRECT_URI = \"secure-image://client\"
 SSO_CLIENT_ID = \"secure-image\"
 SSO_HINT = \"idir\"
 ```
