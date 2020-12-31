@@ -14,13 +14,14 @@
 	},
 	"session": {
 		"maxAge": 604800000,
-		"expires": 604800000
+    "expires": 604800000,
+    "domain": ".gov.bc.ca"
   },
   "sso": {
 		"clientId": "secure-image-api",
 		"callback": "/v1/auth/callback",
-		"authUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth",
-		"tokenUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/token",
-		"certsUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/certs"
+		"authUrl": "https://test.oidc.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/auth",
+		"tokenUrl": "https://test.oidc.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/token",
+		"certsUrl": "https://test.oidc.gov.bc.ca/auth/realms/secimg/protocol/openid-connect/certs"
   }
 }

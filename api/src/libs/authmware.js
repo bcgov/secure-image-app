@@ -34,6 +34,7 @@ const authmware = (app) => {
     secret: config.get('session:key'),
     cookie: {
       maxAge: config.get('session:maxAge'),
+      domain: config.get('session:domain'),
       httpOnly: false,
     },
     resave: false,
