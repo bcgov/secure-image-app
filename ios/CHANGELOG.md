@@ -1,5 +1,20 @@
 # RELEASE NOTES
 
+## SecureImage 1.0.5
+
+### Build 21
+
+- Update UI to have a light appearance;
+- Update SSO to new prod URL;
+- Update API to new;
+- Add text to email indication album link expiration.
+
+## SecureImage 1.0.4
+
+### Build 18
+
+- Resign application with update enterprise certificate.
+
 ## SecureImage 1.0.3
 
 ### Build 15

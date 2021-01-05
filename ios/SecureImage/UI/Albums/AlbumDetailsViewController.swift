@@ -339,13 +339,18 @@ class AlbumDetailsViewController: UIViewController {
             
             let composeVC = MFMailComposeViewController()
             composeVC.mailComposeDelegate = self
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let todayAsString = dateFormatter.string(from: Date())
 
             let body = """
             Here is an album exported from SecureImage App.
             <br /><br />
-            You can downlaod the images from this album at the following URL:
+            You can download the images from this album at the following URL:
             <br />
             <a href=\"\(url)\">Download Album</a>
+            <br /><br />
+            This link will expire \(Constants.Album.ExpirationInDays) days from \(todayAsString).
             """
             // Configure the fields of the interface.
             // composeVC.setToRecipients(["address@example.com"])
