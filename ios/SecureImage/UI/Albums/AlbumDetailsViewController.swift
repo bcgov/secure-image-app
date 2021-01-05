@@ -341,8 +341,10 @@ class AlbumDetailsViewController: UIViewController {
             composeVC.mailComposeDelegate = self
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            let todayAsString = dateFormatter.string(from: Date())
-
+            let expirationDate = Calendar.current.date(byAdding: .day, value: Constants.Album.ExpirationInDays, to: Date())!
+            let expirationDateAsString = dateFormatter.string(from: expirationDate)
+            let createdAtAsString = dateFormatter.string(from: self.album.createdAt)
+            
             let body = """
             Here is an album exported from SecureImage App.
             <br /><br />
@@ -350,11 +352,11 @@ class AlbumDetailsViewController: UIViewController {
             <br />
             <a href=\"\(url)\">Download Album</a>
             <br /><br />
-            This link will expire \(Constants.Album.ExpirationInDays) days from \(todayAsString).
+            This link will expire \(Constants.Album.ExpirationInDays) days from today on \(expirationDateAsString).
             """
             // Configure the fields of the interface.
             // composeVC.setToRecipients(["address@example.com"])
-            composeVC.setSubject("Album from SecureImage App - Created \(self.album.createdAt)")
+            composeVC.setSubject("Album from SecureImage App - Created \(createdAtAsString)")
             composeVC.setMessageBody(body, isHTML: true)
             
             // Present the view controller modally.
