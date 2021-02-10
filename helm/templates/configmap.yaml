@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "secure-image-api.fullname" . }}-config
+  labels:
+    app: {{ include "secure-image-api.name" . }}
+    chart: {{ include "secure-image-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |-
+{{ .Values.congJson | indent 4 }}
