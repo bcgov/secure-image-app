@@ -1,0 +1,44 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: cleanup-cron
+spec:
+  schedule: 0 1 * * *
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    metadata:
+    spec:
+      activeDeadlineSeconds: 1800
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            parent: cleanup-cron
+        spec:
+          volumes:
+            - name: minio-data
+              persistentVolumeClaim:
+                claimName: minio-data
+          containers:
+            - name: minio-clean
+              image: 'alpine:3.12'
+              command:
+                - /bin/sh
+                - '-c'
+                - find /data/ -mtime +7 -delete
+              resources: {}
+              volumeMounts:
+                - name: minio-data
+                  mountPath: /data
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: Always
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          activeDeadlineSeconds: 1800
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
