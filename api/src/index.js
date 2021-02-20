@@ -29,6 +29,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import morgan from 'morgan';
 import authmw from './libs/authmware';
 
 // Middlewares
@@ -75,6 +76,18 @@ app.use(flash());
 
 // Authentication middleware
 app.use(authmw(app));
+
+if (process.env.ENABLE_ACCESS_LOGGING === 'true') {
+  app.use(
+    morgan('common', {
+      skip: (req) => req.baseUrl === '/v1/ehlo',
+    }),
+  );
+}
+
+if (process.env.TRUSTED_PROXY) {
+  app.set('trust proxy', process.env.TRUSTED_PROXY);
+}
 
 // Server API routes
 require('./router')(app);
