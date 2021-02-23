@@ -34,7 +34,7 @@ spec:
       containers:
         - env:
           - name: MINIO_ENDPOINT
-            value: {{ template "minio.fullname" . }}
+            value: {{ template "minio.fullname" . }}-minio
           - name: MINIO_ACCESS_KEY
             valueFrom:
               secretKeyRef:
