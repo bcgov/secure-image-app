@@ -1,30 +1,40 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to API",
-            "processId": "${command:PickProcess}",
-            "restart": true,
-            "protocol": "inspector",
-            "port": 9229,
-            "sourceMaps": true,
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Docker",
-            "protocol": "inspector",
-            "port": 9229,
-            "restart": true,
-            "preLaunchTask": null,
-            "runtimeExecutable": null,
-            "localRoot": "${workspaceFolder}/src/",
-            "remoteRoot": "/opt/app/src",
-            "outFiles": ["${workspaceFolder}/build/**/*.js"],
-            "skipFiles": ["<node_internals>/**/*.js"],
-            "sourceMaps": true
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/node_modules/@babel/node/bin/babel-node.js",
+      "args": ["src/server.js"],
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "envFile": "${workspaceFolder}/.vscode/.env",
+      "outputCapture": "std",
+      "type": "pwa-node"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to API",
+      "processId": "${command:PickProcess}",
+      "restart": true,
+      "protocol": "inspector",
+      "port": 9229,
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Docker",
+      "protocol": "inspector",
+      "port": 9229,
+      "restart": true,
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "localRoot": "${workspaceFolder}/src/",
+      "remoteRoot": "/opt/app/src",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"],
+      "skipFiles": ["<node_internals>/**/*.js"],
+      "sourceMaps": true
+    }
+  ]
 }
