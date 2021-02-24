@@ -8,11 +8,11 @@ image:
   repository: image-registry.openshift-image-registry.svc:5000/97fbe8-tools/secure-image-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: 'latest'
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -21,14 +21,16 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: ''
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -42,18 +44,20 @@ service:
 
 ingress:
   enabled: true
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: api.secure-image.mcf.gov.bc.ca
-      paths: ["/"]
+      paths: ['/']
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -84,14 +88,14 @@ minio:
     enabled: false
   resources:
     requests:
-      memory: 1Gi 
+      memory: 1Gi
   persistence:
     enabled: true
-    existingClaim: ""
-    storageClass: ""
-    VolumeName: ""
+    existingClaim: ''
+    storageClass: ''
+    VolumeName: ''
     accessMode: ReadWriteMany
-    size: 10Gi         
+    size: 10Gi
 
 sso:
   clientSecret:
@@ -113,7 +117,11 @@ congJson: |
     },
     "session": {
       "maxAge": 604800000,
-      "expires": 604800000
+      "expires": 604800000,
+      "domain": ".gov.bc.ca",
+      "memcached": {
+        "hosts": "session-store-memcached:11211"
+      }
     },
     "sso": {
       "clientId": "secure-image-api",

@@ -27,6 +27,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import url from 'url';
+import memcached from 'connect-memcached';
 import config from '../config';
 
 const authmware = (app) => {
@@ -40,6 +41,12 @@ const authmware = (app) => {
     resave: false,
     saveUninitialized: false,
   };
+
+  const memcachedOpts = config.get('session:memcached');
+  if (memcachedOpts) {
+    const MemcachedStore = memcached(session);
+    sessionOptions.store = new MemcachedStore(memcachedOpts);
+  }
 
   app.use(session(sessionOptions));
   app.use(passport.initialize());
@@ -64,7 +71,10 @@ const authmware = (app) => {
       tokenURL: config.get('sso:tokenUrl'),
       clientID: config.get('sso:clientId'),
       clientSecret: config.get('sso:clientSecret'),
-      callbackURL: url.resolve(`${config.get('appUrl')}`, config.get('sso:callback')),
+      callbackURL: url.resolve(
+        `${config.get('appUrl')}`,
+        config.get('sso:callback'),
+      ),
     },
     (accessToken, refreshToken, profile, done) => done(null, {}),
   );
