@@ -33,7 +33,7 @@ struct Constants {
     }
     
     struct SSO {
-        static let baseUrl = URL(string: "https://sso.pathfinder.gov.bc.ca")!
+        static let baseUrl = URL(string: "https://oidc.gov.bc.ca")!
         static let redirectUri = "secure-image://client"
         static let clientId = "secure-image"
         static let realmName = "secimg"
@@ -43,12 +43,13 @@ struct Constants {
     struct Album {
         // When converted to cammelcase these must match the related `Album`
         // model properties.
+        static let ExpirationInDays = 7
         static let Fields = [(name: "Album Name", placeHolderText: "Jane Doe"),
                              (name: "Comment", placeHolderText: "Your text here")]
     }
     
     struct API {
-        static let serverURL = URL(string: "https://api-devex-mpf-secure-prod.pathfinder.gov.bc.ca/v1/")
+        static let serverURL = URL(string: "https://api.secure-image.mcf.gov.bc.ca/v1/")
         static let createAlbumPath = "album/"
         static let addPhotoToAlbumPath = "album/:id"
         static let getAlbumDownloadUrlPath = "album/:id"
