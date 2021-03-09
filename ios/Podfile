@@ -1,7 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 project 'SecureImage.xcodeproj'
-platform :ios, '9.0'
+platform :ios, '10.2'
 use_frameworks!
 
 # This is used to allow the CI build to work. The pod(s) are
