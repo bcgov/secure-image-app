@@ -1,3 +1,5 @@
+![Lifecycle:Stable](https://img.shields.io/badge/Lifecycle-Stable-97ca00)
+
 # TL;DR
 
 The Secure Image app consists of native iOS and Android apps as well as a simple API and web component. Collectively, they allow one to take images on a mobile device, upload them to the API, and securely retrieve the album at a later date.
