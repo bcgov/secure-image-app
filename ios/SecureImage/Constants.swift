@@ -55,6 +55,14 @@ struct Constants {
         static let getAlbumDownloadUrlPath = "album/:id"
         static let addFieldNotesToAlbumPath = "album/:id/note"
     }
+    
+    struct Email {
+        struct Clients {
+            static let yahooMailBaseURI = "ymail://mail/compose"
+            static let outlookBaseURI = "ms-outlook://compose"
+            static let gmailBaseURI = "googlegmail://co"
+        }
+    }
 }
 
 extension Notification.Name {

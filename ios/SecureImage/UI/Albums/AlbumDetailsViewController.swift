@@ -23,6 +23,13 @@ import RealmSwift
 import MessageUI
 import SingleSignOn
 
+enum MailClient: String, CaseIterable {
+    case Outlook
+    case Apple
+    case Gmail
+    case Yahoo
+}
+
 class AlbumDetailsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -201,11 +208,18 @@ class AlbumDetailsViewController: UIViewController {
     
     private func uploadAlbum() {
         
-        if !checkForMessagingCapability() {
+        // Show appropriate message if no clients are available
+        if availableEmailClients().isEmpty {
+            let title = "Messaging"
+            let message = "This devices is not able to send messages."
+            showAlert(with: title, message: message)
             return
         }
         
-        authenticateIfRequred()
+        // TODO: this is the stopper
+        self.sendEmailforUploaded(url: URL(string: "www.google.com")!)
+        return
+        //        authenticateIfRequred()
     }
     
     private func uploadHandler() -> (() -> Void) {
@@ -220,7 +234,7 @@ class AlbumDetailsViewController: UIViewController {
             DispatchQueue.main.async {
                 self.progressOverlay.updateProgress(to: 0.0)
             }
-
+            
             guard let credentials = self.authServices.credentials else {
                 return
             }
@@ -255,7 +269,7 @@ class AlbumDetailsViewController: UIViewController {
                     var notes = [String:String]()
                     for field in Constants.Album.Fields {
                         if let realm = try? Realm(), let myAlbum = realm.objects(Album.self).filter("id == %@", albumId).first,
-                            let key = field.name.toCammelCase(), let value = myAlbum.value(forKey: key) as? String {
+                           let key = field.name.toCammelCase(), let value = myAlbum.value(forKey: key) as? String {
                             notes[key] = value
                         }
                     }
@@ -274,7 +288,7 @@ class AlbumDetailsViewController: UIViewController {
                     let offset = item.offset
                     let doc = item.element
                     let copy = Data.init(base64Encoded: doc.imageData!.base64EncodedData())!
-
+                    
                     queue.addAsyncOperation { done in
                         BackendAPI.add(credentials: credentials, image: copy, toRemoteAlbum: remoteAlbumId) { (remoteDocumentId: String?) in
                             
@@ -337,45 +351,8 @@ class AlbumDetailsViewController: UIViewController {
                 return
             }
             
-            let composeVC = MFMailComposeViewController()
-            composeVC.mailComposeDelegate = self
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            let expirationDate = Calendar.current.date(byAdding: .day, value: Constants.Album.ExpirationInDays, to: Date())!
-            let expirationDateAsString = dateFormatter.string(from: expirationDate)
-            let createdAtAsString = dateFormatter.string(from: self.album.createdAt)
-            
-            let body = """
-            Here is an album exported from SecureImage App.
-            <br /><br />
-            You can download the images from this album at the following URL:
-            <br />
-            <a href=\"\(url)\">Download Album</a>
-            <br /><br />
-            This link will expire \(Constants.Album.ExpirationInDays) days from today on \(expirationDateAsString).
-            """
-            // Configure the fields of the interface.
-            // composeVC.setToRecipients(["address@example.com"])
-            composeVC.setSubject("Album from SecureImage App - Created \(createdAtAsString)")
-            composeVC.setMessageBody(body, isHTML: true)
-            
-            // Present the view controller modally.
-            self.present(composeVC, animated: true, completion: nil)
+            self.sendEmailforUploaded(url: url)
         }
-    }
-    
-    private func checkForMessagingCapability() -> Bool {
-        
-        if MFMailComposeViewController.canSendMail() {
-            return true
-        }
-        
-        let title = "Messaging"
-        let message = "This devices is not able to send messages."
-        
-        showAlert(with: title, message: message)
-        
-        return false
     }
     
     private func confirmNetworkAvailabilityBeforUpload(handler: @escaping (() -> Void)) {
@@ -436,7 +413,7 @@ class AlbumDetailsViewController: UIViewController {
             
             present(vc, animated: true, completion: nil)
         } else {
-            authServices.refreshCredientials(completion: { (credentials: Credentials?, error: Error?) in
+            authServices.refreshCredientials(completion: { (credentials , error: Error?) in
                 if let error = error as? AuthenticationError, case .expired = error {
                     let vc = self.authServices.viewController() { (credentials, error) in
                         
@@ -447,7 +424,7 @@ class AlbumDetailsViewController: UIViewController {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 self.showAlert(with: title, message: message)
                             }
-
+                            
                             return
                         }
                         
@@ -509,7 +486,7 @@ class AlbumDetailsViewController: UIViewController {
             }
             
             return nil
-            }.filter { $0 != nil }.first
+        }.filter { $0 != nil }.first
         
         // adjust the table so that the users current cell is just above
         // the top of the keyboard
@@ -550,8 +527,152 @@ extension AlbumDetailsViewController: UITableViewDataSource {
     }
 }
 
-// MARK: MFMailComposeViewControllerDelegate
+// MARK: Email
 extension AlbumDetailsViewController: MFMailComposeViewControllerDelegate {
+    
+    /// Shows UI for selecting an email client and redirects to the selected
+    /// client app with a pre-populated message containing the given URL
+    /// - Parameter url: to include in email body
+    func sendEmailforUploaded(url: URL) {
+        
+        let availableClients = availableEmailClients()
+        
+        // Show client selection
+        promptEmailClientSelection(options: availableClients) { selectedClient in
+            // redirect to selected client
+            self.sendEmailTo(
+                mailClient: selectedClient,
+                subject: self.formEmailSubject(),
+                body: self.formEmailBody(with: url)
+            )
+        }
+    }
+    
+    /// Presents a UI prompt for selecting an email client
+    /// - Parameters:
+    ///   - options: Email client options to show
+    ///   - completion: selected email client
+    func promptEmailClientSelection(options: [MailClient], completion: @escaping(MailClient)->Void) {
+        
+        let alert = UIAlertController(title: "Messaging", message: "Please choose an client", preferredStyle: .actionSheet)
+        for option in options {
+            alert.addAction(UIAlertAction(title: option.rawValue, style: .default , handler:{ (UIAlertAction) in
+                return completion(option)
+            }))
+        }
+        
+        // TODO: check if ipad or iphone
+        alert.popoverPresentationController?.sourceView = self.tableView
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    /// checks and returns available email clients available on device
+    /// - Returns: Available Email clients on device
+    func availableEmailClients() -> [MailClient] {
+        var clients: [MailClient] = []
+        
+        if let yahooURI = URL(string: Constants.Email.Clients.yahooMailBaseURI), UIApplication.shared.canOpenURL(yahooURI) {
+            clients.append(.Yahoo)
+        }
+        if let gmailURI = URL(string: Constants.Email.Clients.gmailBaseURI), UIApplication.shared.canOpenURL(gmailURI) {
+            clients.append(.Gmail)
+        }
+        if let outlookURI = URL(string: Constants.Email.Clients.outlookBaseURI), UIApplication.shared.canOpenURL(outlookURI) {
+            clients.append(.Outlook)
+        }
+        
+        if MFMailComposeViewController.canSendMail() {
+            clients.append(.Apple)
+        }
+        
+        return clients
+    }
+    
+    /// Generates email subject string based on current date
+    /// - Returns: email subject
+    func formEmailSubject() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let createdAtAsString = dateFormatter.string(from: self.album.createdAt)
+        return "Album from SecureImage App - Created \(createdAtAsString)"
+    }
+    
+    /// generates email body with given url and current date
+    /// - Parameter url: url to include in email body
+    /// - Returns: email body string
+    func formEmailBody(with url: URL) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var expirationDateAsString = "Unknown"
+        if let expirationDate = Calendar.current.date(byAdding: .day, value: Constants.Album.ExpirationInDays, to: Date()) {
+            expirationDateAsString = dateFormatter.string(from: expirationDate)
+        }
+        
+        // HTML body doesn't work when deep linking - would only work with native client
+        /*
+         return """
+         Here is an album exported from SecureImage App.
+         <br /><br />
+         You can download the images from this album at the following URL:
+         <br />
+         <a href=\"\(url)\">Download Album</a>
+         <br /><br />
+         This link will expire \(Constants.Album.ExpirationInDays) days from today on \(expirationDateAsString).
+         """
+         */
+        return """
+                    Here is an album exported from SecureImage App.
+                    \n
+                    You can download the images from this album at the following URL:
+                    \n
+                    \(url.absoluteString)
+                    \n
+                    This link will expire \(Constants.Album.ExpirationInDays) days from today on \(expirationDateAsString).
+                    """
+    }
+    
+    /// Opens / redirects to the specified email client and populates the subject and body
+    /// - Parameters:
+    ///   - mailClient: email client to open
+    ///   - subject: email subject
+    ///   - body: email body
+    func sendEmailTo(mailClient: MailClient, subject: String, body: String) {
+        guard let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+                  return
+              }
+        let clientUrl: URL?
+        switch mailClient {
+        case .Outlook:
+            clientUrl = URL(string: "\(Constants.Email.Clients.outlookBaseURI)?to=&subject=\(subjectEncoded)&body=\(bodyEncoded)")
+        case .Apple:
+            sendEmailWithAppleClient(subject: subject, body: body)
+            return
+        case .Gmail:
+            clientUrl = URL(string: "\(Constants.Email.Clients.gmailBaseURI)?to=&subject=\(subjectEncoded)&body=\(bodyEncoded)")
+        case .Yahoo:
+            clientUrl = URL(string: "\(Constants.Email.Clients.yahooMailBaseURI)?to=&subject=\(subjectEncoded)&body=\(bodyEncoded)")
+        }
+        guard let clientLink = clientUrl, UIApplication.shared.canOpenURL(clientLink) else {
+            let title = "\(mailClient.rawValue) is not available"
+            let message = "Please try a different client"
+            showAlert(with: title, message: message)
+            return
+        }
+        
+        UIApplication.shared.open(clientLink)
+    }
+    
+    
+    func sendEmailWithAppleClient(subject: String, body: String) {
+        let composeVC = MFMailComposeViewController()
+        composeVC.mailComposeDelegate = self
+        composeVC.setSubject(subject)
+        composeVC.setMessageBody(body, isHTML: true)
+        
+        self.present(composeVC, animated: true, completion: nil)
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult,
