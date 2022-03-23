@@ -15,10 +15,14 @@ jobs:
         run: brew install gnupg
       - name: Install xcpretty
         run: gem install xcpretty
+      - name: Install Cocoapods
+        run: sudo gem install cocoapods
       - name: Setup provisioning profile
         env:
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
+      - name: Install dependencies
+        run: pod install
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
