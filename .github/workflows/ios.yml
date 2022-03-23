@@ -22,9 +22,9 @@ jobs:
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_adhoc.sh
+        run: ./.github/scripts/archive_ios.sh
       - name: Export .ipa
-        run: ./.github/scripts/export_adhoc_ipa.sh
+        run: ./.github/scripts/export_ios_ipa.sh
       - name: Upload .ipa
         uses: actions/upload-artifact@v1
         with:
