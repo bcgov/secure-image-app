@@ -20,6 +20,12 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>googlegmail</string>
+		<string>ms-outlook</string>
+		<string>ymail</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -66,11 +72,5 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>googlegmail</string>
-        <string>ms-outlook</string>
-        <string>ymail</string>
-    </array>
 </dict>
 </plist>
