@@ -2,7 +2,7 @@ The provisioning profile and distribution certificate have been encrypted with g
 gpg --symmetric --cipher-algo AES256 AppleDistribution.p12
 gpg --symmetric --cipher-algo AES256 SecureImage__In_House.mobileprovision
 
-The password used has been added to github actions.
+The password used for the encryption has been added to github secrets. It is used in the workflow to decrypt and add the files to the keychain to allow for the code to be signed and exported.
 
 The ios workflow is as follows:
 - Checkout repository
