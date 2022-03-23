@@ -2,7 +2,7 @@ name: Archive and Export ipa
 on:
   push:
     branches:
-      - dev
+      - master
 jobs:
   deploy:
     name: Archiving and exporting ipa
@@ -13,12 +13,11 @@ jobs:
         uses: actions/checkout@v1
       - name: Install gpg
         run: brew install gnupg
-      - name: Setup profiles and certs
-      - name: install xcpretty
+      - name: Install xcpretty
         run: gem install xcpretty
       - name: Setup provisioning profile
         env:
-          KEYS: ${{ secrets.KEYS }}
+          KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt.sh
       - name: Archive project
         env:
@@ -26,3 +25,9 @@ jobs:
         run: ./.github/scripts/archive_adhoc.sh
       - name: Export .ipa
         run: ./.github/scripts/export_adhoc_ipa.sh
+      - name: Upload .ipa
+        uses: actions/upload-artifact@v1
+        with:
+          name: SecureImage.ipa
+          path: $PWD/build/Apps/SecureImage.ipa
+                

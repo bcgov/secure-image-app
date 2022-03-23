@@ -1,0 +1,21 @@
+The provisioning profile and distribution certificate have been encrypted with gpg:
+gpg --symmetric --cipher-algo AES256 AppleDistribution.p12
+gpg --symmetric --cipher-algo AES256 SecureImage__In_House.mobileprovision
+
+The password used has been added to github actions.
+
+The ios workflow is as follows:
+- Checkout repository
+- Install gpg: 
+	used to decrypt the profile and certificate
+- Install xcpretty: 
+	helps us see more useful logs when running the xcode commands
+- Setup provisioning profile: 
+	decrypts profile and certificates and them to keychain
+- Archive project: 
+	creates an SecureImage.xcarchive file 
+- Export .ipa:
+	exports the acrhived project and create the .ipa app file
+	here we use the specification in ios/exportOptions-adhoc.plist file to describe how the code is signed
+- Upload .ipa:
+	uploads the generated .ipa file using actions/upload-artifact@v1
