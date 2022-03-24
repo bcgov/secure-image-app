@@ -1,7 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 project 'SecureImage.xcodeproj'
-platform :ios, '10.2'
+platform :ios, '12.0'
 use_frameworks!
 
 # This is used to allow the CI build to work. The pod(s) are
@@ -22,13 +22,13 @@ end
 target 'SecureImage' do
 #    pod 'SingleSignOn', :path => '../sso-ios'
     pod 'SingleSignOn', :git => 'https://github.com/bcgov/mobile-authentication-ios.git', :tag => 'v1.0.4'
-    pod 'RealmSwift'
-    pod 'SwiftKeychainWrapper'
-    pod 'Alamofire'
+    pod 'RealmSwift', '10.20.1'
+    pod 'SwiftKeychainWrapper', '3.0.1'
+    pod 'Alamofire', '4.6.0'
 end
 
 target 'SecureImageTests' do
-    pod 'RealmSwift'
-    pod 'SwiftKeychainWrapper'
-    pod 'Alamofire'
+    pod 'RealmSwift', '10.20.1'
+    pod 'SwiftKeychainWrapper', '3.0.1'
+    pod 'Alamofire', '4.6.0'
 end
