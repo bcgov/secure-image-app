@@ -11,24 +11,35 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
+      # gpg is used to decrypt the profile and certificate
       - name: Install gpg
         run: brew install gnupg
+      # xcpretty helps us see more useful logs when running the Xcode commands
       - name: Install xcpretty
         run: gem install xcpretty
+      # Cocoapods is a dependency manager for iOS
       - name: Install Cocoapods
         run: sudo gem install cocoapods
+      # decrypts profile and certificates and them to the keychain
       - name: Setup provisioning profile
         env:
+          # passing the encryption password that is stored in Github Secrets
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
+      # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
+      # Archiving iOS project
+      # creates SecureImage.xcarchive file 
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/archive_ios.sh
+      # exports the archived project and create the .ipa app file
+      # here we use the specification in ios/exportOptions-adhoc.plist file to describe how the code is signed and should be exported.
       - name: Export .ipa
         run: ./.github/scripts/export_ios_ipa.sh
+      # uploads the generated .ipa file using actions/upload-artifact@v1
       - name: Upload .ipa
         uses: actions/upload-artifact@v1
         with:
