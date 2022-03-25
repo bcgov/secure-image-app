@@ -1,5 +1,5 @@
 # This workflow is triggered when code is pushed to the master branch where there was a change in the ios folder 
-# This workflow runs on macOS 12 operating system, Xcode 13.3 and has a timeout of 200 minutes
+# This workflow runs on macOS operating system, Xcode 13.3 and has a timeout of 200 minutes
 name: Archive and Export ipa
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     name: Archiving and exporting ipa
-    runs-on: macOS-12 # Update macOS version here if needed
+    runs-on: macOS-latest # Update macOS version here if needed
     env:
       XCODE_VERSION: 13.3 # Update Xcode version here if needed
       
