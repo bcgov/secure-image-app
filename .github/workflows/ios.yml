@@ -5,8 +5,9 @@ on:
   push:
     branches:
       - master
-      paths:
-      - "ios/**/*"
+    paths:
+      - ios/**/*
+      
 jobs:
   deploy:
     name: Archiving and exporting ipa
