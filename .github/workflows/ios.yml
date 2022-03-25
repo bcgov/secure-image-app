@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - master
-#   paths:
-#     - "ios/**/*"
+      paths:
+      - "ios/**/*"
 jobs:
   deploy:
     name: Archiving and exporting ipa
@@ -27,20 +27,12 @@ jobs:
       # Cocoapods is a dependency manager for iOS
       - name: Install Cocoapods
         run: sudo gem install cocoapods
-      # decrypts profile and certificates and them to the keychain
+      # decrypts profile and certificates and adds them to the keychain
       - name: Setup provisioning profile
         env:
           # passing the encryption password that is stored in Github Secrets
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
-      # Try to load cached dependencies
-      - name: Cache pods (dependencies)
-        uses: actions/cache@v2
-        with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-                  ${{ runner.os }}-pods-
       # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
