@@ -35,6 +35,8 @@ jobs:
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
       # instelling dependencies with cocoapods
+      - name: Verify installed secrets
+        run: security find-identity -vp codesigning
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
       # Archiving iOS project
