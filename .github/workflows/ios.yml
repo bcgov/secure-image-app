@@ -1,5 +1,5 @@
 # This workflow is triggered when code is pushed to the master branch where there was a change in the ios folder 
-# This workflow runs on macOS operating system, Xcode 13.3 and has a timeout of 200 minutes
+# This workflow runs on macOS operating system and has a timeout of 200 minutes
 name: Archive and Export ipa
 on:
   push:
@@ -11,8 +11,6 @@ jobs:
   deploy:
     name: Archiving and exporting ipa
     runs-on: macOS-latest # Update macOS version here if needed
-    env:
-      XCODE_VERSION: 13.3 # Update Xcode version here if needed
       
     timeout-minutes: 200 # Workflow timeout in minutes
     
@@ -20,9 +18,6 @@ jobs:
       # Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v1
-      # select Xcode version specified above
-      - name: Select Xcode version
-        run: sudo xcode-select --switch /Applications/Xcode_${{ env.XCODE_VERSION }}.app
       # gpg is used to decrypt the profile and certificate
       - name: Install gpg
         run: brew install gnupg
