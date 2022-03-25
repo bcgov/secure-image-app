@@ -33,10 +33,7 @@ jobs:
           # passing the encryption password that is stored in Github Secrets
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
-      # instelling dependencies with cocoapods
-      - name: Install dependencies
-        run: cd $PWD/ios/ && pod install
-      # Chache dependencies for next time  
+      # Try to load cached dependencies
       - name: Cache pods (dependencies)
         uses: actions/cache@v2
         with:
@@ -44,6 +41,9 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
                   ${{ runner.os }}-pods-
+      # instelling dependencies with cocoapods
+      - name: Install dependencies
+        run: cd $PWD/ios/ && pod install
       # Archiving iOS project
       # creates SecureImage.xcarchive file 
       - name: Archive project
