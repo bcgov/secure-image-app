@@ -1,10 +1,12 @@
-# This workflow is triggered when code is pushed to the master branch
-# This workflow runs on macOS operating system and has a timeout of 1 hour
+# This workflow is triggered when code is pushed to the master branch where there was a change in the ios folder 
+# This workflow runs on macOS operating system and has a timeout of 190 minutes
 name: Archive and Export ipa
 on:
   push:
     branches:
       - master
+    paths:
+      - "ios/**/*"
 jobs:
   deploy:
     name: Archiving and exporting ipa
@@ -31,6 +33,13 @@ jobs:
       # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
+      # Chache dependencies for next time  
+      - uses: actions/cache@v2
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+                  ${{ runner.os }}-pods-
       # Archiving iOS project
       # creates SecureImage.xcarchive file 
       - name: Archive project
