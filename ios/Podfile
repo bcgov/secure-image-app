@@ -1,6 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-
 project 'SecureImage.xcodeproj'
 platform :ios, '12.0'
 use_frameworks!
