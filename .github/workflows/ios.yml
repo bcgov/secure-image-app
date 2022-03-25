@@ -34,6 +34,8 @@ jobs:
           # passing the encryption password that is stored in Github Secrets
           KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
+      - name: Unlock keychain
+        run: security -i unlock-keychain
       # instelling dependencies with cocoapods
       - name: Verify installed secrets
         run: security find-identity -vp codesigning
