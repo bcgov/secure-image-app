@@ -18,6 +18,7 @@ target 'SecureImageTests' do
     pod 'Alamofire'
 end
 
+
 # This is used to allow the CI build to work. The pod(s) are
 # signed with the credentials / profile provided and xcodebuild
 # is not happy with this. If you Pods are check in to SCM, and not
