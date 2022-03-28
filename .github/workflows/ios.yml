@@ -32,7 +32,7 @@ jobs:
       - name: Setup provisioning profile
         env:
           # passing the encryption password that is stored in Github Secrets
-          KEYS: ${{ secrets.IOS_KEYS }}
+          IOS_KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
       - name: Unlock keychain
         run: security -i unlock-keychain
