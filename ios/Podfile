@@ -9,13 +9,13 @@ target 'SecureImage' do
     pod 'SingleSignOn', :git => 'https://github.com/bcgov/mobile-authentication-ios.git', :tag => 'v1.0.4'
     pod 'RealmSwift', '10.20.1'
     pod 'SwiftKeychainWrapper', '3.0.1'
-    pod 'Alamofire', '4.6.0'
+    pod 'Alamofire'
 end
 
 target 'SecureImageTests' do
     pod 'RealmSwift', '10.20.1'
     pod 'SwiftKeychainWrapper', '3.0.1'
-    pod 'Alamofire', '4.6.0'
+    pod 'Alamofire'
 end
 
 # This is used to allow the CI build to work. The pod(s) are
@@ -23,15 +23,12 @@ end
 # is not happy with this. If you Pods are check in to SCM, and not
 # updated by the CI build process then you may not need this.
 post_install do |installer|
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-      
-        config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = "-"
-        config.build_settings['EXPANDED_CODE_SIGN_IDENTITY_NAME'] = "-"
-        config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
-        config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-        config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+      config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+      config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
       end
-    end
+  end
 end
