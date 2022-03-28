@@ -36,11 +36,26 @@ jobs:
         run: ./.github/secrets/decrypt_ios.sh
       - name: Unlock keychain
         run: security -i unlock-keychain
-      # instelling dependencies with cocoapods
       - name: Verify installed secrets
         run: security find-identity -vp codesigning
+      - name: Cache Pods dependencies
+        uses: actions/cache@v1
+        with:
+          path: ios/Pods
+          key: ${{ runner.OS }}-pods-cache-${{ hashFiles('**/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-pods-cache-
+      # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
+      # Build project
+      - name: Build app
+        run: |
+          cd ios
+          xcodebuild \
+          -workspace SecureImage.xcworkspace \
+          -scheme SecureImage \
+          clean build | xcpretty
       # Archiving iOS project
       # creates SecureImage.xcarchive file 
       - name: Archive project
