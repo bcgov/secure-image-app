@@ -19,6 +19,8 @@ jobs:
       # Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v1
+      - name: Switch XCode Version
+        run: sudo xcode-select -s /Applications/Xcode_12.4.app
       # gpg is used to decrypt the profile and certificate
       - name: Install gpg
         run: brew install gnupg
@@ -39,6 +41,14 @@ jobs:
       # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
+      # Build project
+      - name: Build app
+        run: |
+              cd ios
+              xcodebuild \
+              -workspace SecureImage.xcworkspace \
+              -scheme SecureImage \
+              clean build | xcpretty
       # Archiving iOS project
       # creates SecureImage.xcarchive file 
       - name: Archive project
