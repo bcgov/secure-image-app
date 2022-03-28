@@ -34,5 +34,4 @@ jobs:
           xcodebuild \
           -workspace SecureImage.xcworkspace \
           -scheme SecureImage \
-          -configuration Debug \
-          build
+          clean build | xcpretty

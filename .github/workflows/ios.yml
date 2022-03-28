@@ -38,13 +38,13 @@ jobs:
         run: security -i unlock-keychain
       - name: Verify installed secrets
         run: security find-identity -vp codesigning
-      - name: Cache Pods dependencies
-        uses: actions/cache@v1
+      # Setup cache for cocoapods
+      - uses: actions/cache@v1
         with:
-          path: ios/Pods
-          key: ${{ runner.OS }}-pods-cache-${{ hashFiles('**/ios/Podfile.lock') }}
+          path: $PWD/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('$PWD/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.OS }}-pods-cache-
+            ${{ runner.os }}-pods-
       # instelling dependencies with cocoapods
       - name: Install dependencies
         run: cd $PWD/ios/ && pod install
