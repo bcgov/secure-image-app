@@ -12,12 +12,12 @@ target 'SecureImage' do
     pod 'Alamofire'
 end
 
+
 target 'SecureImageTests' do
     pod 'RealmSwift', '10.20.1'
     pod 'SwiftKeychainWrapper', '3.0.1'
     pod 'Alamofire'
 end
-
 
 # This is used to allow the CI build to work. The pod(s) are
 # signed with the credentials / profile provided and xcodebuild

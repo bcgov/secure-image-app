@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - ios/**/*
+    #paths:
+      #- ios/**/*
       
 jobs:
   deploy:
@@ -36,8 +36,6 @@ jobs:
           # passing the encryption password that is stored in Github Secrets
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_ios.sh
-      - name: Unlock keychain
-        run: security -i unlock-keychain
       - name: Verify installed secrets
         run: security find-identity -vp codesigning
       # instelling dependencies with cocoapods
