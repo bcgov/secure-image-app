@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - master
-    #paths:
-      #- ios/**/*
+    paths:
+      - ios/**/*
       
 jobs:
   deploy:
