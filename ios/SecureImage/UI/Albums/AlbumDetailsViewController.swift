@@ -216,10 +216,7 @@ class AlbumDetailsViewController: UIViewController {
             return
         }
         
-        // TODO: this is the stopper
-        self.sendEmailforUploaded(url: URL(string: "www.google.com")!)
-        return
-        //        authenticateIfRequred()
+        authenticateIfRequred()
     }
     
     private func uploadHandler() -> (() -> Void) {
