@@ -841,6 +841,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "SecureImage - In House";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -863,6 +864,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "SecureImage - In House";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};

@@ -111,13 +111,13 @@
         <!--Photos-->
         <scene sceneID="tdQ-fG-jIE">
             <objects>
-                <viewController id="a00-06-C4f" customClass="PhotosViewController" customModule="SecureImage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController wantsFullScreenLayout="YES" modalPresentationStyle="fullScreen" id="a00-06-C4f" customClass="PhotosViewController" customModule="SecureImage" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Yu-Wx-93L">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7jS-U6-Vfs">
-                                <rect key="frame" x="0.0" y="114" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="587"/>
                                 <color key="backgroundColor" red="1" green="0.4165608952" blue="0.26187923810000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9RS-0D-i4f">
                                     <size key="itemSize" width="101" height="110"/>
@@ -142,7 +142,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z6t-ME-yca">
-                                <rect key="frame" x="0.0" y="79" width="375" height="35"/>
+                                <rect key="frame" x="0.0" y="45" width="375" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item Count" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCm-w3-MZb">
                                         <rect key="frame" x="271" y="7" width="84" height="21"/>
@@ -168,12 +168,12 @@
                             <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="Z6t-ME-yca" secondAttribute="trailing" id="56L-5Q-XBx"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="bottom" secondItem="P6T-r1-ITh" secondAttribute="bottom" constant="36" id="6Pm-bs-QPd"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="P6T-r1-ITh" secondAttribute="trailing" constant="36" id="OgM-Ec-SfS"/>
-                            <constraint firstItem="Z6t-ME-yca" firstAttribute="top" secondItem="y9u-R7-imk" secondAttribute="top" constant="35" id="TrD-is-84n"/>
+                            <constraint firstItem="Z6t-ME-yca" firstAttribute="top" secondItem="3Yu-Wx-93L" secondAttribute="top" constant="45" id="TrD-is-84n"/>
                             <constraint firstItem="Z6t-ME-yca" firstAttribute="leading" secondItem="y9u-R7-imk" secondAttribute="leading" id="bNI-07-tQ8"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="trailing" secondItem="7jS-U6-Vfs" secondAttribute="trailing" id="c6v-U1-Qsb"/>
                             <constraint firstItem="y9u-R7-imk" firstAttribute="bottom" secondItem="7jS-U6-Vfs" secondAttribute="bottom" id="sC9-10-QTI"/>
                             <constraint firstItem="7jS-U6-Vfs" firstAttribute="leading" secondItem="y9u-R7-imk" secondAttribute="leading" id="u1L-cu-Voc"/>
-                            <constraint firstItem="7jS-U6-Vfs" firstAttribute="top" secondItem="Z6t-ME-yca" secondAttribute="bottom" id="wpa-I5-4LW"/>
+                            <constraint firstItem="7jS-U6-Vfs" firstAttribute="top" secondItem="Z6t-ME-yca" secondAttribute="bottom" id="xft-YI-5qS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Photos" id="Zg1-ih-ma6"/>

@@ -34,4 +34,8 @@ class PhotoViewController: UIViewController {
             currentPhotoImageView.image = UIImage(data: imageData)
         }
     }
+    override func viewDidAppear(_ animated: Bool) {
+        viewDidAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
 }

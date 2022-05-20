@@ -49,16 +49,14 @@ class PhotosViewController: UIViewController {
     override func viewDidLoad() {
 
         super.viewDidLoad()
-        
+        view.backgroundColor = .clear
         commonInit()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         super.viewWillAppear(animated)
-        
+        navigationController?.navigationBar.isHidden = false
         updateCount()
-        
         collectionView.reloadData()
     }
 
