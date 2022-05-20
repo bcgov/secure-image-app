@@ -58,6 +58,7 @@ class PhotosViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         updateCount()
         collectionView.reloadData()
+        view.layoutIfNeeded()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
