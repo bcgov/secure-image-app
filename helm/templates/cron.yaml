@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "secure-image-api.fullname" . }}-cleanup-cron
+  labels:
+    app: {{ include "secure-image-api.name" . }}
+    chart: {{ include "secure-image-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          activeDeadlineSeconds: 1800
+          containers:
+            - command:
+                - /bin/sh
+                - -c
+                - find /data/ -mtime +7 -type f -delete
+              image: docker-remote.artifacts.developer.gov.bc.ca/alpine:3.12
+              imagePullPolicy: Always
+              name: minio-clean
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /data
+                  name: minio-data
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: docker-pull
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: minio-data
+              persistentVolumeClaim:
+                claimName: {{ .Release.Name }}-minio
+  schedule: 0 1 * * *
+  successfulJobsHistoryLimit: 3
+  suspend: false

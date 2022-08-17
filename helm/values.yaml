@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  imageRegistry: docker-remote.artifacts.developer.gov.bc.ca
+  imagePullSecrets:
+    - docker-pull
+
 replicaCount: 1
 
 image:
@@ -96,6 +101,14 @@ minio:
     VolumeName: ''
     accessMode: ReadWriteMany
     size: 10Gi
+
+memcached:
+  architecture: 'high-availability'
+  replicaCount: 3
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
 
 sso:
   clientSecret:
