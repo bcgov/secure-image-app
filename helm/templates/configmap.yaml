@@ -9,4 +9,4 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   config.json: |-
-{{ .Values.congJson | indent 4 }}
+{{ tpl .Values.congJson . | indent 4 }}
