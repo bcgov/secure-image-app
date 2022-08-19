@@ -47,19 +47,11 @@ service:
   type: ClusterIP
   port: 8080
 
-ingress:
-  enabled: true
-  annotations:
-    {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: api.secure-image.mcf.gov.bc.ca
-      paths: ['/']
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+route:
+  host:
+  caCertificate:
+  certificate:
+  key:
 
 resources:
   {}

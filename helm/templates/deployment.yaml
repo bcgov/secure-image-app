@@ -60,9 +60,7 @@ spec:
           - name: NODE_ENV
             value: production
           - name: APP_URL
-              {{- range .Values.ingress.hosts }}
-            value: https://{{ .host }}/
-              {{- end }}        
+            value: https://{{ .Values.route.host }}/
           name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}

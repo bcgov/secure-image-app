@@ -1,0 +1,31 @@
+{{- $fullName := include "secure-image-api.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "secure-image-api.labels" . | nindent 4 }}
+spec:
+  host: {{ .Values.route.host }}
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+    {{- if .Values.route.caCertificate }}
+    caCertificate: |
+      {{- .Values.route.caCertificate | nindent 6 }}
+    {{ end }}
+    {{- if .Values.route.certificate }}
+    certificate: |
+      {{- .Values.route.certificate | nindent 6 }}
+    {{ end }}
+    {{- if .Values.route.key }}
+    key: |
+      {{- .Values.route.key | nindent 6 }}
+    {{ end }}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+    weight: 100
+  wildcardPolicy: None
