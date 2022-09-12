@@ -1,8 +1,8 @@
 
 buildscript {
-    ext.gradleVersion = '4.1.1'
-    ext.kotlinVersion = '1.3.72'
-    ext.realmVersion = '4.3.4'
+    ext.gradleVersion = '7.1.3'
+    ext.kotlinVersion = '1.7.10'
+    ext.realmVersion = '10.11.1'
 
     repositories {
         google()
@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.21"
+    id "org.jetbrains.kotlin.jvm" version "1.7.10"
 }
 
 allprojects {
