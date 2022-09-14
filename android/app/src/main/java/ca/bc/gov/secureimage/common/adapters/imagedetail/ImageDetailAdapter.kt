@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.common.adapters.imagedetail
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ca.bc.gov.secureimage.data.models.local.CameraImage
@@ -32,14 +32,11 @@ class ImageDetailAdapter(
         else -> -1
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        return when (viewType) {
-            IMAGE -> ImageDetailViewHolder.create(inflater, parent)
-            else -> null
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return ImageDetailViewHolder.create(inflater, parent)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ImageDetailViewHolder -> holder.bind(items[position] as CameraImage)
         }

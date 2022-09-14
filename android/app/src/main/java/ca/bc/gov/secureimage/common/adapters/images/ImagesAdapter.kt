@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.common.adapters.images
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ca.bc.gov.secureimage.data.models.AddImages
@@ -38,15 +38,15 @@ class ImagesAdapter(
         else -> -1
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             CAMERA_IMAGE -> ImageViewHolder.create(inflater, parent)
             ADD_IMAGES -> AddImagesViewHolder.create(inflater, parent)
-            else -> null
+            else -> throw Exception("Unknown viewType provided")
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> holder.bind(items[position] as CameraImage, showDelete,
                     selectMode, imageClickListener)

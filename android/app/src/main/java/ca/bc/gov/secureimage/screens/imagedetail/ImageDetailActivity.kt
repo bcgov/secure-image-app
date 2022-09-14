@@ -1,8 +1,8 @@
 package ca.bc.gov.secureimage.screens.imagedetail
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
@@ -12,7 +12,7 @@ import ca.bc.gov.secureimage.common.Constants
 import ca.bc.gov.secureimage.common.adapters.imagedetail.ImageDetailAdapter
 import ca.bc.gov.secureimage.di.Injection
 import kotlinx.android.synthetic.main.activity_image_detail.*
-import android.support.v7.widget.LinearSnapHelper
+import androidx.recyclerview.widget.LinearSnapHelper
 import android.view.View
 import ca.bc.gov.secureimage.di.InjectionUtils
 
@@ -84,9 +84,9 @@ class ImageDetailActivity : AppCompatActivity(), ImageDetailContract.View, View.
         presenter?.subscribe()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         val currImageIndex = imageDetailLayoutManager?.findFirstVisibleItemPosition() ?: 0
-        outState?.putInt(Constants.IMAGE_INDEX, currImageIndex)
+        outState.putInt(Constants.IMAGE_INDEX, currImageIndex)
         super.onSaveInstanceState(outState)
     }
 

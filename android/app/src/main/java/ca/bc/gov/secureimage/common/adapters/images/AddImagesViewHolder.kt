@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.common.adapters.images
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.item_add_images.view.*
  * Created by Aidan Laing on 2017-12-12.
  *
  */
-class AddImagesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class AddImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(listener: Listener) = with(itemView) {
         layout.setOnClickListener {

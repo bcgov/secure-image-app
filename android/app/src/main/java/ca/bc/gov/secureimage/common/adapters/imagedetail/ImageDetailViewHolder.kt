@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.common.adapters.imagedetail
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.item_image_detail.view.*
  * Created by Aidan Laing on 2017-12-12.
  *
  */
-class ImageDetailViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class ImageDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(cameraImage: CameraImage) = with(itemView) {
 

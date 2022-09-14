@@ -1,6 +1,6 @@
 package ca.bc.gov.secureimage.common.adapters.albums
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.item_album.view.*
  * Created by Aidan Laing on 2017-12-12.
  *
  */
-class AlbumViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class AlbumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(album: Album, clickListener: ClickListener) = with(itemView) {
 
