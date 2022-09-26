@@ -26,6 +26,7 @@ android {
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
+        manifestPlaceholders = ['appAuthRedirectScheme': 'secure-image']
     }
 
     dexOptions {
@@ -71,7 +72,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    implementation "com.github.bcgov:mobile-authentication-android:$mobileAuthenticationVersion"
+    implementation "com.github.tschbc:mobile-authentication-android:$mobileAuthenticationVersion"
 
     implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
     implementation "androidx.legacy:legacy-support-v4:$rootProject.legacySupportVersion"
