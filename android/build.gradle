@@ -56,6 +56,7 @@ ext {
     camerakitVersion = '0.13.2'
     photoViewVersion = '2.0.0'
     junitVersion = '4.12'
+    mockitoCoreVersion = '4.8.0'
     mockitoKotlinVersion = '1.5.0'
     testRunnerVersion = '1.1.1'
     espressoVersion = '3.1.0'

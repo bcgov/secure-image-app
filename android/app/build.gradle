@@ -110,6 +110,7 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation "junit:junit:$rootProject.ext.junitVersion"
 
+    testImplementation "org.mockito:mockito-core:$mockitoCoreVersion"
     testImplementation "com.nhaarman:mockito-kotlin:$rootProject.ext.mockitoKotlinVersion"
 
     androidTestImplementation "androidx.test.ext:junit:$rootProject.ext.testRunnerVersion"
