@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 global:
-  imageRegistry: docker-remote.artifacts.developer.gov.bc.ca
+  imageRegistry: artifacts.developer.gov.bc.ca/docker-remote
   imagePullSecrets:
     - docker-pull
 
@@ -13,11 +13,11 @@ image:
   repository: image-registry.openshift-image-registry.svc:5000/97fbe8-tools/secure-image-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 'latest'
+  tag: "latest"
 
 imagePullSecrets: []
-nameOverride: ''
-fullnameOverride: ''
+nameOverride: ""
+fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -26,7 +26,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ''
+  name: ""
 
 podAnnotations: {}
 
@@ -88,14 +88,14 @@ minio:
       memory: 1Gi
   persistence:
     enabled: true
-    existingClaim: ''
-    storageClass: ''
-    VolumeName: ''
+    existingClaim: ""
+    storageClass: ""
+    VolumeName: ""
     accessMode: ReadWriteMany
     size: 10Gi
 
 memcached:
-  architecture: 'high-availability'
+  architecture: "high-availability"
   replicaCount: 3
   podSecurityContext:
     enabled: false
