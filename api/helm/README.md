@@ -52,13 +52,13 @@ To deploy,
    ```
    oc login ...
    oc project ...
-   helm install <release> -f values.<env/release>.local.yaml api/helm
+   helm install <release> -f api/helm/values.<env/release>.local.yaml api/helm
    ```
 3. To update an existing release
    ```
    oc login ...
    oc project ...
-   helm upgrade <release> -f values.<env/release>.local.yaml api/helm
+   helm upgrade <release> -f api/helm/values.<env/release>.local.yaml api/helm
    ```
 4. To delete an existing release
    ```
