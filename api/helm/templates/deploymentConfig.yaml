@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
   name: {{ include "secure-image-api.fullname" . }}
   labels:
@@ -8,9 +8,6 @@ spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
 {{- end }}
-  selector:
-    matchLabels:
-      {{- include "secure-image-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -64,7 +61,7 @@ spec:
           name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.namespace }}/{{ .Values.image.imageStream }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -108,3 +105,14 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - {{ .Chart.Name }}
+        from:
+          kind: ImageStreamTag
+          namespace: {{ .Values.image.namespace }}
+          name: "{{ .Values.image.imageStream }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      type: ImageChange
+    - type: ConfigChange

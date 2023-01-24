@@ -10,7 +10,9 @@ global:
 replicaCount: 1
 
 image:
-  repository: image-registry.openshift-image-registry.svc:5000/97fbe8-tools/secure-image-api
+  repository: image-registry.openshift-image-registry.svc:5000
+  namespace: 97fbe8-tools
+  imageStream: secure-image-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
