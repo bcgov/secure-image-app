@@ -27,8 +27,11 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import url from 'url';
-import memcached from 'connect-memcached';
 import config from '../config';
+
+const FileStore = require('session-file-store')(session);
+
+const fileStoreOptions = {};
 
 const authmware = (app) => {
   const sessionOptions = {
@@ -40,13 +43,8 @@ const authmware = (app) => {
     },
     resave: false,
     saveUninitialized: false,
+    store: new FileStore(fileStoreOptions),
   };
-
-  const memcachedOpts = config.get('session:memcached');
-  if (memcachedOpts) {
-    const MemcachedStore = memcached(session);
-    sessionOptions.store = new MemcachedStore(memcachedOpts);
-  }
 
   app.use(session(sessionOptions));
   app.use(passport.initialize());

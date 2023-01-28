@@ -1,0 +1,15 @@
+
+{{- if .Values.sessionPVC.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "secure-image-api.fullname" . }}-session
+  labels:
+    {{- include "secure-image-api.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.sessionPVC.size }}
+{{ end }}

@@ -97,8 +97,6 @@ minio:
     size: 10Gi
 
 memcached:
-  architecture: "high-availability"
-  replicaCount: 3
   podSecurityContext:
     enabled: false
   containerSecurityContext:
@@ -106,6 +104,10 @@ memcached:
 
 sso:
   clientSecret:
+
+sessionPVC:
+  enabled: true
+  size: 100Mi
 
 congJson: |
   {
@@ -125,10 +127,7 @@ congJson: |
     "session": {
       "maxAge": 604800000,
       "expires": 604800000,
-      "domain": ".gov.bc.ca",
-      "memcached": {
-        "hosts": "session-store-memcached:11211"
-      }
+      "domain": ".gov.bc.ca"
     },
     "sso": {
       "clientId": "secure-image-api",

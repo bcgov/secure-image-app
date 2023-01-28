@@ -28,6 +28,12 @@ spec:
         - name: config-vol
           configMap: 
             name: {{ template "secure-image-api.fullname" . }}-config
+
+        {{- if .Values.sessionPVC.enabled }}
+        - name: session-vol
+          persistentVolumeClaim:
+                claimName: {{ include "secure-image-api.fullname" . }}-session    
+        {{- end }}      
       containers:
         - env:
           - name: MINIO_ENDPOINT
@@ -91,6 +97,10 @@ spec:
             - name: config-vol
               mountPath: /opt/app-root/src/build/src/config/config.json
               subPath: config.json            
+            {{- if .Values.sessionPVC.enabled }}
+            - name: session-vol
+              mountPath: /opt/app-root/src/build/sessions
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

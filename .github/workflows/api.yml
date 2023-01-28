@@ -75,4 +75,3 @@ jobs:
             'version'
             'start-build secure-image-api-master-build -F -n ${{ secrets.OPENSHIFT_PROJECT }}-tools'
             'tag ${{ secrets.OPENSHIFT_PROJECT }}-tools/secure-image-api:latest ${{ secrets.OPENSHIFT_PROJECT }}-tools/secure-image-api:dev -n ${{ secrets.OPENSHIFT_PROJECT }}-tools'
-            'rollout restart deployment/secure-image-api -n ${{ secrets.OPENSHIFT_PROJECT }}-dev'
