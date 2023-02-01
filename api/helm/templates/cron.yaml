@@ -22,8 +22,8 @@ spec:
             - command:
                 - /bin/sh
                 - -c
-                - find /data/ -mtime +7 -type f -delete
-              image: docker-remote.artifacts.developer.gov.bc.ca/alpine:3.12
+                - find /data/ -mtime +7 -type f -delete {{ ternary " && find /session-data/ -mtime +2 -type f -delete" "" .Values.sessionPVC.enabled }}
+              image: {{ .Values.global.imageRegistry }}/alpine:3.12
               imagePullPolicy: Always
               name: minio-clean
               resources: {}
@@ -32,9 +32,13 @@ spec:
               volumeMounts:
                 - mountPath: /data
                   name: minio-data
+                - mountPath: /session-data
+                  name: session-data
           dnsPolicy: ClusterFirst
           imagePullSecrets:
-            - name: docker-pull
+            {{- range .Values.global.imagePullSecrets }}
+            - name: {{ . }}
+            {{- end }} 
           restartPolicy: OnFailure
           schedulerName: default-scheduler
           securityContext: {}
@@ -43,6 +47,9 @@ spec:
             - name: minio-data
               persistentVolumeClaim:
                 claimName: {{ .Release.Name }}-minio
+            - name: session-data
+              persistentVolumeClaim:
+                claimName: {{ include "secure-image-api.fullname" . }}-session
   schedule: 0 1 * * *
   successfulJobsHistoryLimit: 3
   suspend: false
