@@ -1,25 +1,35 @@
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="shortcut icon" href="/img/favicon.png" type="/x-icon" />
+    <title>Secure Image App</title>
+  </head>
 
-<head>
-  <link rel="stylesheet" type="text/css" href="/css/style.css">
-  <link rel="shortcut icon" href="/img/favicon.png" type="/x-icon">
-  <title> Secure Image App </title>
-</head>
-
-<body>
-  <div class="mainsection">
-    <img id="camera" src="/img/cameraicon.png" alt="Secure Camera with BC Gov logo">
-    <div id="text">
-      <h1> Welcome to Secure Image App </h1>
-      <p> If your file doesn't download automatically you can use the button below to start it manually. </p>
-      <p id="download"><a href={{download_url}}>Download</a></p>
+  <body>
+    <div class="mainsection">
+      <img
+        id="camera"
+        src="/img/cameraicon.png"
+        alt="Secure Camera with BC Gov logo"
+      />
+      <div id="text">
+        <h1>Welcome to Secure Image App</h1>
+        <p>
+          If your file doesn't download automatically you can use the button
+          below to start it manually.
+        </p>
+        <a href="{{download_url}}"><p id="download">Download</p></a>
+      </div>
     </div>
-  </div>
-  <footer>
-    <p id="bio">Secure Image App allows users to securely take photos with their mobile phone. Photos stay sandboxed within the Secure Image system rather than ending up on the phone's camera roll; this makes them unaccessible by third party apps. The user can then
-      securely send the album to fellow government employees.</p>
-    <p id="copyright">Copyright &copy; 2018, Province of British Columbia.</p>
+    <footer>
+      <p id="bio">
+        Secure Image App allows users to securely take photos with their mobile
+        phone. Photos stay sandboxed within the Secure Image system rather than
+        ending up on the phone's camera roll; this makes them unaccessible by
+        third party apps. The user can then securely send the album to fellow
+        government employees.
+      </p>
+      <p id="copyright">Copyright &copy; 2018, Province of British Columbia.</p>
     </footer>
-</body>
-
+  </body>
 </html>
