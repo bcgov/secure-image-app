@@ -49,6 +49,7 @@ service:
   port: 8080
 
 route:
+  enabled: false
   host:
   caCertificate:
   certificate:

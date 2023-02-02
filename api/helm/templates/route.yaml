@@ -1,3 +1,4 @@
+{{- if .Values.route.enabled -}}
 {{- $fullName := include "secure-image-api.fullname" . -}}
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -29,3 +30,4 @@ spec:
     name: {{ $fullName }}
     weight: 100
   wildcardPolicy: None
+{{ end }}
