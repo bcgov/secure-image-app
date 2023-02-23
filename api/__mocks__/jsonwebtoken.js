@@ -18,16 +18,16 @@
 // Created by Jason Leach on 2018-05-06.
 //
 
-'use strict';
+"use strict";
 
-const jwt = jest.genMockFromModule('jsonwebtoken');
-const token = '123bacon123';
+const jwt = jest.genMockFromModule("jsonwebtoken");
+const token = "123bacon123";
 
-function verify(clientAccessToken, pem, options, cb) {
+function verify(clientAccessToken, pem, cb) {
   if (clientAccessToken === token) {
     cb(undefined, {});
   } else {
-    cb(new Error('Bad token :('), undefined);
+    cb(new Error("Bad token :("), undefined);
   }
 }
 

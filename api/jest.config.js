@@ -20,19 +20,26 @@
 
 module.exports = {
   // collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{js,jsx}', '!**/node_modules/**', '!**/vendor/**'],
-  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
-  moduleDirectories: ['node_modules'],
-  modulePathIgnorePatterns: ['<rootDir>/build/'],
-  testEnvironment: 'node',
-  testRegex: ['(/__tests__/.*|(\\.|/)(test|spec))\\.[js]sx?$'],
+  collectCoverageFrom: [
+    "src/**/*.{js,jsx}",
+    "!**/node_modules/**",
+    "!**/vendor/**",
+  ],
+  moduleFileExtensions: ["js", "jsx", "json", "node"],
+  moduleDirectories: ["node_modules"],
+  modulePathIgnorePatterns: ["<rootDir>/build/"],
+  moduleNameMapper: {
+    axios: "axios/dist/node/axios.cjs",
+  },
+  testEnvironment: "node",
+  testRegex: ["(/__tests__/.*|(\\.|/)(test|spec))\\.[js]sx?$"],
   testPathIgnorePatterns: [
-    '/node_modules/',
-    '/.cache/',
-    '/scripts/',
-    '/build/',
-    '/dist/',
-    '/__tests__/src/',
+    "/node_modules/",
+    "/.cache/",
+    "/scripts/",
+    "/build/",
+    "/dist/",
+    "/__tests__/src/",
   ],
   verbose: true,
 };

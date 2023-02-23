@@ -20,16 +20,14 @@
 
 /* eslint-disable no-unused-vars */
 
-'use strict';
+"use strict";
 
-let rpn = jest.genMockFromModule('request-promise-native');
+let rpn = jest.genMockFromModule("axios");
 
-function request(options) {
-  return new Promise((resolve, reject) => {
-    resolve('OK');
-  });
+async function request(options) {
+  return { data: { keys: [{ x5c: "ok" }] } };
 }
 
-rpn = request;
+rpn.get = request;
 
 module.exports = rpn;

@@ -109,6 +109,11 @@ sessionPVC:
   enabled: true
   size: 100Mi
 
+envs:
+  nodeEnv: production
+  enableAccessLogging: true
+  trustedProxy: "10.0.0.0/8"
+
 congJson: |
   {
     "temporaryUploadPath": "uploads",

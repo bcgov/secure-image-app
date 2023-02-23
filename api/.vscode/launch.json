@@ -35,6 +35,18 @@
       "outFiles": ["${workspaceFolder}/build/**/*.js"],
       "skipFiles": ["<node_internals>/**/*.js"],
       "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      "args": ["-t", "album*"],
+      "autoAttachChildProcesses": true,
+      "console": "internalConsole",
+      "env": {
+        "NODE_ENV": "test"
+      }
     }
   ]
 }

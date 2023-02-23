@@ -57,9 +57,13 @@ spec:
           - name: PORT
             value: {{ .Values.service.port | quote }}
           - name: NODE_ENV
-            value: production
+            value: {{ .Values.envs.nodeEnv }}
           - name: APP_URL
             value: https://{{ .Values.route.host }}/
+          - name: ENABLE_ACCESS_LOGGING
+            value: "{{ .Values.envs.enableAccessLogging }}"
+          - name: TRUSTED_PROXY
+            value: {{ .Values.envs.trustedProxy }}
           name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}

@@ -63,7 +63,6 @@ describe("Add file to album", () => {
     await request(app)
       .post("/v1/album/abc123")
       .set("Authorization", "Bearer 123cake123")
-      .attach("file", sample)
       .expect(401)
       .expect("Content-Type", /json/);
   });
@@ -115,7 +114,6 @@ describe("Fetch album details", () => {
   });
 });
 
-
 describe("Add annotations to an album", () => {
   test("Add comment should fail with a bad token", async () => {
     await request(app)
@@ -137,9 +135,9 @@ describe("Add annotations to an album", () => {
     await request(app)
       .post("/v1/album/abc123/note")
       .set("Authorization", "Bearer 123bacon123")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send({
-        'albumName': 'bacon',
+        albumName: "bacon",
       })
       .expect(200)
       .expect("Content-Type", /json/);
@@ -149,9 +147,9 @@ describe("Add annotations to an album", () => {
     await request(app)
       .post("/v1/album/abc123/note")
       .set("Authorization", "Bearer 123bacon123")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send({
-        'comment': 'Hello Comment',
+        comment: "Hello Comment",
       })
       .expect(200)
       .expect("Content-Type", /json/);
@@ -161,10 +159,10 @@ describe("Add annotations to an album", () => {
     await request(app)
       .post("/v1/album/abc123/note")
       .set("Authorization", "Bearer 123bacon123")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send({
-        'albumName': 'bacon',
-        'comment': 'Hello Comment',
+        albumName: "bacon",
+        comment: "Hello Comment",
       })
       .expect(200)
       .expect("Content-Type", /json/);
