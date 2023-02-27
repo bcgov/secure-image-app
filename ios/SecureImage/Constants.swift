@@ -33,15 +33,18 @@ struct Constants {
     }
     
     struct SSO {
-        static let baseUrl = URL(string: "https://oidc.gov.bc.ca")!
+        static let prodUri = "https://loginproxy.gov.bc.ca"
+        static let devUri = "https://dev.loginproxy.gov.bc.ca"
+        
+        static let baseUrl = URL(string: prodUri)!
         static let redirectUri = "secure-image://client"
-        static let clientId = "secure-image"
-        static let realmName = "secimg"
+        static let clientId = "secure-image-3950"
+        static let realmName = "standard"
         static let idpHint = "idir"
     }
     
     struct Album {
-        // When converted to cammelcase these must match the related `Album`
+        // When converted to camelcase these must match the related `Album`
         // model properties.
         static let ExpirationInDays = 7
         static let Fields = [(name: "Album Name", placeHolderText: "Jane Doe"),
@@ -49,7 +52,10 @@ struct Constants {
     }
     
     struct API {
-        static let serverURL = URL(string: "https://api.secure-image.mcf.gov.bc.ca/v1/")
+        static let prodUri = "https://secure-image.apps.gov.bc.ca/v1/"
+        static let devUri = "https://secure-image-dev.apps.gov.bc.ca/v1/"
+        
+        static let serverURL = URL(string: prodUri)
         static let createAlbumPath = "album/"
         static let addPhotoToAlbumPath = "album/:id"
         static let getAlbumDownloadUrlPath = "album/:id"

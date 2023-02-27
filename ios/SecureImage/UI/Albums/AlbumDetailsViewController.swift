@@ -46,26 +46,35 @@ class AlbumDetailsViewController: UIViewController {
     private static let annotationCellRowHeight: CGFloat = 100.0
     private static let annotationCellsOffset: Int = 2
     private static let numberOfRows: Int = annotationCellsOffset + Constants.Album.Fields.count
+    
     private var document: Document?
     private var previewCellHeight: CGFloat = 250.0
+    
     private var progressOverlay: ProgressViewController = {
         let storyboard = UIStoryboard(name: "Progress", bundle: nil)
         let vc = storyboard.instantiateInitialViewController() as! ProgressViewController
-        vc.modalPresentationStyle = .overCurrentContext
         
+        vc.modalPresentationStyle = .overCurrentContext
         return vc
     }()
+    
     private let locationServices: LocationServices = {
         let ls = LocationServices()
         ls.start()
         
         return ls
     }()
+    
     private let authServices: AuthServices = {
-        return AuthServices(baseUrl: Constants.SSO.baseUrl, redirectUri: Constants.SSO.redirectUri,
-                            clientId: Constants.SSO.clientId, realm: Constants.SSO.realmName,
-                            idpHint: Constants.SSO.idpHint)
+        return AuthServices(
+            baseUrl: Constants.SSO.baseUrl,
+            redirectUri: Constants.SSO.redirectUri,
+            clientId: Constants.SSO.clientId,
+            realm: Constants.SSO.realmName,
+            idpHint: Constants.SSO.idpHint
+        )
     }()
+    
     internal var album: Album!
     
     override func viewDidLoad() {
@@ -121,10 +130,19 @@ class AlbumDetailsViewController: UIViewController {
     
     private func commonInit() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillShow),
-                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.keyboardWillHide),
-                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(AlbumDetailsViewController.keyboardWillShow),
+            name: NSNotification.Name.UIKeyboardWillShow,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(AlbumDetailsViewController.keyboardWillHide),
+            name: NSNotification.Name.UIKeyboardWillHide,
+            object: nil
+        )
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -136,8 +154,12 @@ class AlbumDetailsViewController: UIViewController {
             view.setNeedsLayout()
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
-                                               name: Notification.Name.wifiAvailabilityChanged, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(AlbumDetailsViewController.handleWiFiAvailabilityChanged(notification:)),
+            name: Notification.Name.wifiAvailabilityChanged,
+            object: nil
+        )
     }
     
     private func configureCell(cell: UITableViewCell, at indexPath: IndexPath) {
@@ -391,53 +413,20 @@ class AlbumDetailsViewController: UIViewController {
     }
     
     private func authenticateIfRequred() {
-        if !authServices.isAuthenticated() {
-            let vc = authServices.viewController() { (credentials, error) in
-                
-                guard let _ = credentials, error == nil else {
-                    let title = "Authentication"
-                    let message = "Authentication didn't work. Please try again."
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        self.showAlert(with: title, message: message)
-                    }
-                    
-                    return
-                }
-                
+        
+        authServices.doWithAuthentication(presenting: self) { (credentials, error) in
+            
+            if let _ = credentials, error == nil {
                 self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
+            } else {
+                let title = "Authentication"
+                let message = "Authentication didn't work. Please try again."
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.showAlert(with: title, message: message)
+                }
             }
             
-            present(vc, animated: true, completion: nil)
-        } else {
-            authServices.refreshCredientials(completion: { (credentials , error: Error?) in
-                if let error = error as? AuthenticationError, case .expired = error {
-                    let vc = self.authServices.viewController() { (credentials, error) in
-                        
-                        guard let _ = credentials, error == nil else {
-                            let title = "Authentication"
-                            let message = "Authentication didn't work. Please try again."
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                self.showAlert(with: title, message: message)
-                            }
-                            
-                            return
-                        }
-                        
-                        self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
-                    }
-                    
-                    self.present(vc, animated: true, completion: nil)
-                    return
-                }
-                
-                if let error = error as? AuthenticationError, case AuthenticationError.unknownError = error {
-                    self.authServices.logout()
-                }
-                
-                self.confirmNetworkAvailabilityBeforUpload(handler: self.uploadHandler())
-            });
         }
     }
     

@@ -5,18 +5,19 @@ platform :ios, '12.0'
 use_frameworks!
 
 target 'SecureImage' do
-#    pod 'SingleSignOn', :path => '../sso-ios'
-    pod 'SingleSignOn', :git => 'https://github.com/bcgov/mobile-authentication-ios.git', :tag => 'v1.0.4'
+    # For local development pods, use :path
+#    pod 'SingleSignOn', :path => '/path/to/local/repository/project/files'
+    pod 'SingleSignOn', :git => 'https://github.com/tschbc/mobile-authentication-ios.git', :tag => 'v1.1.0'
     pod 'RealmSwift', '10.20.1'
     pod 'SwiftKeychainWrapper', '3.0.1'
-    pod 'Alamofire'
+    pod 'Alamofire', '4.9.1'
 end
 
 
 target 'SecureImageTests' do
     pod 'RealmSwift', '10.20.1'
     pod 'SwiftKeychainWrapper', '3.0.1'
-    pod 'Alamofire'
+    pod 'Alamofire', '4.9.1'
 end
 
 # This is used to allow the CI build to work. The pod(s) are

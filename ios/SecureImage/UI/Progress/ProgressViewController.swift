@@ -23,7 +23,7 @@ import UIKit
 class ProgressViewController: UIViewController {
 
     private let progressView: ProgressView = {
-        let v = Bundle.main.loadNibNamed("ProgressView", owner: self, options: nil)?.first as! ProgressView
+        let v = Bundle.main.loadNibNamed("ProgressView", owner: ProgressViewController.self, options: nil)?.first as! ProgressView
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = Theme.governmentDarkBlue
         v.layer.cornerRadius = 12.0

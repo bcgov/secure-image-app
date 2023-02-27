@@ -33,7 +33,7 @@ class AlbumsViewController: UIViewController {
     private var albums: Results<Album>?
     private var localAlbumId: String?
     private let createFirstAlbumView: UIView = {
-        let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: self, options: nil)?.first as! UIView
+        let v = Bundle.main.loadNibNamed("CreateFirstAlbumView", owner: AlbumsViewController.self, options: nil)?.first as! UIView
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = Theme.governmentDarkBlue
 
