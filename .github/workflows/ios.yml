@@ -2,7 +2,7 @@
 # This workflow runs on macOS operating system and has a timeout of 200 minutes
 name: Archive and Export ipa
 on:
-  workflow_dispatch
+  workflow_dispatch:
   push:
     branches:
       - master
