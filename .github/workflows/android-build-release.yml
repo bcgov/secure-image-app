@@ -35,7 +35,7 @@ jobs:
           destination: build-tools
 
       - name: List files
-        run: ls -la
+        run: ls -la ..
 
       # - name: Zipalign APK
       #   run: build-tools/android-13/zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
