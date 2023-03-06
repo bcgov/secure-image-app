@@ -18,32 +18,27 @@ jobs:
         with:
           java-version: 11
       
-      # - name: Decrypt keystore properties
-      #   run: |
-      #     openssl version
-      #     openssl aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${{ secrets.ANDROID_DECRYPT_KEY }}
+      - name: Decrypt keystore properties
+        run: |
+          openssl version
+          openssl aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${{ secrets.ANDROID_DECRYPT_KEY }}
       
-      # - name: Run Gradle release task
-      #   run: |
-      #     export ANDROID_NDK_HOME=
-      #     ./gradlew assembleRelease
+      - name: Run Gradle release task
+        run: |
+          export ANDROID_NDK_HOME=
+          ./gradlew assembleRelease
       
       - name: Get Android SDK Build Tools
         run: |
           curl --output build-tools.zip https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
           unzip build-tools.zip
-          export PATH=$PATH:$(pwd)/android-13
+          rm build-tools.zip
 
-      - name: List files and path
-        run: |
-          echo $PATH
-          ls -la
-
-      # - name: Zipalign APK
-      #   run: zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
+      - name: Zipalign APK
+        run: android-13/zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
       
-      # - name: Upload release artifact
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: SecureImage-release.apk
-      #     path: app/build/outputs/release/app-release-aligned.apk
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: SecureImage-release.apk
+          path: app/build/outputs/release/app-release-aligned.apk
