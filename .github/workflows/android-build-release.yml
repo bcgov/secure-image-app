@@ -29,7 +29,7 @@ jobs:
           ./gradlew assembleRelease
       
       - name: Get Android SDK Build Tools
-        uses: actions/schmiddim-wget-unzip@v1
+        uses: actions/schmiddim-wget-unzip@v2
         with:
           url: https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
           destination: build-tools
