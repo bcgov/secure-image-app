@@ -31,7 +31,7 @@ jobs:
       - name: Get Android SDK Build Tools
         uses: schmiddim/action-wget-unzip@v2
         with:
-          url: https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
+          url: 'https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip'
           destination: build-tools
 
       - name: List files
