@@ -24,6 +24,8 @@ jobs:
         run: |
           export ANDROID_NDK_HOME=
           ./gradlew assembleRelease
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
       - name: Zipalign APK
         run: zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
       - name: Upload release artifact
