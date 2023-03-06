@@ -24,3 +24,10 @@ jobs:
         run: |
           export ANDROID_NDK_HOME=
           ./gradlew assembleRelease
+      - name: Zipalign APK
+        run: zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: SecureImage-release.apk
+          path: app/build/outputs/release/app-release-aligned.apk
