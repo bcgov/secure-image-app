@@ -29,16 +29,18 @@ jobs:
       #     ./gradlew assembleRelease
       
       - name: Get Android SDK Build Tools
-        uses: schmiddim/action-wget-unzip@v2
-        with:
-          url: 'https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip'
-          destination: build-tools
+        run: |
+          curl --output build-tools.zip https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
+          unzip build-tools.zip
+          export PATH=$PATH:$(pwd)/android-13
 
-      - name: List files
-        run: ls -la ..
+      - name: List files and path
+        run: |
+          echo $PATH
+          ls -la
 
       # - name: Zipalign APK
-      #   run: build-tools/android-13/zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
+      #   run: zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
       
       # - name: Upload release artifact
       #   uses: actions/upload-artifact@v1
