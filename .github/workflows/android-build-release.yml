@@ -32,10 +32,10 @@ jobs:
         uses: schmiddim/action-wget-unzip@v2
         with:
           url: https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
-          destination: ./build-tools
+          destination: build-tools
 
       - name: List files
-        run: find / -type d -name "android-13"
+        run: ls -la
 
       # - name: Zipalign APK
       #   run: build-tools/android-13/zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
