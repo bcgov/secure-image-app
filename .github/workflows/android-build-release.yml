@@ -29,7 +29,7 @@ jobs:
           ./gradlew assembleRelease
       
       - name: Upload release artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: SecureImage-release.apk
           path: android/app/build/**/release/*release*.apk
