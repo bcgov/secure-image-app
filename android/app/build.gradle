@@ -53,6 +53,7 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField "String", "API_URL", keystoreProperties['DEBUG_SERVER_URL']

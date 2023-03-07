@@ -28,17 +28,8 @@ jobs:
           export ANDROID_NDK_HOME=
           ./gradlew assembleRelease
       
-      - name: Get Android SDK Build Tools
-        run: |
-          curl --output build-tools.zip https://dl.google.com/android/repository/build-tools_r33.0.2-linux.zip
-          unzip build-tools.zip
-          rm build-tools.zip
-
-      - name: Zipalign APK
-        run: android-13/zipalign -v -p 4 app/build/outputs/release/app-release.apk app/build/outputs/release/app-release-aligned.apk
-      
       - name: Upload release artifact
         uses: actions/upload-artifact@v1
         with:
           name: SecureImage-release.apk
-          path: app/build/outputs/release/app-release-aligned.apk
+          path: app/build/intermediates/apk/release/app-release-unsigned.apk
