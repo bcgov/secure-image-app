@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: SecureImage-release.apk
-          path: app/build/**/release/*release*.apk
+          path: android/app/build/**/release/*release*.apk
