@@ -1,4 +1,4 @@
-name: Android Make Release APK
+name: Android Make Unsigned Release APK
 on:
   workflow_dispatch:
 
