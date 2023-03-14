@@ -28,6 +28,9 @@ jobs:
           export ANDROID_NDK_HOME=
           ./gradlew assembleRelease
 
+      - name: Rename unsigned output file
+        run: mv android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/release/SecureImage-release.apk
+
       - name: Sign Android release
         id: sign_app
         uses: r0adkll/sign-android-release@v1
