@@ -1,4 +1,4 @@
-name: Android Make Unsigned Release APK
+name: Android Make Signed Release APK
 on:
   workflow_dispatch:
 
@@ -18,18 +18,30 @@ jobs:
         with:
           java-version: 11
       
-      - name: Decrypt keystore properties
+      - name: Decrypt keystore properties (URLs)
         run: |
           openssl version
           openssl aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -d -a -in keystore.properties.enc -out keystore.properties -pass pass:${{ secrets.ANDROID_DECRYPT_KEY }}
-      
+
       - name: Run Gradle release task
         run: |
           export ANDROID_NDK_HOME=
           ./gradlew assembleRelease
+
+      - name: Sign Android release
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_JKS_ARMOR }}
+          alias: ${{ secrets.ANDROID_KEYALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_JKS_PW }}
+          keyPassword: ${{ secrets.ANDROID_KEYPW }}
+        env:
+          BUILD_TOOLS_VERSION: "33.0.0"
       
       - name: Upload release artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: SecureImage-release.apk
-          path: android/app/build/**/release/*release*.apk
+          name: SecureImage-release-signed
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
