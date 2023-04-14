@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "secure-image-api.labels" . | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-{{- end }}
+  replicas: {{ .Values.autoscaling.enabled | ternary 1 .Values.replicaCount }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
