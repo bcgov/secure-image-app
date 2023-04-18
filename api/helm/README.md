@@ -30,10 +30,7 @@ To deploy,
         "session": {
           "maxAge": 604800000,
           "expires": 604800000,
-          "domain": ".gov.bc.ca",
-          "memcached": {
-            "hosts": "{{ include "secure-image-api.fullname" . }}-memcached:11211"
-          }
+          "domain": ".gov.bc.ca"
         },
         "sso": {
           "clientId": "******",

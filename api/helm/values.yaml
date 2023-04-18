@@ -96,12 +96,6 @@ minio:
     accessMode: ReadWriteMany
     size: 10Gi
 
-memcached:
-  podSecurityContext:
-    enabled: false
-  containerSecurityContext:
-    enabled: false
-
 sso:
   clientSecret:
 
