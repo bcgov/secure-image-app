@@ -54,4 +54,4 @@ jobs:
       - name: Push build to Artifactory
         run: |
           export JFROG_CLI_LOG_LEVEL=DEBUG
-          jf rt upload ${{ steps.sign_app.outputs.signedReleaseFile }} ${{ vars.ARTIFACTORY_REPO_NAME }}
+          jf rt upload ${{ steps.sign_app.outputs.signedReleaseFile }} "${{ vars.ARTIFACTORY_REPO_NAME }}/SecureImage-android-${{ github.run_number }}.apk"
