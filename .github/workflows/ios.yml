@@ -70,5 +70,5 @@ jobs:
       - name: Push build to Artifactory
         run: |
           export JFROG_CLI_LOG_LEVEL=DEBUG
-          jf rt upload build/Apps/SecureImage.ipa ${{ vars.ARTIFACTORY_REPO_NAME }}
+          jf rt upload build/Apps/SecureImage.ipa "${{ vars.ARTIFACTORY_REPO_NAME }}/SecureImage-ios-${{ github.run_number }}.ipa"
           
