@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>ca.bc.gov.pathfinder.mobile.SecureImage</key>
-		<string>SecureImage - In House - 2024 - new</string>
+		<string>SecureImage In House 2026</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>iOS Distribution</string>
