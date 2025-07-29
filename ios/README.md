@@ -2,6 +2,23 @@
 
 This sub-directory contains the iOS app that is one of the three components to the application suite. The following document will illustrate key configuration for iOS development and release.
 
+# Release builds
+
+1. Make sure certificates and profiles are valid for distribution builds.
+
+    * Update provisioning profile name in:
+
+        * [exportOptions-adhoc.plist](exportOptions-adhoc.plist)
+        * [SecureImage Signing & Capabilites section](SecureImage.xcodeproj/project.pbxproj) (via XCode)
+
+    * Update version and build numbers in:
+    
+        * [SecureImage Signing & Capabilites section](SecureImage.xcodeproj/project.pbxproj) (via XCode)
+
+2. Run the [Archive and Export ipa](../.github/workflows/ios.yml) action on the desired branch (usually master, after all changes have been reviewed and merged).
+
+3. If successful, IPA file will be uploaded to artifactory with a build number matching the action run number.
+
 # Local Development
 
 This document assumes the reader is using a macOS device and has downloaded `xcode` from the macOS App store. It also assumes the reader is familiar with iOS development.
