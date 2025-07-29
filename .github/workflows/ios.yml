@@ -35,11 +35,11 @@ jobs:
           p12-password: ${{ secrets.APPLE_ENTERPRISE_BUILD_CERTIFICATE_PASSWORD }}
       - name: Install provisioning profile
         env:
-          IOS_PROVISIONING_PROFILE_BASE_64_2024: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE_64_2024 }}
+          IOS_PROVISIONING_PROFILE_BASE_64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE_64 }}
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
 
-          echo -n "$IOS_PROVISIONING_PROFILE_BASE_64_2024" | base64 --decode -o $PP_PATH
+          echo -n "$IOS_PROVISIONING_PROFILE_BASE_64" | base64 --decode -o $PP_PATH
 
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
