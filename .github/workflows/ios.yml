@@ -19,7 +19,7 @@ jobs:
     steps:
       # Checkout repo
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4.2.2
 #     - name: Switch XCode Version
 #       run: sudo xcode-select -s /Applications/Xcode_12.4.app
       # xcpretty helps us see more useful logs when running the Xcode commands
@@ -29,7 +29,7 @@ jobs:
       - name: Install Cocoapods
         run: sudo gem install cocoapods
       - name: Import code-signing certificates
-        uses: Apple-Actions/import-codesign-certs@v1
+        uses: Apple-Actions/import-codesign-certs@65cfbc37e1464d733524cb555b724878f278b8c3 # v5.0.2
         with: 
           p12-file-base64: ${{ secrets.APPLE_ENTERPRISE_BUILD_CERTIFICATE_BASE_64 }}
           p12-password: ${{ secrets.APPLE_ENTERPRISE_BUILD_CERTIFICATE_PASSWORD }}
@@ -61,7 +61,7 @@ jobs:
         run: ./.github/scripts/export_ios_ipa.sh
       # uploads the generated .ipa file to a gov-hosted Artifactory instance
       - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4
+        uses: jfrog/setup-jfrog-cli@ff5cb544114ffc152db9cea1cd3d5978d5074946 # v4.5.11
         env:
           JF_PROJECT: ${{ vars.ARTIFACTORY_PROJECT }}
           JF_URL: ${{ vars.ARTIFACTORY_URL }}
